@@ -1,0 +1,2 @@
+communicate_app_0 为一个最基本的发送数据的客户端和服务端 ,已经隐藏了实现方式
+communicate_app_1 为涉及的相关通讯
