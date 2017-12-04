@@ -1,0 +1,4 @@
+include ':communicate_app_0'
+include ':communicate_app_1'
+include ':app'
+//, ':hardware'
