@@ -18,7 +18,7 @@ public class LedStatue {
     public static final int POSITION_CHEST                  = 0x00000004 ;  //胸部
     public static final int POSITION_PAUNCH                 = 0x00000008 ;  //肚子
 
-     LedStatue(){}
+    LedStatue(){}
 
 
     public static final String EFFECT_NORMAL                = "normal" ;  //普通效果

@@ -4,9 +4,15 @@ import com.yongyida.robot.communicate.app.common.response.BaseResponse;
 
 /**
  * Created by HuangXiangXiang on 2017/11/30.
+ *
  */
 public class LedResponse extends BaseResponse {
 
+    public LedResponse() {
+        super();
+    }
 
-
+    public LedResponse(int result, String message) {
+        super(result, message);
+    }
 }
