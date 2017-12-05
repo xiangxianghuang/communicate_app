@@ -12,6 +12,7 @@
       <module fileurl="file://$PROJECT_DIR$/communicate_app_1/communicate_app_1.iml" filepath="$PROJECT_DIR$/communicate_app_1/communicate_app_1.iml" />
       <module fileurl="file://Z:\source\1_remote\communicate_app\communicate_app_1\communicate_app_1.iml" filepath="Z:\source\1_remote\communicate_app\communicate_app_1\communicate_app_1.iml" />
       <module fileurl="file://$PROJECT_DIR$/communicate_app_2/communicate_app_2.iml" filepath="$PROJECT_DIR$/communicate_app_2/communicate_app_2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/communicate_app_3/communicate_app_3.iml" filepath="$PROJECT_DIR$/communicate_app_3/communicate_app_3.iml" />
       <module fileurl="file://Z:\source\2_local\Hardware\communicate_app_1\communicate_app_server.iml" filepath="Z:\source\2_local\Hardware\communicate_app_1\communicate_app_server.iml" />
       <module fileurl="file://Z:\source\1_remote\communicate_app\communicate_app_2\communicate_app_y20.iml" filepath="Z:\source\1_remote\communicate_app\communicate_app_2\communicate_app_y20.iml" />
     </modules>

@@ -10,6 +10,7 @@ import com.yongyida.robot.communicate.app.client.Receiver;
 import com.yongyida.robot.communicate.app.common.IResponseListener;
 import com.yongyida.robot.communicate.app.common.SendResponse;
 import com.yongyida.robot.communicate.app.common.response.BaseResponse;
+import com.yongyida.robot.communicate.app.hardware.HardwareClient;
 import com.yongyida.robot.communicate.app.hardware.led.LedStatue;
 import com.yongyida.robot.communicate.app.hardware.led.response.LedStatueResponse;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
@@ -25,8 +26,8 @@ public class TestActivity extends Activity {
 
     private static final String TAG = TestActivity.class.getSimpleName() ;
 
-    private Client mClient ;
-    private Receiver mReceiver ;
+    private HardwareClient mHardwareClient ;
+    private Receiver mHardwareReceiver ;
     private LedStatue mLedStatue ;
 
     @Override
@@ -35,11 +36,8 @@ public class TestActivity extends Activity {
 
         setContentView(R.layout.activity_test);
 
-        mClient = Client.getInstance(this) ;
-
-        String packageName = "com.yongyida.robot.hardware" ;
-        String action = "com.yongyida.robot.HARDWARE" ;
-        mReceiver = mClient.getReceiver(packageName,action) ;
+        mHardwareClient = HardwareClient.getInstance(this) ;
+        mHardwareReceiver = mHardwareClient.getHardwareReceiver() ;
 
 //        Button button = new Button(this) ;
 //        setContentView(button);
@@ -113,7 +111,7 @@ public class TestActivity extends Activity {
                         LogHelper.i(TAG, LogHelper.__TAG__() + ", 响应耗时1：" + (end2-start)) ;
                     }
                 };
-                SendResponse sendResponse = mReceiver.send(ledSend,ledResponseListener) ;
+                SendResponse sendResponse = mHardwareReceiver.send(ledSend,ledResponseListener) ;
                 LogHelper.i(TAG, LogHelper.__TAG__() + ", sendResponse : " + sendResponse);
 
                 long end1 = System.currentTimeMillis() ;
@@ -164,7 +162,7 @@ public class TestActivity extends Activity {
                         LogHelper.i(TAG, LogHelper.__TAG__() + ", 响应耗时1：" + (end2-start)) ;
                     }
                 };
-                SendResponse sendResponse = mReceiver.send(ledSend,ledResponseListener) ;
+                SendResponse sendResponse = mHardwareReceiver.send(ledSend,ledResponseListener) ;
                 LogHelper.i(TAG, LogHelper.__TAG__() + ", sendResponse : " + sendResponse);
 
                 long end1 = System.currentTimeMillis() ;
@@ -181,31 +179,37 @@ public class TestActivity extends Activity {
             @Override
             public void run() {
 
-                final long start = System.currentTimeMillis() ;
-
                 VersionData versionData = new VersionData() ;
                 versionData.setPosition(VersionData.Position.MIDDLE);
                 versionData.setDistance(10);
+                mHardwareClient.sendVisionData(versionData) ;
 
-                VersionDataSend versionDataSend = new VersionDataSend() ;
-                versionDataSend.setVersionData(versionData);
 
-                IResponseListener responseListener = new IResponseListener(){
-
-                    @Override
-                    public void onResponse(BaseResponse response) {
-
-                        LogHelper.i(TAG, LogHelper.__TAG__() + ", response : " + response);
-
-                        long end2 = System.currentTimeMillis() ;
-                        LogHelper.i(TAG, LogHelper.__TAG__() + ", 响应耗时1：" + (end2-start)) ;
-                    }
-                };
-                SendResponse sendResponse = mReceiver.send(versionDataSend,responseListener) ;
-                LogHelper.i(TAG, LogHelper.__TAG__() + ", sendResponse : " + sendResponse);
-
-                long end1 = System.currentTimeMillis() ;
-                LogHelper.i(TAG, LogHelper.__TAG__() + ", 响应耗时2：" + (end1-start)) ;
+//                final long start = System.currentTimeMillis() ;
+//
+//                VersionData versionData = new VersionData() ;
+//                versionData.setPosition(VersionData.Position.MIDDLE);
+//                versionData.setDistance(10);
+//
+//                VersionDataSend versionDataSend = new VersionDataSend() ;
+//                versionDataSend.setVersionData(versionData);
+//
+//                IResponseListener responseListener = new IResponseListener(){
+//
+//                    @Override
+//                    public void onResponse(BaseResponse response) {
+//
+//                        LogHelper.i(TAG, LogHelper.__TAG__() + ", response : " + response);
+//
+//                        long end2 = System.currentTimeMillis() ;
+//                        LogHelper.i(TAG, LogHelper.__TAG__() + ", 响应耗时1：" + (end2-start)) ;
+//                    }
+//                };
+//                SendResponse sendResponse = mHardwareReceiver.send(versionDataSend,responseListener) ;
+//                LogHelper.i(TAG, LogHelper.__TAG__() + ", sendResponse : " + sendResponse);
+//
+//                long end1 = System.currentTimeMillis() ;
+//                LogHelper.i(TAG, LogHelper.__TAG__() + ", 响应耗时2：" + (end1-start)) ;
             }
         }.start();
 
