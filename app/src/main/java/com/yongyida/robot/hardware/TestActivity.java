@@ -14,6 +14,8 @@ import com.yongyida.robot.communicate.app.hardware.led.LedStatue;
 import com.yongyida.robot.communicate.app.hardware.led.response.LedStatueResponse;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedStatueSend;
+import com.yongyida.robot.communicate.app.hardware.vision.VersionData;
+import com.yongyida.robot.communicate.app.hardware.vision.send.VersionDataSend;
 import com.yongyida.robot.communicate.app.utils.LogHelper;
 
 /**
@@ -35,8 +37,8 @@ public class TestActivity extends Activity {
 
         mClient = Client.getInstance(this) ;
 
-        String packageName = getPackageName() ;
-        String action = "led" ;
+        String packageName = "com.yongyida.robot.hardware" ;
+        String action = "com.yongyida.robot.HARDWARE" ;
         mReceiver = mClient.getReceiver(packageName,action) ;
 
 //        Button button = new Button(this) ;
@@ -170,6 +172,42 @@ public class TestActivity extends Activity {
             }
         }.start();
 
+
+    }
+
+    public void sendVersionData(View view) {
+
+        new Thread(){
+            @Override
+            public void run() {
+
+                final long start = System.currentTimeMillis() ;
+
+                VersionData versionData = new VersionData() ;
+                versionData.setPosition(VersionData.Position.MIDDLE);
+                versionData.setDistance(10);
+
+                VersionDataSend versionDataSend = new VersionDataSend() ;
+                versionDataSend.setVersionData(versionData);
+
+                IResponseListener responseListener = new IResponseListener(){
+
+                    @Override
+                    public void onResponse(BaseResponse response) {
+
+                        LogHelper.i(TAG, LogHelper.__TAG__() + ", response : " + response);
+
+                        long end2 = System.currentTimeMillis() ;
+                        LogHelper.i(TAG, LogHelper.__TAG__() + ", 响应耗时1：" + (end2-start)) ;
+                    }
+                };
+                SendResponse sendResponse = mReceiver.send(versionDataSend,responseListener) ;
+                LogHelper.i(TAG, LogHelper.__TAG__() + ", sendResponse : " + sendResponse);
+
+                long end1 = System.currentTimeMillis() ;
+                LogHelper.i(TAG, LogHelper.__TAG__() + ", 响应耗时2：" + (end1-start)) ;
+            }
+        }.start();
 
     }
 }

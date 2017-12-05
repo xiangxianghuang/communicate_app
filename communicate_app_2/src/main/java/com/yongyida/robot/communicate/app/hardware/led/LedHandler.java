@@ -18,12 +18,12 @@ public class LedHandler extends BaseHandler {
 
     private static final String TAG = LedHandler.class.getSimpleName() ;
 
-    private ILedControl mLedControl ;
+    private LedControl mLedControl ;
     private final LedStatue mLedStatue = new LedStatue() ;
 
     public LedHandler(){
 
-        mLedControl = (ILedControl) getControl();
+        mLedControl = (LedControl) getControl();
     }
 
 

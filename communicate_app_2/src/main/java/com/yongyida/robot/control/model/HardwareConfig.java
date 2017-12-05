@@ -3,6 +3,8 @@ package com.yongyida.robot.control.model;
 import android.util.SparseArray;
 
 import com.yongyida.robot.communicate.app.hardware.IControl;
+import com.yongyida.robot.communicate.app.hardware.vision.VisionControl;
+import com.yongyida.robot.control.model.y138.version.Y138VisionControl;
 
 /**
  * Created by HuangXiangXiang on 2017/12/5.
@@ -47,6 +49,9 @@ public class HardwareConfig {
 
     private HardwareConfig(){
 
+
+        VisionControl versionControl = new Y138VisionControl() ;
+        mControls.put(versionControl.getType(), versionControl);
     }
 
     private void initY20(){

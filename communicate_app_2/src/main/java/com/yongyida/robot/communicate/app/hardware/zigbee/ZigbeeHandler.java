@@ -10,11 +10,11 @@ import com.yongyida.robot.control.model.HardwareConfig;
  */
 public class ZigbeeHandler extends BaseHandler {
 
-    private IZigbeeControl mZigbeeControl ;
+    private ZigbeeControl mZigbeeControl ;
 
     public ZigbeeHandler(){
 
-        mZigbeeControl = (IZigbeeControl) getControl();
+        mZigbeeControl = (ZigbeeControl) getControl();
     }
 
     @Override

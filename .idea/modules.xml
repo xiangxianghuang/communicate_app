@@ -2,13 +2,18 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Hardware.iml" filepath="$PROJECT_DIR$/Hardware.iml" />
+      <module fileurl="file://Z:\source\1_remote\communicate_app\Hardware.iml" filepath="Z:\source\1_remote\communicate_app\Hardware.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://Z:\source\1_remote\communicate_app\app\app.iml" filepath="Z:\source\1_remote\communicate_app\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/communicate_app.iml" filepath="$PROJECT_DIR$/communicate_app.iml" />
       <module fileurl="file://Z:\source\2_local\Hardware\communicate_app_0\communicate_app.iml" filepath="Z:\source\2_local\Hardware\communicate_app_0\communicate_app.iml" />
       <module fileurl="file://$PROJECT_DIR$/communicate_app_0/communicate_app_0.iml" filepath="$PROJECT_DIR$/communicate_app_0/communicate_app_0.iml" />
+      <module fileurl="file://Z:\source\1_remote\communicate_app\communicate_app_0\communicate_app_0.iml" filepath="Z:\source\1_remote\communicate_app\communicate_app_0\communicate_app_0.iml" />
       <module fileurl="file://$PROJECT_DIR$/communicate_app_1/communicate_app_1.iml" filepath="$PROJECT_DIR$/communicate_app_1/communicate_app_1.iml" />
-      <module fileurl="file://$PROJECT_DIR$/communicate_app_2/communicate_app_y20.iml" filepath="$PROJECT_DIR$/communicate_app_2/communicate_app_y20.iml" />
+      <module fileurl="file://Z:\source\1_remote\communicate_app\communicate_app_1\communicate_app_1.iml" filepath="Z:\source\1_remote\communicate_app\communicate_app_1\communicate_app_1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/communicate_app_2/communicate_app_2.iml" filepath="$PROJECT_DIR$/communicate_app_2/communicate_app_2.iml" />
       <module fileurl="file://Z:\source\2_local\Hardware\communicate_app_1\communicate_app_server.iml" filepath="Z:\source\2_local\Hardware\communicate_app_1\communicate_app_server.iml" />
+      <module fileurl="file://Z:\source\1_remote\communicate_app\communicate_app_2\communicate_app_y20.iml" filepath="Z:\source\1_remote\communicate_app\communicate_app_2\communicate_app_y20.iml" />
     </modules>
   </component>
 </project>

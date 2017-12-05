@@ -10,7 +10,7 @@
 
         <service android:name="com.yongyida.robot.control.server.HardWareServerService">
             <intent-filter>
-                <action android:name="led"/>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
             </intent-filter>
         </service>
 

@@ -11,11 +11,10 @@ import com.yongyida.robot.communicate.app.hardware.led.LedHandler;
 import com.yongyida.robot.communicate.app.hardware.light.LightHandler;
 import com.yongyida.robot.communicate.app.hardware.motion.MotionHandler;
 import com.yongyida.robot.communicate.app.hardware.touch.TouchHandler;
-import com.yongyida.robot.communicate.app.hardware.vision.VersionHandler;
+import com.yongyida.robot.communicate.app.hardware.vision.VisionHandler;
 import com.yongyida.robot.communicate.app.hardware.zigbee.ZigbeeHandler;
 import com.yongyida.robot.communicate.app.server.ServerService;
 import com.yongyida.robot.communicate.app.utils.LogHelper;
-import com.yongyida.robot.control.model.HardwareConfig;
 
 import java.util.ArrayList;
 
@@ -39,7 +38,7 @@ public class HardWareServerService extends ServerService {
         mHandlers.add(new LightHandler()) ;
         mHandlers.add(new CameraHandler()) ;
         mHandlers.add(new ZigbeeHandler()) ;
-        mHandlers.add(new VersionHandler()) ;
+        mHandlers.add(new VisionHandler()) ;
     }
 
     @Override
