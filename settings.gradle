@@ -1,5 +1,4 @@
-include ':app'
 include ':communicate_app_0'
 include ':communicate_app_1'
 include ':communicate_app_2'
-include ':communicate_app_3'
+include ':YYDRobotHardware'

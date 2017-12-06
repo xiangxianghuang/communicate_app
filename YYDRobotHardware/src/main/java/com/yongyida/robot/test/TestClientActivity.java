@@ -1,11 +1,10 @@
-package com.yongyida.robot.hardware;
+package com.yongyida.robot.test;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.yongyida.robot.communicate.app.client.Client;
 import com.yongyida.robot.communicate.app.client.Receiver;
 import com.yongyida.robot.communicate.app.common.IResponseListener;
 import com.yongyida.robot.communicate.app.common.SendResponse;
@@ -16,15 +15,15 @@ import com.yongyida.robot.communicate.app.hardware.led.response.LedStatueRespons
 import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedStatueSend;
 import com.yongyida.robot.communicate.app.hardware.vision.VersionData;
-import com.yongyida.robot.communicate.app.hardware.vision.send.VersionDataSend;
 import com.yongyida.robot.communicate.app.utils.LogHelper;
+import com.yongyida.robot.hardware.R;
 
 /**
- * Created by HuangXiangXiang on 2017/11/30.
+ * Created by HuangXiangXiang on 2017/12/6.
  */
-public class TestActivity extends Activity {
+public class TestClientActivity extends Activity {
 
-    private static final String TAG = TestActivity.class.getSimpleName() ;
+    private static final String TAG = TestClientActivity.class.getSimpleName() ;
 
     private HardwareClient mHardwareClient ;
     private Receiver mHardwareReceiver ;
@@ -214,4 +213,5 @@ public class TestActivity extends Activity {
         }.start();
 
     }
+
 }

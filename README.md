@@ -19,5 +19,8 @@
 
 
 ## communicate_app_2
-    为实际控制硬件的程序
+    未发送指令的架包
 
+
+## YYDRobotHardware
+ YYD的实际控制

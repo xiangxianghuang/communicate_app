@@ -8,11 +8,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/YYDRobotHardware" />
             <option value="$PROJECT_DIR$/communicate_app_0" />
             <option value="$PROJECT_DIR$/communicate_app_1" />
             <option value="$PROJECT_DIR$/communicate_app_2" />
-            <option value="$PROJECT_DIR$/communicate_app_3" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

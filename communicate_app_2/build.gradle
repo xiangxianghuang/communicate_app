@@ -21,13 +21,13 @@ android {
         }
     }
 
+    dexOptions {
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
-
     compile project(path: ':communicate_app_1')
     compile project(path: ':communicate_app_0')
 }
