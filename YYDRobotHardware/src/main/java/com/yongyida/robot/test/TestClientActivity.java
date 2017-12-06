@@ -5,17 +5,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.yongyida.robot.communicate.app.client.Receiver;
-import com.yongyida.robot.communicate.app.common.IResponseListener;
-import com.yongyida.robot.communicate.app.common.SendResponse;
-import com.yongyida.robot.communicate.app.common.response.BaseResponse;
-import com.yongyida.robot.communicate.app.hardware.HardwareClient;
-import com.yongyida.robot.communicate.app.hardware.led.LedStatue;
-import com.yongyida.robot.communicate.app.hardware.led.response.LedStatueResponse;
-import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
-import com.yongyida.robot.communicate.app.hardware.led.send.LedStatueSend;
-import com.yongyida.robot.communicate.app.hardware.vision.VersionData;
-import com.yongyida.robot.communicate.app.utils.LogHelper;
+import com.hiva.communicate.app.client.Receiver;
+import com.hiva.communicate.app.common.IResponseListener;
+import com.hiva.communicate.app.common.SendResponse;
+import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.hardware.HardwareClient;
+import com.hiva.communicate.app.hardware.led.LedStatue;
+import com.hiva.communicate.app.hardware.led.response.LedStatueResponse;
+import com.hiva.communicate.app.hardware.led.send.LedSend;
+import com.hiva.communicate.app.hardware.led.send.LedStatueSend;
+import com.hiva.communicate.app.hardware.vision.VersionData;
+import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.hardware.R;
 
 /**

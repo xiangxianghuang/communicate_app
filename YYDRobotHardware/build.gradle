@@ -11,7 +11,7 @@ android {
 
         applicationId "com.yongyida.robot.hardware"
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
     }
 
@@ -29,7 +29,6 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
-//    compile project(path: ':communicate_app_0')
-//    compile project(path: ':communicate_app_1')
-    compile project(path: ':communicate_app_2')
+
+    compile project(path: ':communicate_app_client')
 }

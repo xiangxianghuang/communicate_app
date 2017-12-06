@@ -1,11 +1,11 @@
 package com.yongyida.robot.control.model.y138.version;
 
-import com.yongyida.robot.communicate.app.common.response.BaseResponse;
-import com.yongyida.robot.communicate.app.hardware.vision.VersionData;
-import com.yongyida.robot.communicate.app.hardware.vision.VisionControl;
-import com.yongyida.robot.communicate.app.hardware.vision.response.VersionDataResponse;
-import com.yongyida.robot.communicate.app.hardware.vision.send.VersionDataSend;
-import com.yongyida.robot.communicate.app.utils.LogHelper;
+import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.hardware.vision.VersionData;
+import com.hiva.communicate.app.hardware.vision.VisionControl;
+import com.hiva.communicate.app.hardware.vision.response.VersionDataResponse;
+import com.hiva.communicate.app.hardware.vision.send.VersionDataSend;
+import com.hiva.communicate.app.utils.LogHelper;
 
 /**
  * Created by HuangXiangXiang on 2017/12/5.

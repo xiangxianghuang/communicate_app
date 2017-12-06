@@ -1,6 +1,6 @@
 package com.yongyida.robot.control.model.y128.led;
 
-import com.yongyida.robot.communicate.app.hardware.led.LedControl;
+import com.hiva.communicate.app.hardware.led.LedControl;
 
 /**
  * Created by HuangXiangXiang on 2017/12/5.

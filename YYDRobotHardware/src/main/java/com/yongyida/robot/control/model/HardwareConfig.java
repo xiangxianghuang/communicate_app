@@ -3,7 +3,7 @@ package com.yongyida.robot.control.model;
 import android.util.SparseArray;
 
 import com.yongyida.robot.communicate.app.hardware.IControl;
-import com.yongyida.robot.communicate.app.hardware.vision.VisionControl;
+import com.hiva.communicate.app.hardware.vision.VisionControl;
 import com.yongyida.robot.control.model.y138.version.Y138VisionControl;
 
 /**
