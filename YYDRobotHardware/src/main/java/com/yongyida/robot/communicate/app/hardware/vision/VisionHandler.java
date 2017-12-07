@@ -1,14 +1,14 @@
 package com.yongyida.robot.communicate.app.hardware.vision;
 
-import com.yongyida.robot.communicate.app.common.IResponseListener;
-import com.yongyida.robot.communicate.app.common.response.BaseResponse;
-import com.yongyida.robot.communicate.app.common.send.BaseSend;
+import com.hiva.communicate.app.common.IResponseListener;
+import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.send.BaseSend;
 import com.yongyida.robot.communicate.app.hardware.BaseHandler;
 import com.yongyida.robot.communicate.app.hardware.vision.response.VersionDataResponse;
 import com.yongyida.robot.communicate.app.hardware.vision.send.VersionDataSend;
 import com.yongyida.robot.control.model.HardwareConfig;
 
-import static com.yongyida.robot.communicate.app.common.response.BaseResponse.RESULT_CAN_NOT_HANDLE;
+import static com.hiva.communicate.app.common.response.BaseResponse.RESULT_CAN_NOT_HANDLE;
 
 /**
  * Created by HuangXiangXiang on 2017/12/5.

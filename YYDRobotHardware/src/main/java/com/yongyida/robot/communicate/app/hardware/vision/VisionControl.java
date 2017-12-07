@@ -1,6 +1,6 @@
 package com.yongyida.robot.communicate.app.hardware.vision;
 
-import com.yongyida.robot.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.BaseResponse;
 import com.yongyida.robot.communicate.app.hardware.IControl;
 import com.yongyida.robot.communicate.app.hardware.vision.send.VersionDataSend;
 import com.yongyida.robot.control.model.HardwareConfig;

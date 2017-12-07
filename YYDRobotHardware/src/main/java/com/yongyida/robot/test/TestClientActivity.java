@@ -10,11 +10,11 @@ import com.hiva.communicate.app.common.IResponseListener;
 import com.hiva.communicate.app.common.SendResponse;
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.hardware.HardwareClient;
-import com.hiva.communicate.app.hardware.led.LedStatue;
-import com.hiva.communicate.app.hardware.led.response.LedStatueResponse;
-import com.hiva.communicate.app.hardware.led.send.LedSend;
-import com.hiva.communicate.app.hardware.led.send.LedStatueSend;
-import com.hiva.communicate.app.hardware.vision.VersionData;
+import com.yongyida.robot.communicate.app.hardware.led.LedStatue;
+import com.yongyida.robot.communicate.app.hardware.led.response.LedStatueResponse;
+import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
+import com.yongyida.robot.communicate.app.hardware.led.send.LedStatueSend;
+import com.yongyida.robot.communicate.app.hardware.vision.VisionData;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.hardware.R;
 
@@ -178,20 +178,20 @@ public class TestClientActivity extends Activity {
             @Override
             public void run() {
 
-                VersionData versionData = new VersionData() ;
-                versionData.setPosition(VersionData.Position.MIDDLE);
-                versionData.setDistance(10);
-                mHardwareClient.sendVisionData(versionData) ;
+                VisionData visionData = new VisionData() ;
+                visionData.setPosition(VisionData.Position.MIDDLE);
+                visionData.setDistance(10);
+                mHardwareClient.sendVisionData(visionData) ;
 
 
 //                final long start = System.currentTimeMillis() ;
 //
-//                VersionData versionData = new VersionData() ;
-//                versionData.setPosition(VersionData.Position.MIDDLE);
-//                versionData.setDistance(10);
+//                VisionData visionData = new VisionData() ;
+//                visionData.setPosition(VisionData.Position.MIDDLE);
+//                visionData.setDistance(10);
 //
 //                VersionDataSend versionDataSend = new VersionDataSend() ;
-//                versionDataSend.setVersionData(versionData);
+//                versionDataSend.setVisionData(visionData);
 //
 //                IResponseListener responseListener = new IResponseListener(){
 //

@@ -1,10 +1,10 @@
 package com.yongyida.robot.control.model.y138.version;
 
 import com.hiva.communicate.app.common.response.BaseResponse;
-import com.hiva.communicate.app.hardware.vision.VersionData;
-import com.hiva.communicate.app.hardware.vision.VisionControl;
-import com.hiva.communicate.app.hardware.vision.response.VersionDataResponse;
-import com.hiva.communicate.app.hardware.vision.send.VersionDataSend;
+import com.yongyida.robot.communicate.app.hardware.vision.VisionData;
+import com.yongyida.robot.communicate.app.hardware.vision.VisionControl;
+import com.yongyida.robot.communicate.app.hardware.vision.response.VersionDataResponse;
+import com.yongyida.robot.communicate.app.hardware.vision.send.VersionDataSend;
 import com.hiva.communicate.app.utils.LogHelper;
 
 /**
@@ -20,9 +20,9 @@ public class Y138VisionControl extends VisionControl {
 
         BaseResponse response = new VersionDataResponse() ;
 
-        VersionData versionData = versionDataSend.getVersionData() ;
+        VisionData visionData = versionDataSend.getVisionData() ;
 
-        LogHelper.i(TAG, LogHelper.__TAG__() + ",versionData : " + versionData);
+        LogHelper.i(TAG, LogHelper.__TAG__() + ",visionData : " + visionData);
 
        return response;
     }

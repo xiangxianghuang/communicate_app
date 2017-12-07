@@ -22,13 +22,21 @@ android {
         }
     }
 
-    dexOptions {
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.google.code.gson:gson:2.8.2'
 
-    compile project(path: ':communicate_app_client')
+    compile(name: 'communicate_app-debug-1.0.0', ext: 'aar')
+    compile(name: 'communicate_app_hardware-debug-1.0.0', ext: 'aar')
+    compile(name: 'communicate_app_client-debug-1.0.0', ext: 'aar')
+
 }

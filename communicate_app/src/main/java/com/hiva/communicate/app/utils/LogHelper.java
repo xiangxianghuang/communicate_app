@@ -20,8 +20,6 @@ import java.util.Locale;
 public class LogHelper {
 	/**
 	 * 打印日志时获取当前的程序文件名,行号,方法名 输出格式为：[FileName | LineNumber | MethodName]
-	 *
-	 * @return
 	 */
 	public static boolean debug = true;
 

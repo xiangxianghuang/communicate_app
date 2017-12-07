@@ -1,5 +1,10 @@
 apply plugin: 'com.android.library'
 
+
+def versionCodeApp = 1              //版本号
+def versionNameApp = "1.0.0"        //版本名称
+def projectName = "communicate_app_client"            //项目(因为和远程仓库名称一致，不能修改)
+
 android {
     compileSdkVersion 26
 
@@ -8,8 +13,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 2
-        versionName "1.1"
+        versionCode versionCodeApp
+        versionName versionNameApp
 
 
     }
@@ -21,7 +26,11 @@ android {
         }
     }
 
-    dexOptions {
+    //重命名
+    android.libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${projectName}-${name}-${defaultConfig.versionName}.aar"
+        }
     }
 }
 
@@ -40,8 +49,8 @@ publish{
     repoName = 'AppCommunicate'//远程仓库名字,不指明，默认是上传到maven
     userOrg = 'huangxiangxiang'//bintray.com的用户名
     groupId = 'com.hiva.communicate.app'//jcenter上的路径
-    artifactId = 'communicate_app_client'//项目名称
-    publishVersion = '1.0.0'//版本号
+    artifactId = projectName//项目名称
+    publishVersion = versionNameApp//版本号
     desc = '数据发送的工具类'//描述，不重要
     website = siteUrl//项目主页
 }
