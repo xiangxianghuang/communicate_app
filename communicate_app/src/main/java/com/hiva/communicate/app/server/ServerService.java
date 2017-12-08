@@ -6,10 +6,10 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 
+import com.hiva.communicate.app.ResponseListener;
+import com.hiva.communicate.app.SendManager;
 import com.hiva.communicate.app.common.Container;
 import com.hiva.communicate.app.common.IResponseListener;
-import com.yongyida.robot.communicate.app.ResponseListener;
-import com.yongyida.robot.communicate.app.SendManager;
 import com.hiva.communicate.app.common.SendResponse;
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.common.send.BaseSend;

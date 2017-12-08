@@ -1,8 +1,8 @@
 package com.yongyida.robot.communicate.app.hardware.vision;
 
 import com.hiva.communicate.app.common.response.BaseResponse;
+import com.yongyida.robot.communicate.app.hardware.vision.send.VisionDataSend;
 import com.yongyida.robot.communicate.app.hardware.IControl;
-import com.yongyida.robot.communicate.app.hardware.vision.send.VersionDataSend;
 import com.yongyida.robot.control.model.HardwareConfig;
 
 /**
@@ -10,7 +10,7 @@ import com.yongyida.robot.control.model.HardwareConfig;
  */
 public abstract class VisionControl implements IControl{
 
-    public abstract BaseResponse sendVersionData(VersionDataSend versionDataSend);
+    public abstract BaseResponse sendVersionData(VisionDataSend visionDataSend);
 
     @Override
     public final int getType() {

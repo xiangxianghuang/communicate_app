@@ -4,8 +4,8 @@ import com.hiva.communicate.app.common.IResponseListener;
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.common.send.BaseSend;
 import com.yongyida.robot.communicate.app.hardware.BaseHandler;
-import com.yongyida.robot.communicate.app.hardware.vision.response.VersionDataResponse;
-import com.yongyida.robot.communicate.app.hardware.vision.send.VersionDataSend;
+import com.yongyida.robot.communicate.app.hardware.vision.response.VisionDataResponse;
+import com.yongyida.robot.communicate.app.hardware.vision.send.VisionDataSend;
 import com.yongyida.robot.control.model.HardwareConfig;
 
 import static com.hiva.communicate.app.common.response.BaseResponse.RESULT_CAN_NOT_HANDLE;
@@ -26,10 +26,10 @@ public class VisionHandler extends BaseHandler {
     @Override
     public boolean onHandler(BaseSend send, IResponseListener responseListener) {
 
-        if(send instanceof VersionDataSend){
+        if(send instanceof VisionDataSend){
 
-            VersionDataSend versionDataSend = (VersionDataSend) send;
-            sendVersionData(versionDataSend, responseListener) ;
+            VisionDataSend visionDataSend = (VisionDataSend) send;
+            sendVersionData(visionDataSend, responseListener) ;
 
             return true;
         }
@@ -38,19 +38,19 @@ public class VisionHandler extends BaseHandler {
         return false;
     }
 
-    private void sendVersionData(VersionDataSend versionDataSend,IResponseListener responseListener) {
+    private void sendVersionData(VisionDataSend visionDataSend, IResponseListener responseListener) {
 
         if(mVersionControl == null){
 
             if(responseListener != null){
 
-                BaseResponse baseResponse = new VersionDataResponse(RESULT_CAN_NOT_HANDLE, "没有对应的处理类") ;
+                BaseResponse baseResponse = new VisionDataResponse(RESULT_CAN_NOT_HANDLE, "没有对应的处理类") ;
                 responseListener.onResponse(baseResponse);
             }
 
         }else{
 
-            BaseResponse baseResponse = mVersionControl.sendVersionData(versionDataSend) ;
+            BaseResponse baseResponse = mVersionControl.sendVersionData(visionDataSend) ;
             if(responseListener != null){
 
                 responseListener.onResponse(baseResponse);

@@ -6,4 +6,9 @@ package com.yongyida.robot.communicate.app.hardware;
 public interface IControl {
 
     int getType() ;
+
+    boolean start() ;
+
+    boolean end() ;
+
 }

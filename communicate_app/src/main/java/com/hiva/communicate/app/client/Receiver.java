@@ -8,9 +8,9 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
 
+import com.hiva.communicate.app.ResponseListener;
+import com.hiva.communicate.app.SendManager;
 import com.hiva.communicate.app.common.Container;
-import com.yongyida.robot.communicate.app.ResponseListener;
-import com.yongyida.robot.communicate.app.SendManager;
 import com.hiva.communicate.app.common.IResponseListener;
 import com.hiva.communicate.app.common.SendResponse;
 import com.hiva.communicate.app.common.response.BaseResponse;
@@ -183,8 +183,6 @@ public class Receiver {
         }
 
     }
-
-
 
 
 }

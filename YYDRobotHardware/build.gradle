@@ -22,6 +22,27 @@ android {
         }
     }
 
+    sourceSets.main {
+
+        java.srcDirs += [ "src/CARO/java","src/Y20/java","src/Y50/java","src/Y128/java","src/Y138/java",]
+        jniLibs.srcDirs +=  [ "src/Y128/jniLibs"]
+
+
+//        java.srcDirs = ["src/main/java", "src/Y128/java"]
+
+//        java.srcDir []
+
+//        aidl.srcDirs "/aidl"
+//        java.srcDir ""
+//        res.srcDir "/res"
+        //disable automatic ndk-build call
+//        jniLibs.srcDir "/libs"
+//        manifest.srcFile "/AndroidManifest.xml"
+//        assets.srcDir "/assets"
+//        resources.srcDirs = ['src/main/resources/']
+
+    }
+
 }
 
 repositories {
@@ -33,10 +54,17 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.google.code.gson:gson:2.8.2'
 
-    compile(name: 'communicate_app-debug-1.0.0', ext: 'aar')
-    compile(name: 'communicate_app_hardware-debug-1.0.0', ext: 'aar')
-    compile(name: 'communicate_app_client-debug-1.0.0', ext: 'aar')
+//    compile 'com.google.code.gson:gson:2.8.2'
+//    compile 'com.hiva.communicate.app:communicate_app:1.0.0'
+//    compile 'com.hiva.communicate.app:communicate_app_hardware:1.0.0'
+//    compile 'com.hiva.communicate.app:communicate_app_client:1.0.0'
 
+
+    //
+    //    compile(name: 'communicate_app-debug-1.0.0', ext: 'aar')
+    //    compile(name: 'communicate_app_hardware-debug-1.0.0', ext: 'aar')
+    //    compile(name: 'communicate_app_client-debug-1.0.0', ext: 'aar')
+
+    implementation project(':communicate_app_client')
 }

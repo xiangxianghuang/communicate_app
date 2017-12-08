@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
-def versionCodeApp = 1              //版本号
-def versionNameApp = "1.0.0"        //版本名称
+def versionCodeApp = 2              //版本号
+def versionNameApp = "1.0.1"        //版本名称
 def projectName = "communicate_app"            //项目(因为和远程仓库名称一致，不能修改)
 
 android {

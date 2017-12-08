@@ -12,4 +12,14 @@ public class InfraredControl implements IControl {
     public int getType() {
         return HardwareConfig.TYPE_INFRARED ;
     }
+
+    @Override
+    public boolean start() {
+        return false;
+    }
+
+    @Override
+    public boolean end() {
+        return false;
+    }
 }

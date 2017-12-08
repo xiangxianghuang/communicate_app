@@ -1,6 +1,6 @@
-package com.yongyida.robot.communicate.app ;
+package com.hiva.communicate.app ;
 
-import com.yongyida.robot.communicate.app.ResponseListener ;
+import com.hiva.communicate.app.ResponseListener ;
 
 interface SendManager {
 

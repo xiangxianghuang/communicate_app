@@ -1,4 +1,4 @@
-package com.yongyida.robot.communicate.app;
+package com.hiva.communicate.app;
 
 interface ResponseListener {
 

@@ -9,7 +9,8 @@ import com.hiva.communicate.app.client.Receiver;
 import com.hiva.communicate.app.common.IResponseListener;
 import com.hiva.communicate.app.common.SendResponse;
 import com.hiva.communicate.app.common.response.BaseResponse;
-import com.hiva.communicate.app.hardware.HardwareClient;
+import com.yongyida.robot.hardware.client.HardwareClient;
+
 import com.yongyida.robot.communicate.app.hardware.led.LedStatue;
 import com.yongyida.robot.communicate.app.hardware.led.response.LedStatueResponse;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
@@ -125,7 +126,6 @@ public class TestClientActivity extends Activity {
     int warm ;
     public void updateLed(View view) {
 
-
         if(mLedStatue == null){
 
             return;
@@ -139,7 +139,6 @@ public class TestClientActivity extends Activity {
             isFlag = true ;
             mLedStatue.setWarm(++warm);
         }
-
 
         new Thread(){
             @Override
@@ -169,7 +168,6 @@ public class TestClientActivity extends Activity {
             }
         }.start();
 
-
     }
 
     public void sendVersionData(View view) {
@@ -190,7 +188,7 @@ public class TestClientActivity extends Activity {
 //                visionData.setPosition(VisionData.Position.MIDDLE);
 //                visionData.setDistance(10);
 //
-//                VersionDataSend versionDataSend = new VersionDataSend() ;
+//                VisionDataSend versionDataSend = new VisionDataSend() ;
 //                versionDataSend.setVisionData(visionData);
 //
 //                IResponseListener responseListener = new IResponseListener(){

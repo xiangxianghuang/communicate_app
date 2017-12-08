@@ -23,11 +23,12 @@ public class Container {
 
     private String confirmClassName ;
 
+    private final static Gson GSON = new Gson() ;
+
     public static Container fromJson(String json){
 
-        return new Gson().fromJson(json, Container.class) ;
+        return GSON.fromJson(json, Container.class) ;
     }
-
 
     public Container(Context context, Object object){
 
@@ -83,17 +84,17 @@ public class Container {
 
     public String toJson() {
 
-        return new Gson().toJson(this);
+        return GSON.toJson(this);
     }
 
     private static String toJson(Object object) {
 
-        return new Gson().toJson(object);
+        return GSON.toJson(object);
     }
 
     private static <T>T fromJson(String json ,Class<T> classOfT){
 
-        return new Gson().fromJson(json, classOfT) ;
+        return GSON.fromJson(json, classOfT) ;
     }
 
 

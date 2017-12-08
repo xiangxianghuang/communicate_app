@@ -12,4 +12,14 @@ public class ZigbeeControl implements IControl{
     public int getType() {
         return HardwareConfig.TYPE_ZIGBEE ;
     }
+
+    @Override
+    public boolean start() {
+        return false;
+    }
+
+    @Override
+    public boolean end() {
+        return false;
+    }
 }

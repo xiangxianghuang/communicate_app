@@ -6,7 +6,7 @@ import com.yongyida.robot.communicate.app.hardware.vision.VisionData;
 /**
  * Created by HuangXiangXiang on 2017/12/5.
  */
-public class VersionDataSend extends BaseSend {
+public class VisionDataSend extends BaseSend {
 
     private VisionData visionData;
 

@@ -5,14 +5,14 @@ import com.hiva.communicate.app.common.response.BaseResponse;
 /**
  * Created by HuangXiangXiang on 2017/12/5.
  */
-public class VersionDataResponse extends BaseResponse {
+public class VisionDataResponse extends BaseResponse {
 
-    public VersionDataResponse() {
+    public VisionDataResponse() {
 
         super();
     }
 
-    public VersionDataResponse(int result, String message) {
+    public VisionDataResponse(int result, String message) {
         super(result, message);
     }
 }

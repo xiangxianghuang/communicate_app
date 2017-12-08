@@ -1,4 +1,4 @@
-package com.hiva.communicate.app.hardware;
+package com.yongyida.robot.hardware.client;
 
 import android.content.Context;
 
@@ -6,7 +6,7 @@ import com.hiva.communicate.app.client.Client;
 import com.hiva.communicate.app.client.Receiver;
 import com.hiva.communicate.app.common.SendResponse;
 import com.yongyida.robot.communicate.app.hardware.vision.VisionData;
-import com.yongyida.robot.communicate.app.hardware.vision.send.VersionDataSend;
+import com.yongyida.robot.communicate.app.hardware.vision.send.VisionDataSend;
 
 /**
  * Created by HuangXiangXiang on 2017/12/5.
@@ -52,10 +52,10 @@ public class HardwareClient {
 
         getHardwareReceiver() ;
 
-        VersionDataSend versionDataSend = new VersionDataSend() ;
-        versionDataSend.setVisionData(visionData);
+        VisionDataSend visionDataSend = new VisionDataSend() ;
+        visionDataSend.setVisionData(visionData);
 
-        return mReceiver.send(versionDataSend, null) ;
+        return mReceiver.send(visionDataSend, null) ;
     }
 
 
