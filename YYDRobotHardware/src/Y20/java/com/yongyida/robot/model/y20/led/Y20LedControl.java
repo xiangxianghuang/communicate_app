@@ -1,11 +1,13 @@
-package com.yongyida.robot.model.y128.led;
+package com.yongyida.robot.model.y20.led;
+
 
 import com.yongyida.robot.communicate.app.hardware.led.LedControl;
 
 /**
  * Created by HuangXiangXiang on 2017/12/5.
  */
-public class Y128LedControl extends LedControl {
+public class Y20LedControl extends LedControl {
+
     @Override
     public void onPositionChanged(int position) {
 
@@ -55,6 +57,5 @@ public class Y128LedControl extends LedControl {
     public boolean isStart() {
         return false;
     }
-
 
 }

@@ -22,8 +22,24 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="开始障碍物的信息"
+        android:onClick="startVersion"
+        />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="发送障碍物的信息"
         android:onClick="sendVersionData"
         />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="停止障碍物的信息"
+        android:onClick="stopVersion"
+        />
+
 
 </LinearLayout>

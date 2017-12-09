@@ -9,15 +9,15 @@ import com.hiva.communicate.app.client.Receiver;
 import com.hiva.communicate.app.common.IResponseListener;
 import com.hiva.communicate.app.common.SendResponse;
 import com.hiva.communicate.app.common.response.BaseResponse;
-import com.yongyida.robot.hardware.client.HardwareClient;
-
+import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.led.LedStatue;
 import com.yongyida.robot.communicate.app.hardware.led.response.LedStatueResponse;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedStatueSend;
-import com.yongyida.robot.communicate.app.hardware.vision.VisionData;
-import com.hiva.communicate.app.utils.LogHelper;
+import com.yongyida.robot.communicate.app.hardware.vision.data.VisionData;
 import com.yongyida.robot.hardware.R;
+import com.yongyida.robot.hardware.client.HardwareClient;
+import com.yongyida.robot.hardware.client.VisionClient;
 
 /**
  * Created by HuangXiangXiang on 2017/12/6.
@@ -30,6 +30,8 @@ public class TestClientActivity extends Activity {
     private Receiver mHardwareReceiver ;
     private LedStatue mLedStatue ;
 
+    private VisionClient mVisionClient ;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +40,8 @@ public class TestClientActivity extends Activity {
 
         mHardwareClient = HardwareClient.getInstance(this) ;
         mHardwareReceiver = mHardwareClient.getHardwareReceiver() ;
+
+        mVisionClient = new VisionClient(this) ;
 
 //        Button button = new Button(this) ;
 //        setContentView(button);
@@ -176,11 +180,7 @@ public class TestClientActivity extends Activity {
             @Override
             public void run() {
 
-                VisionData visionData = new VisionData() ;
-                visionData.setPosition(VisionData.Position.MIDDLE);
-                visionData.setDistance(10);
-                mHardwareClient.sendVisionData(visionData) ;
-
+                mVisionClient.sendVisionData(VisionData.Position.MIDDLE,120);
 
 //                final long start = System.currentTimeMillis() ;
 //
@@ -212,4 +212,31 @@ public class TestClientActivity extends Activity {
 
     }
 
+    public void startVersion(View view) {
+
+        new Thread(){
+
+            @Override
+            public void run() {
+
+                mVisionClient.startVisionData();
+
+            }
+        }.start();
+
+    }
+
+    public void stopVersion(View view) {
+
+        new Thread(){
+
+            @Override
+            public void run() {
+
+                mVisionClient.stopVisionData();
+
+            }
+        }.start();
+
+    }
 }

@@ -1,7 +1,5 @@
 package com.hiva.communicate.app.common;
 
-import android.support.annotation.NonNull;
-
 import com.hiva.communicate.app.common.response.BaseResponse;
 
 /**
@@ -9,5 +7,5 @@ import com.hiva.communicate.app.common.response.BaseResponse;
  */
 public interface IResponseListener {
 
-    void onResponse(@NonNull BaseResponse response);
+    void onResponse(BaseResponse response);
 }

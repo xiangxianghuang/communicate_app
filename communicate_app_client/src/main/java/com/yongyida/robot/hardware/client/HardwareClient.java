@@ -4,9 +4,6 @@ import android.content.Context;
 
 import com.hiva.communicate.app.client.Client;
 import com.hiva.communicate.app.client.Receiver;
-import com.hiva.communicate.app.common.SendResponse;
-import com.yongyida.robot.communicate.app.hardware.vision.VisionData;
-import com.yongyida.robot.communicate.app.hardware.vision.send.VisionDataSend;
 
 /**
  * Created by HuangXiangXiang on 2017/12/5.
@@ -18,7 +15,7 @@ public class HardwareClient {
 
     private Context mContext ;
     private Client mClient ;
-    private Receiver mReceiver ;
+    Receiver mReceiver ;
 
     private static HardwareClient mHardwareClient ;
     public static HardwareClient getInstance(Context context){
@@ -34,6 +31,7 @@ public class HardwareClient {
 
         this.mContext = context ;
         this.mClient = Client.getInstance(context) ;
+        getHardwareReceiver() ;
     }
 
     public Receiver getHardwareReceiver(){
@@ -46,17 +44,6 @@ public class HardwareClient {
         return  mReceiver;
     }
 
-
-
-    public SendResponse sendVisionData(VisionData visionData){
-
-        getHardwareReceiver() ;
-
-        VisionDataSend visionDataSend = new VisionDataSend() ;
-        visionDataSend.setVisionData(visionData);
-
-        return mReceiver.send(visionDataSend, null) ;
-    }
 
 
 }

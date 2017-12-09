@@ -1,6 +1,6 @@
 package com.yongyida.robot.model.y128.serial;
 
-import com.yongyida.robot.agreement.old.Steering;
+import com.yongyida.robot.model.y138.agreement.old.Steering;
 
 /**
  * Created by Huangxiangxiang on 2017/8/11.

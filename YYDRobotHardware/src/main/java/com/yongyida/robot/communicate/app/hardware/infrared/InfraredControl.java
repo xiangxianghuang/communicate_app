@@ -19,7 +19,14 @@ public class InfraredControl implements IControl {
     }
 
     @Override
-    public boolean end() {
+    public boolean stop() {
         return false;
     }
+
+    @Override
+    public boolean isStart() {
+        return false;
+    }
+
+
 }

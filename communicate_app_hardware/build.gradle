@@ -1,12 +1,11 @@
 apply plugin: 'com.android.library'
 
-def versionCodeApp = 1              //版本号
-def versionNameApp = "1.0.0"        //版本名称
+def versionCodeApp = 2              //版本号
+def versionNameApp = "1.0.1"        //版本名称
 def projectName = "communicate_app_hardware"            //项目(因为和远程仓库名称一致，不能修改)
 
 android {
     compileSdkVersion 26
-
 
     defaultConfig {
         minSdkVersion 14
@@ -20,6 +19,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
     }
 
     //重命名
@@ -31,9 +31,12 @@ android {
 }
 
 dependencies {
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     implementation project(':communicate_app')
 }
+
 
 /** 以下开始是将Android Library上传到jcenter的相关配置**/
 apply plugin: 'com.novoda.bintray-release'//添加

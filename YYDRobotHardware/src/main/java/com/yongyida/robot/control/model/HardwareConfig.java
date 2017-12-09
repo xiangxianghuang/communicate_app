@@ -4,8 +4,8 @@ import android.util.SparseArray;
 
 import com.yongyida.robot.communicate.app.hardware.IControl;
 import com.yongyida.robot.model.y128.serial.Serial;
-import com.yongyida.robot.model.y128.serial.VisionSerialSend;
-import com.yongyida.robot.control.model.y138.version.Y138VisionControl;
+import com.yongyida.robot.model.y138.serial.VisionSerialSend;
+import com.yongyida.robot.model.y138.vision.Y138VisionControl;
 
 /**
  * Created by HuangXiangXiang on 2017/12/5.
@@ -49,7 +49,6 @@ public class HardwareConfig {
     }
 
     private HardwareConfig(){
-
 
 
         Serial serial = new Serial() ;

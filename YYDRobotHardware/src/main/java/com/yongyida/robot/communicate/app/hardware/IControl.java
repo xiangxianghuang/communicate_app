@@ -9,6 +9,8 @@ public interface IControl {
 
     boolean start() ;
 
-    boolean end() ;
+    boolean stop() ;
+
+    boolean isStart() ;
 
 }

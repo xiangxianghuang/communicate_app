@@ -25,7 +25,6 @@ public class HardWareServerService extends ServerService {
 
     private static final String TAG = HardWareServerService.class.getSimpleName() ;
 
-
     private ArrayList<BaseHandler> mHandlers = new ArrayList<>() ;
     private void initHandlers (){
 
