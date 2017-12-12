@@ -56,5 +56,44 @@ public class VisionClient extends BaseClient {
 
     }
 
+    public void startVisionDataInMainThread(){
 
+        mReceiver.getSendManager() ;
+
+        new Thread(){
+
+            @Override
+            public void run() {
+
+                startVisionData() ;
+            }
+        }.start();
+
+    }
+
+
+    public void sendVisionDataInMainThread(final VisionData.Position position, final int distance){
+
+        new Thread(){
+
+            @Override
+            public void run() {
+
+                sendVisionData(position,distance);
+            }
+        }.start();
+    }
+
+    public void stopVisionDataInMainThread(){
+
+        new Thread(){
+
+            @Override
+            public void run() {
+
+                stopVisionData() ;
+            }
+        }.start();
+
+    }
 }

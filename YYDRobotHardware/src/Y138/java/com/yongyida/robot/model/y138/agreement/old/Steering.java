@@ -399,9 +399,12 @@ public class Steering {
 
     public static class Vision extends SingleChip{
 
-        public static final  byte POSITION_LEFT      = 0x01 ;
-        public static final  byte POSITION_MIDDLE    = 0x02 ;
-        public static final  byte POSITION_RIGHT     = 0x03 ;
+        public static final byte POSITION_NONE              = 0x00 ;//空数据
+        public static final byte POSITION_LEFT              = 0x01 ;
+        public static final byte POSITION_MIDDLE            = 0x02 ;
+        public static final byte POSITION_RIGHT             = 0x03 ;
+        public static final byte POSITION_START             = (byte) 0xF0;//起始
+        public static final byte POSITION_STOP              = (byte) 0xFF;//结束
 
         private byte position ;
         private byte distance ;

@@ -24,8 +24,6 @@ public class Y138VisionControl extends VisionControl {
     }
 
 
-
-
     @Override
     public BaseResponse sendVersionData(VisionDataSend visionDataSend) {
 
@@ -54,17 +52,19 @@ public class Y138VisionControl extends VisionControl {
     }
 
 
+    private boolean isStartVisionControl = false ;
     private boolean isStartVisionControl(){
 
-       return (mVisionThread != null && mVisionThread.isRun) ;
+        return isStartVisionControl ;
     }
 
     private BaseResponse startVisionControl() {
 
         if(!isStartVisionControl()){
 
-            mVisionThread = new VisionThread() ;
-            mVisionThread.start() ;
+            visionSerialSend.sendStartVision();
+
+            isStartVisionControl = true ;
         }
 
         return null;
@@ -75,7 +75,29 @@ public class Y138VisionControl extends VisionControl {
 
         if(isStartVisionControl()){
 
-            this.mVisionData = visionData ;
+            byte position = Steering.Vision.POSITION_NONE ;
+            switch (visionData.getPosition()){
+
+                case NONE:
+                    position  = Steering.Vision.POSITION_NONE ;
+                case LEFT:
+                    position  = Steering.Vision.POSITION_LEFT;
+                    break;
+                case MIDDLE:
+                    position  = Steering.Vision.POSITION_MIDDLE ;
+                    break;
+                case RIGHT:
+                    position  = Steering.Vision.POSITION_RIGHT ;
+                    break;
+                case START:
+                    position  = Steering.Vision.POSITION_START ;
+                    break;
+                case STOP:
+                    position  = Steering.Vision.POSITION_STOP ;
+                    break;
+            }
+            byte distance = (byte) visionData.getDistance() ;
+            visionSerialSend.sendVision(position,distance);
         }
 
         return null;
@@ -85,71 +107,11 @@ public class Y138VisionControl extends VisionControl {
 
         if(isStartVisionControl()){
 
-            mVisionThread.stopRun();
-            mVisionThread = null ;
+            visionSerialSend.sendStopVision();
         }
 
         return null;
     }
-
-    private VisionData mVisionData ;
-    private static final int DELAY_MILLIS = 100;
-    private VisionThread mVisionThread ;
-    private class VisionThread extends Thread{
-
-        private boolean isRun = true ;
-
-        @Override
-        public void run() {
-
-            while (isRun){
-
-                if(mVisionData != null){
-
-                    byte position = Steering.Vision.POSITION_LEFT ;
-
-                    switch (mVisionData.getPosition()){
-
-                        case LEFT:
-                            position  = Steering.Vision.POSITION_LEFT;
-                            break;
-                        case MIDDLE:
-
-                            position  = Steering.Vision.POSITION_MIDDLE ;
-                            break;
-                        case RIGHT:
-
-                            position  = Steering.Vision.POSITION_RIGHT ;
-                            break;
-                    }
-
-                    byte distance = (byte) mVisionData.getDistance() ;
-
-                    visionSerialSend.sendVision(position,distance);
-
-                    mVisionData = null ;
-
-                }else{
-
-                    visionSerialSend.sendVision();
-                }
-
-                try {
-                    Thread.sleep(DELAY_MILLIS);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        private void stopRun(){
-
-            isRun = false ;
-        }
-
-    }
-
-
 
 
     @Override

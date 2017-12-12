@@ -19,6 +19,8 @@ import com.yongyida.robot.hardware.R;
 import com.yongyida.robot.hardware.client.HardwareClient;
 import com.yongyida.robot.hardware.client.VisionClient;
 
+import java.util.Random;
+
 /**
  * Created by HuangXiangXiang on 2017/12/6.
  */
@@ -176,67 +178,18 @@ public class TestClientActivity extends Activity {
 
     public void sendVersionData(View view) {
 
-        new Thread(){
-            @Override
-            public void run() {
-
-                mVisionClient.sendVisionData(VisionData.Position.MIDDLE,120);
-
-//                final long start = System.currentTimeMillis() ;
-//
-//                VisionData visionData = new VisionData() ;
-//                visionData.setPosition(VisionData.Position.MIDDLE);
-//                visionData.setDistance(10);
-//
-//                VisionDataSend versionDataSend = new VisionDataSend() ;
-//                versionDataSend.setVisionData(visionData);
-//
-//                IResponseListener responseListener = new IResponseListener(){
-//
-//                    @Override
-//                    public void onResponse(BaseResponse response) {
-//
-//                        LogHelper.i(TAG, LogHelper.__TAG__() + ", response : " + response);
-//
-//                        long end2 = System.currentTimeMillis() ;
-//                        LogHelper.i(TAG, LogHelper.__TAG__() + ", 响应耗时1：" + (end2-start)) ;
-//                    }
-//                };
-//                SendResponse sendResponse = mHardwareReceiver.send(versionDataSend,responseListener) ;
-//                LogHelper.i(TAG, LogHelper.__TAG__() + ", sendResponse : " + sendResponse);
-//
-//                long end1 = System.currentTimeMillis() ;
-//                LogHelper.i(TAG, LogHelper.__TAG__() + ", 响应耗时2：" + (end1-start)) ;
-            }
-        }.start();
-
+        int index = new Random().nextInt(4) ;
+        int distance = new Random().nextInt(100 ) ;
+        mVisionClient.sendVisionDataInMainThread(VisionData.Position.values()[index],distance);
     }
 
     public void startVersion(View view) {
 
-        new Thread(){
-
-            @Override
-            public void run() {
-
-                mVisionClient.startVisionData();
-
-            }
-        }.start();
-
+        mVisionClient.startVisionDataInMainThread();
     }
 
     public void stopVersion(View view) {
 
-        new Thread(){
-
-            @Override
-            public void run() {
-
-                mVisionClient.stopVisionData();
-
-            }
-        }.start();
-
+        mVisionClient.stopVisionDataInMainThread();
     }
 }
