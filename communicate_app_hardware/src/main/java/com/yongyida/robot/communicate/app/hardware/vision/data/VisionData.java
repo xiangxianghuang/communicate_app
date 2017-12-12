@@ -6,12 +6,12 @@ package com.yongyida.robot.communicate.app.hardware.vision.data;
 public class VisionData {
 
     public enum Position{
-        NONE,
-        LEFT,   //左
-        MIDDLE, //中
-        RIGHT,   //右
-        START,
-        STOP,
+        NONE,       // 空数据
+        LEFT,       //左
+        MIDDLE,     //中
+        RIGHT,      //右
+        START,      //开始
+        STOP,       //结束
     }
 
     //障碍位置

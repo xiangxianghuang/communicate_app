@@ -3,7 +3,6 @@ package com.yongyida.robot.model.y138.vision;
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.vision.VisionControl;
-import com.yongyida.robot.communicate.app.hardware.vision.data.VisionControlData;
 import com.yongyida.robot.communicate.app.hardware.vision.data.VisionData;
 import com.yongyida.robot.communicate.app.hardware.vision.send.VisionDataSend;
 import com.yongyida.robot.model.y138.agreement.old.Steering;
@@ -25,25 +24,13 @@ public class Y138VisionControl extends VisionControl {
 
 
     @Override
-    public BaseResponse sendVersionData(VisionDataSend visionDataSend) {
+    public BaseResponse onControl(VisionDataSend visionDataSend) {
 
         LogHelper.i(TAG, LogHelper.__TAG__() + ",visionDataSend : " + visionDataSend);
 
-        VisionControlData visionControlData = visionDataSend.getVisionControlData();
         VisionData visionData = visionDataSend.getVisionData() ;
 
-        if (visionControlData != null){
-
-            if (visionControlData.isStart()){
-
-                return startVisionControl() ;
-
-            }else{
-
-                return stopVisionControl() ;
-            }
-
-        }else if(visionData != null){
+        if(visionData != null){
 
             return onVisionChanged(visionData) ;
         }
@@ -51,64 +38,32 @@ public class Y138VisionControl extends VisionControl {
        return null;
     }
 
-
-    private boolean isStartVisionControl = false ;
-    private boolean isStartVisionControl(){
-
-        return isStartVisionControl ;
-    }
-
-    private BaseResponse startVisionControl() {
-
-        if(!isStartVisionControl()){
-
-            visionSerialSend.sendStartVision();
-
-            isStartVisionControl = true ;
-        }
-
-        return null;
-    }
-
-
     private BaseResponse onVisionChanged(VisionData visionData) {
 
-        if(isStartVisionControl()){
+        byte position = Steering.Vision.POSITION_NONE ;
+        switch (visionData.getPosition()){
 
-            byte position = Steering.Vision.POSITION_NONE ;
-            switch (visionData.getPosition()){
-
-                case NONE:
-                    position  = Steering.Vision.POSITION_NONE ;
-                case LEFT:
-                    position  = Steering.Vision.POSITION_LEFT;
-                    break;
-                case MIDDLE:
-                    position  = Steering.Vision.POSITION_MIDDLE ;
-                    break;
-                case RIGHT:
-                    position  = Steering.Vision.POSITION_RIGHT ;
-                    break;
-                case START:
-                    position  = Steering.Vision.POSITION_START ;
-                    break;
-                case STOP:
-                    position  = Steering.Vision.POSITION_STOP ;
-                    break;
-            }
-            byte distance = (byte) visionData.getDistance() ;
-            visionSerialSend.sendVision(position,distance);
+            case NONE:
+                position  = Steering.Vision.POSITION_NONE ;
+                break;
+            case LEFT:
+                position  = Steering.Vision.POSITION_LEFT;
+                break;
+            case MIDDLE:
+                position  = Steering.Vision.POSITION_MIDDLE ;
+                break;
+            case RIGHT:
+                position  = Steering.Vision.POSITION_RIGHT ;
+                break;
+            case START:
+                position  = Steering.Vision.POSITION_START ;
+                break;
+            case STOP:
+                position  = Steering.Vision.POSITION_STOP ;
+                break;
         }
-
-        return null;
-    }
-
-    private BaseResponse stopVisionControl() {
-
-        if(isStartVisionControl()){
-
-            visionSerialSend.sendStopVision();
-        }
+        byte distance = (byte) visionData.getDistance() ;
+        visionSerialSend.sendVision(position,distance);
 
         return null;
     }

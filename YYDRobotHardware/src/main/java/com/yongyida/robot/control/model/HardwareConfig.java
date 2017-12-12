@@ -3,9 +3,11 @@ package com.yongyida.robot.control.model;
 import android.util.SparseArray;
 
 import com.yongyida.robot.communicate.app.hardware.IControl;
+import com.yongyida.robot.communicate.app.hardware.vision.VisionControl;
 import com.yongyida.robot.model.y128.serial.Serial;
 import com.yongyida.robot.model.y138.serial.VisionSerialSend;
 import com.yongyida.robot.model.y138.vision.Y138VisionControl;
+import com.yongyida.robot.model.y20.led.Y20LedControl;
 
 /**
  * Created by HuangXiangXiang on 2017/12/5.
@@ -51,15 +53,7 @@ public class HardwareConfig {
     private HardwareConfig(){
 
 
-        Serial serial = new Serial() ;
-        serial.open() ;
-
-        VisionSerialSend visionSerialSend = new VisionSerialSend(serial);
-
-        Y138VisionControl versionControl = new Y138VisionControl() ;
-        versionControl.setVisionSerialSend(visionSerialSend);
-
-        mControls.put(versionControl.getType(), versionControl);
+        initTest() ;
     }
 
     private void initY20(){
@@ -76,6 +70,29 @@ public class HardwareConfig {
     private void initY128(){
 
 
+    }
+
+    private void initTest(){
+
+        Serial serial = new Serial() ;
+        serial.open() ;
+
+        VisionSerialSend visionSerialSend = new VisionSerialSend(serial);
+
+        Y138VisionControl versionControl = new Y138VisionControl() ;
+        versionControl.setVisionSerialSend(visionSerialSend);
+        addControl(versionControl) ;
+
+
+        Y20LedControl y20LedControl = new Y20LedControl() ;
+        addControl(y20LedControl) ;
+
+
+    }
+
+    private void addControl(IControl control){
+
+        mControls.put(control.getType(), control);
     }
 
 

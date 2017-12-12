@@ -10,7 +10,7 @@ import com.yongyida.robot.control.model.HardwareConfig;
  */
 public abstract class VisionControl implements IControl{
 
-    public abstract BaseResponse sendVersionData(VisionDataSend visionDataSend);
+    public abstract BaseResponse onControl(VisionDataSend visionDataSend);
 
     @Override
     public final int getType() {

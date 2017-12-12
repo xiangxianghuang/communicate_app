@@ -24,40 +24,21 @@ public class VisionHandler extends BaseHandler {
 
 
     @Override
-    public boolean onHandler(BaseSend send, IResponseListener responseListener) {
+    protected boolean isCanHandle(BaseSend send) {
 
-        if(send instanceof VisionDataSend){
-
-            VisionDataSend visionDataSend = (VisionDataSend) send;
-            sendVersionData(visionDataSend, responseListener) ;
-
-            return true;
-        }
-
-
-        return false;
+        return send instanceof VisionDataSend;
     }
 
-    private void sendVersionData(VisionDataSend visionDataSend, IResponseListener responseListener) {
+    @Override
+    protected void onHandler(BaseSend send, IResponseListener responseListener) {
 
-        if(mVersionControl == null){
+        VisionDataSend visionDataSend = (VisionDataSend) send;
+        BaseResponse baseResponse = mVersionControl.onControl(visionDataSend) ;
+        if(responseListener != null){
 
-            if(responseListener != null){
-
-                BaseResponse baseResponse = new VisionDataResponse(RESULT_CAN_NOT_HANDLE, "没有对应的处理类") ;
-                responseListener.onResponse(baseResponse);
-            }
-
-        }else{
-
-            BaseResponse baseResponse = mVersionControl.sendVersionData(visionDataSend) ;
-            if(responseListener != null){
-
-                responseListener.onResponse(baseResponse);
-            }
+            responseListener.onResponse(baseResponse);
         }
     }
-
 
     @Override
     public final int getType() {

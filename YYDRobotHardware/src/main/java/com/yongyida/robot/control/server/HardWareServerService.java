@@ -55,7 +55,7 @@ public class HardWareServerService extends ServerService {
         for (int i = 0 ; i < size ; i++){
 
             BaseHandler baseHandler = mHandlers.get(i) ;
-            if(baseHandler.onHandler(send,responseListener)){
+            if(baseHandler.isCanHandle(send,responseListener)){
 
                 return ;
             }

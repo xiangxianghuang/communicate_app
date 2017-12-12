@@ -1,4 +1,4 @@
-package com.yongyida.robot.communicate.app.hardware.led;
+package com.yongyida.robot.communicate.app.hardware.led.data;
 
 import java.util.Locale;
 

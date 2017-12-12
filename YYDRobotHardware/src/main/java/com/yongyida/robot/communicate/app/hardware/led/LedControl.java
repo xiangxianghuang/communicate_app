@@ -1,6 +1,9 @@
 package com.yongyida.robot.communicate.app.hardware.led;
 
+import com.hiva.communicate.app.common.response.BaseResponse;
 import com.yongyida.robot.communicate.app.hardware.IControl;
+import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
+import com.yongyida.robot.communicate.app.hardware.vision.send.VisionDataSend;
 import com.yongyida.robot.control.model.HardwareConfig;
 
 /**
@@ -8,19 +11,7 @@ import com.yongyida.robot.control.model.HardwareConfig;
  */
 public abstract class LedControl implements IControl {
 
-  public abstract void onPositionChanged(int position);
-
-  public abstract void onTurnOnChanged(boolean turnOn);
-
-  public abstract void onEffectChanged(String effect);
-
-  public abstract void onBrightnessChanged(int brightness);
-
-  public abstract void onColorChanged(int color);
-
-  public abstract void onColdChanged(int cold);
-
-  public abstract void onWarmChanged(int warm);
+  public abstract BaseResponse onControl(LedSend ledSend);
 
     @Override
     public int getType() {

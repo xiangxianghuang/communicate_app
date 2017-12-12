@@ -17,13 +17,19 @@ public class ZigbeeHandler extends BaseHandler {
         mZigbeeControl = (ZigbeeControl) getControl();
     }
 
-    @Override
-    public boolean onHandler(BaseSend send, IResponseListener responseListener) {
-        return false;
-    }
 
     @Override
     public int getType() {
         return HardwareConfig.TYPE_ZIGBEE ;
+    }
+
+    @Override
+    protected boolean isCanHandle(BaseSend send) {
+        return false;
+    }
+
+    @Override
+    protected void onHandler(BaseSend send, IResponseListener responseListener) {
+
     }
 }

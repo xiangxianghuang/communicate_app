@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.hiva.communicate.app.client.Receiver;
 import com.hiva.communicate.app.common.SendResponse;
-import com.yongyida.robot.communicate.app.hardware.vision.data.VisionControlData;
 import com.yongyida.robot.communicate.app.hardware.vision.data.VisionData;
 import com.yongyida.robot.communicate.app.hardware.vision.send.VisionDataSend;
 
@@ -16,9 +15,7 @@ public class VisionClient extends BaseClient {
     private HardwareClient mHardwareClient ;
     private Receiver mReceiver ;
 
-
     private VisionData mVisionData = new VisionData() ;
-    private VisionControlData mVisionControlData = new VisionControlData() ;
 
     public VisionClient(Context context){
 
@@ -28,13 +25,8 @@ public class VisionClient extends BaseClient {
 
     public SendResponse startVisionData(){
 
-        VisionDataSend visionDataSend = new VisionDataSend() ;
-        mVisionControlData.setStart(true);
-        visionDataSend.setVisionControlData(mVisionControlData);
-
-        return mReceiver.send(visionDataSend, null) ;
+        return sendVisionData(VisionData.Position.START, 0) ;
     }
-
 
     public SendResponse sendVisionData(VisionData.Position position, int distance){
 
@@ -48,17 +40,10 @@ public class VisionClient extends BaseClient {
 
     public SendResponse stopVisionData(){
 
-        VisionDataSend visionDataSend = new VisionDataSend() ;
-        mVisionControlData.setStart(false);
-        visionDataSend.setVisionControlData(mVisionControlData);
-
-        return mReceiver.send(visionDataSend, null) ;
-
+        return sendVisionData(VisionData.Position.STOP, 0) ;
     }
 
     public void startVisionDataInMainThread(){
-
-        mReceiver.getSendManager() ;
 
         new Thread(){
 
@@ -70,7 +55,6 @@ public class VisionClient extends BaseClient {
         }.start();
 
     }
-
 
     public void sendVisionDataInMainThread(final VisionData.Position position, final int distance){
 
