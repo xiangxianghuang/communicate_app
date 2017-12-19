@@ -2,6 +2,8 @@ package com.yongyida.robot.model.y138.led;
 
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.yongyida.robot.communicate.app.hardware.led.LedControl;
+import com.yongyida.robot.communicate.app.hardware.led.data.LedScene;
+import com.yongyida.robot.communicate.app.hardware.led.data.LedStatue;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
 
 /**
@@ -28,6 +30,16 @@ public class Y138LedControl extends LedControl {
 
     @Override
     public BaseResponse onControl(LedSend ledSend) {
+        return null;
+    }
+
+    @Override
+    public BaseResponse onControl(LedStatue ledStatue) {
+        return null;
+    }
+
+    @Override
+    public BaseResponse onControl(LedScene ledScene) {
         return null;
     }
 }

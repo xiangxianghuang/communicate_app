@@ -5,6 +5,7 @@ import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.led.LedControl;
 import com.yongyida.robot.communicate.app.hardware.led.data.LedScene;
+import com.yongyida.robot.communicate.app.hardware.led.data.LedStatue;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
 
 /**
@@ -41,57 +42,62 @@ public class Y20LedControl extends LedControl {
         return null;
     }
 
-    private BaseResponse onControl(LedScene ledScene){
+    @Override
+    public BaseResponse onControl(LedStatue ledStatue) {
+        return null;
+    }
+
+    public BaseResponse onControl(LedScene ledScene){
 
         LogHelper.i(TAG , LogHelper.__TAG__() + ledScene.name());
 
         switch (ledScene){
-            case POWER_ON:
-                
-                poweredOn() ;
-                break;
-            case WAKE_UP:
-                
-                wakeUp() ;
-                break;
-            case LISTENING:
-                
-                listening() ;
-                break;
-            case RECOGNITION:
-
-                recognition() ;
-                break;
-            case DIALOG:
-                
-                dialog() ;
-                break;
-            case SLEEP:
-                
-                sleep() ;
-                break;
-            case POWER_OFF:
-                
-                powerOff() ;
-                break;
-            case CONNECT_NET:
-                
-                connectNet() ;
-                break;
-            case LOW_POWER:
-            case CHARGING:
-                
-                lowPowerOrCharging() ;
-                break;
-            case PLAY_MEDIA:
-            case PLAY_TTS:
-                
-                play() ;
-                break;
-            case STAND_BY:
-
-                standBy();
-                break;
+//            case POWER_ON:
+//
+//                poweredOn() ;
+//                break;
+//            case WAKE_UP:
+//
+//                wakeUp() ;
+//                break;
+//            case LISTENING:
+//
+//                listening() ;
+//                break;
+//            case RECOGNITION:
+//
+//                recognition() ;
+//                break;
+//            case DIALOG:
+//
+//                dialog() ;
+//                break;
+//            case SLEEP:
+//
+//                sleep() ;
+//                break;
+//            case POWER_OFF:
+//
+//                powerOff() ;
+//                break;
+//            case CONNECT_NET:
+//
+//                connectNet() ;
+//                break;
+//            case LOW_POWER:
+//            case CHARGING:
+//
+//                lowPowerOrCharging() ;
+//                break;
+//            case PLAY_MEDIA:
+//            case PLAY_TTS:
+//
+//                play() ;
+//                break;
+//            case STAND_BY:
+//
+//                standBy();
+//                break;
 
         }
 

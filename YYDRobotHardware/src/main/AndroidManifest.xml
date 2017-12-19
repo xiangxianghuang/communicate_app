@@ -26,7 +26,21 @@
         </activity>
 
         <activity android:name="com.yongyida.robot.test.TestLedActivity"
-            android:label="LED测试"
+            android:label="LED场景测试"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+        <activity android:name="com.yongyida.robot.test.TestLedStatueActivity"
+            android:label="LED状态测试"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+        <activity android:name="com.yongyida.robot.test.TestMotionStatueActivity"
+            android:label="动作状态测试"
             >
             <intent-filter>
                 <action android:name="com.yongyida.robot.HARDWARE"/>

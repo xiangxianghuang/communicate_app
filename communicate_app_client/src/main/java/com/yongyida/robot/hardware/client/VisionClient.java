@@ -12,15 +12,10 @@ import com.yongyida.robot.communicate.app.hardware.vision.send.VisionDataSend;
  */
 public class VisionClient extends BaseClient {
 
-    private HardwareClient mHardwareClient ;
-    private Receiver mReceiver ;
-
     private VisionData mVisionData = new VisionData() ;
 
     public VisionClient(Context context){
-
-        mHardwareClient = HardwareClient.getInstance(context) ;
-        mReceiver = mHardwareClient.getHardwareReceiver() ;
+        super(context);
     }
 
     public SendResponse startVisionData(){

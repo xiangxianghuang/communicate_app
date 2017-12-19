@@ -10,6 +10,15 @@ import com.hiva.communicate.app.client.Receiver;
  */
 public class BaseClient {
 
+    protected HardwareClient mHardwareClient ;
+    protected Receiver mReceiver ;
+
+    public BaseClient(Context context){
+
+        mHardwareClient = HardwareClient.getInstance(context) ;
+        mReceiver = mHardwareClient.getHardwareReceiver() ;
+    }
+
 
 
 }

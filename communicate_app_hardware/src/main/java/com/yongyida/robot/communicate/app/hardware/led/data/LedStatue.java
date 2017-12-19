@@ -1,11 +1,14 @@
 package com.yongyida.robot.communicate.app.hardware.led.data;
 
-import java.util.Locale;
-
 /**
  * Created by HuangXiangXiang on 2017/11/30.
- * 呼吸灯
  *
+ * 对于某个具体呼吸灯状态
+ *  位置
+ *  开关
+ *  亮度
+ *  颜色
+ *  效果
  */
 public class LedStatue {
 
@@ -16,33 +19,21 @@ public class LedStatue {
     public static final int POSITION_CHEST                  = 0x00000004 ;  //胸部
     public static final int POSITION_PAUNCH                 = 0x00000008 ;  //肚子
 
-    LedStatue(){}
 
-
-    public static final String EFFECT_NORMAL                = "normal" ;  //普通效果
-
-    //位置
+    /**位置*/
     private int position = POSITION_ALL ;
 
-    //是否打开
-    private boolean isTurnOn = true ;
+    /**开关*/
+    private Power power ;
 
-    //效果类型
-    private String effect = EFFECT_NORMAL ;
+    /**亮度值（0-100）*/
+    private Brightness brightness ;
 
-    //亮度值（0-100）
-    private int brightness ;
+    /**颜色值(0x000000-0xFFFFFF)*/
+    private Color color ;
 
-    //颜色值(0x000000-0xFFFFFF)
-    private int color ;
-
-    //冷光值（0-100）
-    private int cold ;
-
-    //暖光值（0-100）
-    private int warm ;
-
-
+    /**效果*/
+    private Effect effect ;
 
 
     public int getPosition() {
@@ -53,60 +44,112 @@ public class LedStatue {
         this.position = position;
     }
 
-    public boolean isTurnOn() {
-        return isTurnOn;
+    public Power getPower() {
+        return power;
     }
 
-    public void setTurnOn(boolean isTurnOn) {
-        isTurnOn = isTurnOn;
+    public void setPower(Power power) {
+        this.power = power;
     }
 
-    public String getEffect() {
-        return effect;
-    }
-
-    public void setEffect(String effect) {
-        this.effect = effect;
-    }
-
-    public int getBrightness() {
+    public Brightness getBrightness() {
         return brightness;
     }
 
-    public void setBrightness(int brightness) {
+    public void setBrightness(Brightness brightness) {
         this.brightness = brightness;
     }
 
-    public int getColor() {
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(int color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 
-    public int getCold() {
-        return cold;
+    public Effect getEffect() {
+        return effect;
     }
 
-    public void setCold(int cold) {
-        this.cold = cold;
+    public void setEffect(Effect effect) {
+        this.effect = effect;
     }
 
-    public int getWarm() {
-        return warm;
+    public enum Power{
+
+        POWER_ON ,  // 开灯
+        POWER_OFF   // 关灯
     }
 
-    public void setWarm(int warm) {
-        this.warm = warm;
+    public static class Brightness{
+
+        private int brightness ;
+
+        public int getBrightness() {
+            return brightness;
+        }
+
+        public void setBrightness(int brightness) {
+            this.brightness = brightness;
+        }
     }
 
-    @Override
-    public String toString() {
+    public static class Color{
 
-        return hashCode() + "--> "+ String.format(Locale.CHINA, "position : %d, isTurnOn :%s," +
-                "effect : %s, brightness : %x," +
-                "color : %x, cold : %d," +
-                "warm : %d" , position,isTurnOn,effect,brightness,color,cold,warm);
+        private int red ;
+        private int green ;
+        private int blue ;
+
+        public int getRed() {
+            return red;
+        }
+
+        public void setRed(int red) {
+            this.red = red;
+        }
+
+        public int getGreen() {
+            return green;
+        }
+
+        public void setGreen(int green) {
+            this.green = green;
+        }
+
+        public int getBlue() {
+            return blue;
+        }
+
+        public void setBlue(int blue) {
+            this.blue = blue;
+        }
+
+        public void setColor(int red, int green , int blue){
+
+            this.red = red ;
+            this.green = green ;
+            this.blue = blue ;
+        }
+
+        public int getColor() {
+
+            return  (red&0xFF) << 16 | (green&0xFF) << 8 | blue ;
+        }
+
     }
+
+
+
+    public enum Effect{
+
+        NORMAL ,        //常亮的状态
+        BREATH_LOW ,    //呼吸灯(慢)
+        BREATH_MIDDLE , //呼吸灯(中)
+        BREATH_FAST ,   //呼吸灯(快)
+        HORSE_RACE      //跑马灯
+
+    }
+
+
 }

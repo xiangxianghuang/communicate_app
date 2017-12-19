@@ -3,11 +3,13 @@ package com.yongyida.robot.control.model;
 import android.util.SparseArray;
 
 import com.yongyida.robot.communicate.app.hardware.IControl;
-import com.yongyida.robot.communicate.app.hardware.vision.VisionControl;
+import com.yongyida.robot.model.caro.led.CaroLedControl;
 import com.yongyida.robot.model.y128.serial.Serial;
 import com.yongyida.robot.model.y138.serial.VisionSerialSend;
 import com.yongyida.robot.model.y138.vision.Y138VisionControl;
-import com.yongyida.robot.model.y20.led.Y20LedControl;
+import com.yongyida.robot.model.y20.led.Y20DLedControl;
+import com.yongyida.robot.model.y20.motion.Y20DMotionControl;
+import com.yongyida.robot.model.y20.motion.Y20MotionControl;
 
 /**
  * Created by HuangXiangXiang on 2017/12/5.
@@ -76,18 +78,21 @@ public class HardwareConfig {
 
         Serial serial = new Serial() ;
         serial.open() ;
-
-        VisionSerialSend visionSerialSend = new VisionSerialSend(serial);
-
-        Y138VisionControl versionControl = new Y138VisionControl() ;
-        versionControl.setVisionSerialSend(visionSerialSend);
-        addControl(versionControl) ;
-
-
-        Y20LedControl y20LedControl = new Y20LedControl() ;
-        addControl(y20LedControl) ;
+//
+//        VisionSerialSend visionSerialSend = new VisionSerialSend(serial);
+//
+//        Y138VisionControl versionControl = new Y138VisionControl() ;
+//        versionControl.setVisionSerialSend(visionSerialSend);
+//        addControl(versionControl) ;
 
 
+//        Y20DLedControl y20DLedControl = new Y20DLedControl() ;
+//        addControl(y20DLedControl) ;
+//        CaroLedControl caroLedControl = new CaroLedControl() ;
+//        addControl(caroLedControl);
+
+        Y20MotionControl y20MotionControl = new Y20MotionControl() ;
+        addControl(y20MotionControl) ;
     }
 
     private void addControl(IControl control){

@@ -36,6 +36,8 @@ public abstract class ServerService extends Service {
         public String setResponseListener(String content, ResponseListener responseListener) throws RemoteException {
             LogHelper.i(TAG, LogHelper.__TAG__());
 
+
+
             return null;
         }
 
