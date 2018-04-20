@@ -18,7 +18,7 @@ import com.hiva.communicate.app.utils.LogHelper;
 /**
  * Created by HuangXiangXiang on 2017/11/30.
  */
-public abstract class ServerService extends Service {
+public abstract class  ServerService extends Service {
 
     private static final String TAG = ServerService.class.getSimpleName() ;
 
@@ -35,8 +35,6 @@ public abstract class ServerService extends Service {
         @Override
         public String setResponseListener(String content, ResponseListener responseListener) throws RemoteException {
             LogHelper.i(TAG, LogHelper.__TAG__());
-
-
 
             return null;
         }
@@ -55,6 +53,7 @@ public abstract class ServerService extends Service {
                 Class clazz = Class.forName(className) ;
                 final BaseSend baseSend = (BaseSend) container.getData(clazz);
 
+                //新开一个线程处理数据，使其不会阻塞通讯线程
                 new Thread(){
 
                     @Override
@@ -78,7 +77,28 @@ public abstract class ServerService extends Service {
                                 }
                             };
                         }
-                        onReceiver(baseSend,iResponseListener) ;
+
+                        try{
+
+                            onReceiver(baseSend,iResponseListener) ;
+                        }catch (Exception e){
+
+                            if(iResponseListener != null){
+
+                                BaseResponse baseResponse = new BaseResponse(BaseResponse.RESULT_EXCEPTION , e.getMessage()) ;
+//                                iResponseListener.onResponse(baseResponse);
+
+                                Container responseContainer = new Container(ServerService.this,baseResponse) ;
+                                String responseString = responseContainer.toString() ;
+                                try {
+                                    responseListener.response(responseString);
+                                } catch (RemoteException e1) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+
+                        }
                     }
                 }.start();
 
@@ -89,6 +109,7 @@ public abstract class ServerService extends Service {
 
             }
 
+            // 返回发送结果
             SendResponse sendResponse = new SendResponse(SendResponse.RESULT_NO_METHOD) ;
             return new Container(ServerService.this, sendResponse).toString();
         }

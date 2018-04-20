@@ -2,19 +2,24 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://Z:\source\1_remote\communicate_app\Hardware.iml" filepath="Z:\source\1_remote\communicate_app\Hardware.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Aratek_BMApi_USB_Demo/Aratek_BMApi_USB_Demo.iml" filepath="$PROJECT_DIR$/Aratek_BMApi_USB_Demo/Aratek_BMApi_USB_Demo.iml" />
+      <module fileurl="file://Z:/source/1_remote/communicate_app/Hardware.iml" filepath="Z:/source/1_remote/communicate_app/Hardware.iml" />
+      <module fileurl="file://$PROJECT_DIR$/UsbPrintMDemo/UsbPrintMDemo.iml" filepath="$PROJECT_DIR$/UsbPrintMDemo/UsbPrintMDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/YYDRobotBreathLed/YYDRobotBreathLed.iml" filepath="$PROJECT_DIR$/YYDRobotBreathLed/YYDRobotBreathLed.iml" />
       <module fileurl="file://$PROJECT_DIR$/YYDRobotHardware/YYDRobotHardware.iml" filepath="$PROJECT_DIR$/YYDRobotHardware/YYDRobotHardware.iml" />
-      <module fileurl="file://Z:\source\1_remote\communicate_app\app\app.iml" filepath="Z:\source\1_remote\communicate_app\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/YYDRobotHardwareTest/YYDRobotHardwareTest.iml" filepath="$PROJECT_DIR$/YYDRobotHardwareTest/YYDRobotHardwareTest.iml" />
+      <module fileurl="file://Z:/source/1_remote/communicate_app/app/app.iml" filepath="Z:/source/1_remote/communicate_app/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/communicate_app/communicate_app.iml" filepath="$PROJECT_DIR$/communicate_app/communicate_app.iml" />
-      <module fileurl="file://Z:\source\2_local\Hardware\communicate_app_0\communicate_app.iml" filepath="Z:\source\2_local\Hardware\communicate_app_0\communicate_app.iml" />
-      <module fileurl="file://Z:\source\1_remote\communicate_app\communicate_app_0\communicate_app_0.iml" filepath="Z:\source\1_remote\communicate_app\communicate_app_0\communicate_app_0.iml" />
-      <module fileurl="file://Z:\source\1_remote\communicate_app\communicate_app_1\communicate_app_1.iml" filepath="Z:\source\1_remote\communicate_app\communicate_app_1\communicate_app_1.iml" />
-      <module fileurl="file://Z:\source\1_remote\hardware\hardware\communicate_app_2.iml" filepath="Z:\source\1_remote\hardware\hardware\communicate_app_2.iml" />
+      <module fileurl="file://Z:/source/2_local/Hardware/communicate_app_0/communicate_app.iml" filepath="Z:/source/2_local/Hardware/communicate_app_0/communicate_app.iml" />
+      <module fileurl="file://Z:/source/1_remote/communicate_app/communicate_app_0/communicate_app_0.iml" filepath="Z:/source/1_remote/communicate_app/communicate_app_0/communicate_app_0.iml" />
+      <module fileurl="file://Z:/source/1_remote/communicate_app/communicate_app_1/communicate_app_1.iml" filepath="Z:/source/1_remote/communicate_app/communicate_app_1/communicate_app_1.iml" />
+      <module fileurl="file://Z:/source/1_remote/hardware/hardware/communicate_app_2.iml" filepath="Z:/source/1_remote/hardware/hardware/communicate_app_2.iml" />
       <module fileurl="file://$PROJECT_DIR$/communicate_app_client/communicate_app_client.iml" filepath="$PROJECT_DIR$/communicate_app_client/communicate_app_client.iml" />
       <module fileurl="file://$PROJECT_DIR$/communicate_app_hardware/communicate_app_hardware.iml" filepath="$PROJECT_DIR$/communicate_app_hardware/communicate_app_hardware.iml" />
-      <module fileurl="file://Z:\source\2_local\Hardware\communicate_app_1\communicate_app_server.iml" filepath="Z:\source\2_local\Hardware\communicate_app_1\communicate_app_server.iml" />
-      <module fileurl="file://Z:\source\1_remote\communicate_app\communicate_app_2\communicate_app_y20.iml" filepath="Z:\source\1_remote\communicate_app\communicate_app_2\communicate_app_y20.iml" />
+      <module fileurl="file://Z:/source/2_local/Hardware/communicate_app_1/communicate_app_server.iml" filepath="Z:/source/2_local/Hardware/communicate_app_1/communicate_app_server.iml" />
+      <module fileurl="file://Z:/source/1_remote/communicate_app/communicate_app_2/communicate_app_y20.iml" filepath="Z:/source/1_remote/communicate_app/communicate_app_2/communicate_app_y20.iml" />
       <module fileurl="file://$PROJECT_DIR$/hardware.iml" filepath="$PROJECT_DIR$/hardware.iml" />
+      <module fileurl="file://$PROJECT_DIR$/usb_uart/usb_uart.iml" filepath="$PROJECT_DIR$/usb_uart/usb_uart.iml" />
     </modules>
   </component>
 </project>

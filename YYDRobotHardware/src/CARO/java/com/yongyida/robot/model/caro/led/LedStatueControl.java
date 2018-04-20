@@ -2,8 +2,8 @@ package com.yongyida.robot.model.caro.led;
 
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.breathled.LedControl;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedStatue;
+import com.yongyida.robot.breathled.LedHelper;
+import com.yongyida.robot.communicate.app.hardware.led.data.LedHandle;
 
 /**
  * Created by HuangXiangXiang on 2017/12/16.
@@ -12,48 +12,48 @@ public class LedStatueControl {
 
     private final static String TAG = LogHelper.__FILE__() ;
 
-    private LedControl mLedControl = LedControl.getInstance();
+    private LedHelper mLedHelper = LedHelper.getInstance();
 
-    public BaseResponse onControl(LedStatue ledStatue){
+    public BaseResponse onControl(LedHandle ledHandle){
 
         /**位置*/
-//        int position = ledStatue.getPosition() ;
-//        boolean isContain = LedControl.getPosition(position);
+//        int position = ledHandle.getPosition() ;
+//        boolean isContain = LedHelper.getPosition(position);
 //        if (!isContain){
 //
 //            return null;
 //        }
 
         /**开关*/
-        LedStatue.Power power = ledStatue.getPower();
+        LedHandle.Power power = ledHandle.getPower();
         if(power != null){
 
-            if(LedControl.isPower(power)){
+            if(LedHelper.isPower(power)){
 
-                mLedControl.openLed() ;
+                mLedHelper.openLed() ;
             }else {
 
-                mLedControl.closeLed() ;
+                mLedHelper.closeLed() ;
             }
         }
 
         /**亮度值*/
-        LedStatue.Brightness brightness = ledStatue.getBrightness() ;
+        LedHandle.Brightness brightness = ledHandle.getBrightness() ;
         if(brightness != null){
 
-            mLedControl.setLedBrightness(brightness.getBrightness()) ;
+            mLedHelper.setLedBrightness(brightness.getValue()) ;
         }
 
 
         /**颜色值(0x000000-0xFFFFFF)*/
-        LedStatue.Color color = ledStatue.getColor();
+        LedHandle.Color color = ledHandle.getColor();
         if(color != null){
 
-            mLedControl.setLedColor(color.getRed(), color.getGreen(), color.getBlue()) ;
+            mLedHelper.setLedColor(color.getRed(), color.getGreen(), color.getBlue()) ;
         }
 
         /**效果*/
-        LedStatue.Effect effect = ledStatue.getEffect();
+        LedHandle.Effect effect = ledHandle.getEffect();
         if(effect != null){
 
             //暂时不支持效果

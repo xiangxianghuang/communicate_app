@@ -1,8 +1,8 @@
 package com.yongyida.robot.communicate.app.hardware.led.send;
 
 import com.hiva.communicate.app.common.send.BaseSend;
+import com.yongyida.robot.communicate.app.hardware.led.data.LedHandle;
 import com.yongyida.robot.communicate.app.hardware.led.data.LedScene;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedStatue;
 
 /**
  * Created by HuangXiangXiang on 2017/11/30.
@@ -10,7 +10,7 @@ import com.yongyida.robot.communicate.app.hardware.led.data.LedStatue;
  */
 public class LedSend extends BaseSend{
 
-    private LedStatue ledStatue ;
+    private LedHandle ledHandle;
     private LedScene ledScene ;
 
     public LedScene getLedScene() {
@@ -21,11 +21,11 @@ public class LedSend extends BaseSend{
         this.ledScene = ledScene;
     }
 
-    public LedStatue getLedStatue() {
-        return ledStatue;
+    public LedHandle getLedHandle() {
+        return ledHandle;
     }
 
-    public void setLedStatue(LedStatue ledStatue) {
-        this.ledStatue = ledStatue;
+    public void setLedHandle(LedHandle ledHandle) {
+        this.ledHandle = ledHandle;
     }
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    >
+
+    <Button
+        android:id="@+id/back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:text="退出工厂模式"
+        android:layout_gravity="center"
+        />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/enable_sct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#A0ff0000"
+        android:textSize="16dp"
+        android:text="选择打开的，所有功能只能在工厂模式,外面的不能调用"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:paddingLeft="10dp"
+        android:visibility="gone"
+        />
+
+    <GridView
+        android:id="@+id/item_gvw"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:numColumns="5"
+        />
+
+
+    <TextView
+        android:id="@+id/version_tvw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#A000ff00"
+        android:text="Version:0.0.1"
+        android:padding="10dp"
+        />
+
+</LinearLayout>

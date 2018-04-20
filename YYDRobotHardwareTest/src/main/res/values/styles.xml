@@ -1,0 +1,37 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme"  parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="tipsTextStyle">
+        <item name="android:textColor">@color/colorWarm</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:layout_marginLeft">20dp</item>
+    </style>
+
+    <style name="titleTextStyle">
+
+        <item name="android:textColor">@color/colorInit</item>
+        <item name="android:textSize">28dp</item>
+
+    </style>
+
+    <style name="contentTextStyle">
+        <item name="android:textColor">@color/colorSuccess</item>
+        <item name="android:textSize">26dp</item>
+    </style>
+
+
+    <!-- 按钮字体大小、颜色 -->
+    <style name="CustomButtonStyle" >
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/whitesmoke</item>
+    </style>
+
+</resources>

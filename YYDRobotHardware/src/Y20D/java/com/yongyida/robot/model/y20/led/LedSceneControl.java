@@ -23,55 +23,38 @@ public class LedSceneControl {
         stopTimer();
 
         switch (ledScene){
-            case POWER_ON:
 
-                powerOn() ;
-                break;
             case WAKE_UP:
+            case LISTEN:
+            case ANALYSE:
 
                 wakeUp() ;
                 break;
-            case LISTEN:
 
-                listen() ;
-                break;
-            case ANALYSE:
-
-                analyse() ;
-                break;
             case TALK:
 
                 talk() ;
-                break;
-            case SLEEP:
-
-                sleep() ;
                 break;
             case POWER_OFF:
 
                 powerOff() ;
                 break;
-            case CONNECT_NET_NONE:
+            case NORMAL_SCREEN_ON:
 
-                connectNetNone() ;
+                normalScreenOn() ;
                 break;
-            case CONNECT_NET_SUCCESS:
+            case NORMAL_SCREEN_OFF:
 
-                connectNetSuccess() ;
+                normalScreenOFF() ;
                 break;
             case LOW_POWER:
             case CHARGING:
 
                 lowPowerOrCharging() ;
                 break;
-            case PLAY_MEDIA:
-            case PLAY_TTS:
+            case FULL_POWER:
 
-                play() ;
-                break;
-            case NORMAL:
-
-                normal();
+                fullPower() ;
                 break;
 
         }
@@ -81,37 +64,27 @@ public class LedSceneControl {
     }
 
 
-    // 开机中(有系统层完成)
-    //      胸口灯：蓝色呼吸，最弱到最亮，呼吸频率2.5秒。
-    //      耳朵灯：白色跑马灯，2.5秒一圈
-    private void powerOn() {
+
+
+    //唤醒/监听/识别
+    //      胸口灯：蓝色呼吸。
+    //      耳朵灯：跑马灯一圈，白色常亮。
+    private void wakeUp() {
         LogHelper.i(TAG , LogHelper.__TAG__()) ;
 
         ChestLedHelper.openLed(ChestLedHelper.COLOR_BLUE,ChestLedHelper.FREQ_MIDDLE);
 
         EarLedHelper.openHorseRaceLed();
-    }
+
+//        try {
+//            Thread.sleep(500);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        EarLedHelper.openWhiteLed();
 
 
-    //唤醒
-    //      胸口灯：蓝色常亮。
-    //      耳朵灯：跑马灯一圈，白色常亮。
-    private void wakeUp() {
-        LogHelper.i(TAG , LogHelper.__TAG__()) ;
-
-        ChestLedHelper.openLed(ChestLedHelper.COLOR_BLUE,ChestLedHelper.FREQ_CONST);
-
-        EarLedHelper.openHorseRaceLed();
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        EarLedHelper.openWhiteLed();
-
-
-//        startWakeUpTimer() ;
+        startWakeUpTimer() ;
 
     }
 
@@ -146,49 +119,17 @@ public class LedSceneControl {
 
 
 
-    //监听
-    //      胸口灯：蓝色常亮。
-    //      耳朵灯：白色常亮。
-    private void listen() {
-        LogHelper.i(TAG , LogHelper.__TAG__()) ;
-
-        ChestLedHelper.openLed(ChestLedHelper.COLOR_BLUE,ChestLedHelper.FREQ_CONST);
-
-        EarLedHelper.openWhiteLed();
-    }
-
-    //识别
-    //      胸口灯：蓝色呼吸。
-    //      耳朵灯：白色旋转。
-    private void analyse() {
-        LogHelper.i(TAG , LogHelper.__TAG__()) ;
-
-        ChestLedHelper.openLed(ChestLedHelper.COLOR_BLUE,ChestLedHelper.FREQ_MIDDLE);
-
-        EarLedHelper.openHorseRaceLed();
-    }
 
     //对话
-    //      胸口灯：说话时蓝色常亮。
-    //      耳朵灯：说话时白色常亮。
+    //      胸口灯 说话时蓝色呼吸
+    //      耳朵灯 说话时白色常亮
     private void talk() {
         LogHelper.i(TAG , LogHelper.__TAG__()) ;
 
-        ChestLedHelper.openLed(ChestLedHelper.COLOR_BLUE,ChestLedHelper.FREQ_CONST);
-
+        ChestLedHelper.openLed(ChestLedHelper.COLOR_BLUE,ChestLedHelper.FREQ_MIDDLE);
         EarLedHelper.openWhiteLed();
     }
 
-    //休眠
-    //      胸口灯 绿色呼吸
-    //      耳朵灯 灭
-    private void sleep() {
-        LogHelper.i(TAG , LogHelper.__TAG__()) ;
-
-        ChestLedHelper.openLed(ChestLedHelper.COLOR_GREEN,ChestLedHelper.FREQ_MIDDLE);
-
-        EarLedHelper.closeLed();
-    }
 
     //关机
     //      胸口灯 灭
@@ -200,75 +141,50 @@ public class LedSceneControl {
         EarLedHelper.closeLed();
     }
 
-    //联网
-    //  未联网
-    //      胸口灯 红色常亮
-    //      耳朵灯 灭
+    //常态（亮屏）
+    //  胸口灯 灭
+    //  耳朵灯 灭
 
-    private void connectNetNone() {
+    private void normalScreenOn() {
         LogHelper.i(TAG , LogHelper.__TAG__()) ;
 
-        ChestLedHelper.openLed(ChestLedHelper.COLOR_RED,ChestLedHelper.FREQ_CONST);
-
+        ChestLedHelper.closeLed();
         EarLedHelper.closeLed();
     }
 
 
-    //联网
-    //  联网成功
-    //      胸口灯 绿色常亮
-    //      耳朵灯 灭
-    private void connectNetSuccess() {
+    //常态（灭屏）
+    //  胸口灯 绿色呼吸
+    //  耳朵灯 灭
+    private void normalScreenOFF() {
         LogHelper.i(TAG , LogHelper.__TAG__()) ;
 
-        ChestLedHelper.openLed(ChestLedHelper.COLOR_GREEN,ChestLedHelper.FREQ_CONST);
-
+        ChestLedHelper.openLed(ChestLedHelper.COLOR_GREEN,ChestLedHelper.FREQ_MIDDLE);
         EarLedHelper.closeLed();
     }
 
     //  电量低充电中：
-    //      胸口灯红色呼吸
-    //      耳朵灯灭。
-    //  满电
-    //      胸口灯绿色常亮
-    //      耳朵灯灭。充电灯的优先级低于语音交互的灯的定义。
+    //      胸口灯 红色呼吸
+    //      耳朵灯 灭
     private void lowPowerOrCharging() {
         LogHelper.i(TAG , LogHelper.__TAG__()) ;
 
         ChestLedHelper.openLed(ChestLedHelper.COLOR_RED, ChestLedHelper.FREQ_MIDDLE);
-
         EarLedHelper.closeLed();
     }
 
 
-
-    //播放内容：
-    //  屏幕在亮的时候，
-    //      胸口灯灭
-    //      耳朵灯灭。
-    //
-    //  屏幕熄灭时，
-    //      胸口灯绿色呼吸，
-    //      耳朵灯依然熄灭。
-    private void play() {
+    //满电
+    //  胸口灯 绿色常亮
+    //  耳朵灯 灭
+    private void fullPower() {
         LogHelper.i(TAG , LogHelper.__TAG__()) ;
 
-
-        ChestLedHelper.closeLed();
-
+        ChestLedHelper.openLed(ChestLedHelper.COLOR_GREEN, ChestLedHelper.FREQ_CONST);
         EarLedHelper.closeLed();
     }
 
 
-    //待机
-    //      胸口灯灭
-    //      耳朵灯灭
-    private void normal() {
-        LogHelper.i(TAG , LogHelper.__TAG__()) ;
-
-        ChestLedHelper.closeLed();
-        EarLedHelper.closeLed();
-    }
 
 
 }

@@ -1,32 +1,24 @@
 package com.yongyida.robot.communicate.app.hardware.infrared;
 
-import com.yongyida.robot.communicate.app.hardware.IControl;
+import android.content.Context;
+
+import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.send.BaseSend;
+import com.yongyida.robot.communicate.app.hardware.BaseControl;
 import com.yongyida.robot.control.model.HardwareConfig;
 
 /**
  * Created by HuangXiangXiang on 2017/12/5.
  */
-public class InfraredControl implements IControl {
+public class InfraredControl extends BaseControl {
 
-    @Override
-    public int getType() {
-        return HardwareConfig.TYPE_INFRARED ;
+
+    public InfraredControl(Context context) {
+        super(context);
     }
 
     @Override
-    public boolean start() {
-        return false;
+    public BaseResponse onControl(BaseSend send) {
+        return null;
     }
-
-    @Override
-    public boolean stop() {
-        return false;
-    }
-
-    @Override
-    public boolean isStart() {
-        return false;
-    }
-
-
 }

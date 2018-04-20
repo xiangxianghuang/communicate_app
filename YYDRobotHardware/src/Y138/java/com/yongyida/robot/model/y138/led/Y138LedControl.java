@@ -1,9 +1,11 @@
 package com.yongyida.robot.model.y138.led;
 
+import android.content.Context;
+
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.yongyida.robot.communicate.app.hardware.led.LedControl;
+import com.yongyida.robot.communicate.app.hardware.led.data.LedHandle;
 import com.yongyida.robot.communicate.app.hardware.led.data.LedScene;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedStatue;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
 
 /**
@@ -12,33 +14,19 @@ import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
 public class Y138LedControl extends LedControl {
 
 
-    @Override
-    public boolean start() {
-        return false;
+    public Y138LedControl(Context context) {
+        super(context);
     }
-
-    @Override
-    public boolean stop() {
-        return false;
-    }
-
-    @Override
-    public boolean isStart() {
-        return false;
-    }
-
 
     @Override
     public BaseResponse onControl(LedSend ledSend) {
         return null;
     }
 
-    @Override
-    public BaseResponse onControl(LedStatue ledStatue) {
+    public BaseResponse onControl(LedHandle ledHandle) {
         return null;
     }
 
-    @Override
     public BaseResponse onControl(LedScene ledScene) {
         return null;
     }

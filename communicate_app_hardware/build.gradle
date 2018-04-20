@@ -1,14 +1,14 @@
 apply plugin: 'com.android.library'
 
-def versionCodeApp = 2              //版本号
-def versionNameApp = "1.0.1"        //版本名称
+def versionCodeApp = 3              //版本号
+def versionNameApp = "1.1.0"        //版本名称
 def projectName = "communicate_app_hardware"            //项目(因为和远程仓库名称一致，不能修改)
 
 android {
     compileSdkVersion 26
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 26
         versionCode versionCodeApp
         versionName versionNameApp
@@ -22,12 +22,12 @@ android {
 
     }
 
-    //重命名
-    android.libraryVariants.all { variant ->
-        variant.outputs.all {
-            outputFileName = "${projectName}-${name}-${defaultConfig.versionName}.aar"
-        }
-    }
+//    //重命名
+//    android.libraryVariants.all { variant ->
+//        variant.outputs.all {
+//            outputFileName = "${projectName}-${name}-${defaultConfig.versionName}.aar"
+//        }
+//    }
 }
 
 dependencies {
@@ -38,21 +38,21 @@ dependencies {
 }
 
 
-/** 以下开始是将Android Library上传到jcenter的相关配置**/
-apply plugin: 'com.novoda.bintray-release'//添加
-//项目主页
-def siteUrl = 'https://github.com/xiangxianghuang/communicate_app'
-publish{
-    repoName = 'AppCommunicate'//远程仓库名字,不指明，默认是上传到maven
-    userOrg = 'huangxiangxiang'//bintray.com的用户名
-    groupId = 'com.hiva.communicate.app'//jcenter上的路径
-    artifactId = projectName//项目名称
-    publishVersion = versionNameApp//版本号
-    desc = 'Android 发送的数据层'//描述，不重要
-    website = siteUrl//项目主页
-}
-tasks.withType(Javadoc) {//防止编码问题
-    options.addStringOption('Xdoclint:none', '-quiet')
-    options.addStringOption('encoding', 'UTF-8')
-    options.addStringOption('charSet', 'UTF-8')
-}
+///** 以下开始是将Android Library上传到jcenter的相关配置**/
+//apply plugin: 'com.novoda.bintray-release'//添加
+////项目主页
+//def siteUrl = 'https://github.com/xiangxianghuang/communicate_app'
+//publish{
+//    repoName = 'AppCommunicate'//远程仓库名字,不指明，默认是上传到maven
+//    userOrg = 'huangxiangxiang'//bintray.com的用户名
+//    groupId = 'com.hiva.communicate.app'//jcenter上的路径
+//    artifactId = projectName//项目名称
+//    publishVersion = versionNameApp//版本号
+//    desc = 'Android 发送的数据层'//描述，不重要
+//    website = siteUrl//项目主页
+//}
+//tasks.withType(Javadoc) {//防止编码问题
+//    options.addStringOption('Xdoclint:none', '-quiet')
+//    options.addStringOption('encoding', 'UTF-8')
+//    options.addStringOption('charSet', 'UTF-8')
+//}

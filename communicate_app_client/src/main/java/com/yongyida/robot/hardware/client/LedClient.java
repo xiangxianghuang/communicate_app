@@ -2,63 +2,53 @@ package com.yongyida.robot.hardware.client;
 
 import android.content.Context;
 
+import com.hiva.communicate.app.common.IResponseListener;
 import com.hiva.communicate.app.common.SendResponse;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedScene;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedStatue;
+import com.yongyida.robot.communicate.app.hardware.led.data.LedHandle;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
 
 /**
  * Created by HuangXiangXiang on 2017/12/9.
  */
-public class LedClient extends BaseClient {
+public final class LedClient extends BaseClient<LedSend> {
 
-    public LedClient(Context context){
+    private static LedClient mLedClient ;
+    public static LedClient getInstance(Context context){
+
+        if(mLedClient == null){
+
+            mLedClient = new LedClient(context.getApplicationContext()) ;
+        }
+        return mLedClient ;
+    }
+
+    private LedClient(Context context) {
         super(context);
     }
 
-    public SendResponse sendLightEffect(LedScene ledScene){
+
+    /**
+     * 在主线程发送led控制,需要回调函数
+     * */
+    public SendResponse sendLedControl(LedHandle ledHandle, IResponseListener response){
 
         LedSend ledSend = new LedSend() ;
-        ledSend.setLedScene(ledScene);
+        ledSend.setLedHandle(ledHandle);
 
-        return mReceiver.send(ledSend, null) ;
+        return send(ledSend,response);
     }
 
-    public SendResponse sendLedStatue(LedStatue ledStatue){
+    /**
+     * 在主线程发送led控制,不需要回调函数
+     * */
+    public void sendLedControlInMainThread(LedHandle ledHandle, IResponseListener response) {
 
         LedSend ledSend = new LedSend() ;
-        ledSend.setLedStatue(ledStatue);
+        ledSend.setLedHandle(ledHandle);
 
-        return mReceiver.send(ledSend, null) ;
+        sendInMainThread(ledSend,response);
     }
 
-
-    public void sendLedStatueInMainThread(final LedStatue ledStatue){
-
-        new Thread(){
-
-            @Override
-            public void run() {
-
-                sendLedStatue(ledStatue) ;
-            }
-        }.start();
-
-    }
-
-
-    public void sendLightEffectInMainThread(final LedScene ledScene){
-
-        new Thread(){
-
-            @Override
-            public void run() {
-
-                sendLightEffect(ledScene) ;
-            }
-        }.start();
-
-    }
 
 
 }

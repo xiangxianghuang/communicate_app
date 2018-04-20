@@ -1,19 +1,24 @@
 package com.yongyida.robot.communicate.app.hardware.vision;
 
+import android.content.Context;
+
 import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.send.BaseSend;
 import com.yongyida.robot.communicate.app.hardware.vision.send.VisionDataSend;
-import com.yongyida.robot.communicate.app.hardware.IControl;
+import com.yongyida.robot.communicate.app.hardware.BaseControl;
 import com.yongyida.robot.control.model.HardwareConfig;
 
 /**
  * Created by HuangXiangXiang on 2017/12/5.
  */
-public abstract class VisionControl implements IControl{
+public class VisionControl extends BaseControl {
 
-    public abstract BaseResponse onControl(VisionDataSend visionDataSend);
+    public VisionControl(Context context) {
+        super(context);
+    }
 
     @Override
-    public final int getType() {
-        return HardwareConfig.TYPE_VISION ;
+    public BaseResponse onControl(BaseSend send) {
+        return null;
     }
 }

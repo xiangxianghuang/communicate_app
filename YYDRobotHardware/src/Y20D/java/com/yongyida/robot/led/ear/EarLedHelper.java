@@ -20,7 +20,7 @@ public class EarLedHelper {
 
         LogHelper.i(TAG,LogHelper.__TAG__());
 
-//        JniHead.close_all_led() ;//呼吸灯不能在亮的时候打开白色常亮
+        JniHead.close_all_led() ;//呼吸灯不能在亮的时候打开白色常亮
         JniHead.open_all_led() ;
     }
 

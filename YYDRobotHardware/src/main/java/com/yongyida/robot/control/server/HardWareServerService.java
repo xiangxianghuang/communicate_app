@@ -1,22 +1,19 @@
 package com.yongyida.robot.control.server;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+
 import com.hiva.communicate.app.common.IResponseListener;
+import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.common.send.BaseSend;
-import com.yongyida.robot.communicate.app.hardware.BaseHandler;
-import com.yongyida.robot.communicate.app.hardware.battery.BatteryHandler;
-import com.yongyida.robot.communicate.app.hardware.camera.CameraHandler;
-import com.yongyida.robot.communicate.app.hardware.humiture.HumitureHandler;
-import com.yongyida.robot.communicate.app.hardware.infrared.InfraredHandler;
-import com.yongyida.robot.communicate.app.hardware.led.LedHandler;
-import com.yongyida.robot.communicate.app.hardware.light.LightHandler;
-import com.yongyida.robot.communicate.app.hardware.motion.MotionHandler;
-import com.yongyida.robot.communicate.app.hardware.touch.TouchHandler;
-import com.yongyida.robot.communicate.app.hardware.vision.VisionHandler;
-import com.yongyida.robot.communicate.app.hardware.zigbee.ZigbeeHandler;
 import com.hiva.communicate.app.server.ServerService;
 import com.hiva.communicate.app.utils.LogHelper;
-
-import java.util.ArrayList;
+import com.yongyida.robot.communicate.app.hardware.BaseControl;
+import com.yongyida.robot.communicate.app.hardware.motion.data.MotionControl;
+import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
+import com.yongyida.robot.control.model.HardwareConfig;
 
 /**
  * Created by HuangXiangXiang on 2017/11/30.
@@ -25,42 +22,119 @@ public class HardWareServerService extends ServerService {
 
     private static final String TAG = HardWareServerService.class.getSimpleName() ;
 
-    private ArrayList<BaseHandler> mHandlers = new ArrayList<>() ;
-    private void initHandlers (){
 
-        mHandlers.add(new MotionHandler()) ;
-        mHandlers.add(new LedHandler()) ;
-        mHandlers.add(new TouchHandler()) ;
-        mHandlers.add(new BatteryHandler()) ;
-        mHandlers.add(new InfraredHandler()) ;
-        mHandlers.add(new HumitureHandler()) ;
-        mHandlers.add(new LightHandler()) ;
-        mHandlers.add(new CameraHandler()) ;
-        mHandlers.add(new ZigbeeHandler()) ;
-        mHandlers.add(new VisionHandler()) ;
+    /**
+     * 启动服务
+     * */
+    public static void startHardWareServerService(Context context){
+
+        LogHelper.i(TAG, LogHelper.__TAG__()) ;
+
+        Intent intent = new Intent(context, HardWareServerService.class) ;
+        context.startService(intent) ;
     }
+
+
+    private HardwareConfig mHardwareConfig ;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        initHandlers() ;
+        LogHelper.i(TAG, LogHelper.__TAG__()) ;
+
+        mHardwareConfig = HardwareConfig.getInstance(this) ;
+
+        registerReceiver();
     }
 
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        unRegisterReceiver();
+    }
+
+    @Override
     protected void onReceiver(BaseSend send, IResponseListener responseListener) {
 
-        final int size = mHandlers.size() ;
-        for (int i = 0 ; i < size ; i++){
+        LogHelper.i(TAG, LogHelper.__TAG__() + "，BaseSend : " + send);
 
-            BaseHandler baseHandler = mHandlers.get(i) ;
-            if(baseHandler.isCanHandle(send,responseListener)){
+        BaseResponse baseResponse ;
 
-                return ;
-            }
+        BaseControl baseControl = mHardwareConfig.getControl(send.getClass()) ;
+        if(baseControl != null){
+
+            baseResponse = baseControl.onControl(send) ;
+
+        }else{
+
+            LogHelper.e(TAG, LogHelper.__TAG__() + "，无对应的处理方式!" );
+            baseResponse = new BaseResponse(BaseResponse.RESULT_CAN_NOT_HANDLE,null) ;
         }
 
-        LogHelper.e(TAG, "被遗漏的SEND : " + send);
+        if(responseListener != null){
+
+            responseListener.onResponse(baseResponse);
+        }
+
     }
+
+
+    public static final String ACTION_MOVE = "com.yongyida.robot.MOVE" ;
+    public static final String KEY_ACTION = "action" ;
+    public static final String KEY_TIME = "time" ;
+
+
+    private BroadcastReceiver receiver = new BroadcastReceiver(){
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String action = intent.getAction() ;
+            if(ACTION_MOVE.equals(action)){
+
+                try{
+
+                    String motionAction = intent.getStringExtra(KEY_ACTION) ;
+                    int time = intent.getIntExtra(KEY_TIME, 1000) ;
+
+                    LogHelper.i(TAG, LogHelper.__TAG__() + " motionAction : " + motionAction + ", time : "+ time);
+                    MotionControl.Action action1 = MotionControl.Action.valueOf(motionAction);
+                    motionControl.setAction(action1);
+                    motionControl.getTime().setValue(time);
+
+                    onReceiver(motionSend, null) ;
+
+                }catch (Exception e){
+                    LogHelper.e(TAG, LogHelper.__TAG__() + "Exception " + e );
+                }
+            }
+
+        }
+    };
+
+
+
+    private MotionSend motionSend =  new MotionSend() ;
+    private MotionControl motionControl = new MotionControl() ;
+    private void registerReceiver(){
+
+        motionControl.setTime(new MotionControl.Time());
+
+        motionSend.setMotionControl(motionControl) ;
+
+        IntentFilter filter = new IntentFilter() ;
+        filter.addAction(ACTION_MOVE);
+
+        registerReceiver(receiver, filter) ;
+    }
+
+
+    private void unRegisterReceiver(){
+
+        unregisterReceiver(receiver);
+    }
+
 }

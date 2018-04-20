@@ -1,34 +1,25 @@
 package com.yongyida.robot.model.y20.led;
 
 
+import android.content.Context;
+
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.communicate.app.hardware.led.LedControl;
 import com.yongyida.robot.communicate.app.hardware.led.data.LedScene;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedStatue;
+import com.yongyida.robot.communicate.app.hardware.led.data.LedHandle;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
 
 /**
  * Created by HuangXiangXiang on 2017/12/5.
  */
-public class Y20LedControl extends LedControl {
+public class Y20LedControl extends com.yongyida.robot.communicate.app.hardware.led.LedControl {
 
     private final static String TAG = LogHelper.__FILE__() ;
 
-    @Override
-    public boolean start() {
-        return false;
+    public Y20LedControl(Context context) {
+        super(context);
     }
 
-    @Override
-    public boolean stop() {
-        return false;
-    }
-
-    @Override
-    public boolean isStart() {
-        return false;
-    }
 
     @Override
     public BaseResponse onControl(LedSend ledSend) {
@@ -42,8 +33,7 @@ public class Y20LedControl extends LedControl {
         return null;
     }
 
-    @Override
-    public BaseResponse onControl(LedStatue ledStatue) {
+    public BaseResponse onControl(LedHandle ledHandle) {
         return null;
     }
 

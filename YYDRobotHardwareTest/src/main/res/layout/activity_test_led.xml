@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <com.yongyida.robot.hardware.test.item.led.HorizontalListView
+        android:id="@+id/led_position_gvw"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        />
+
+    <Switch
+        android:id="@+id/power_sih"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="开关灯"
+        android:textOff="关灯"
+        android:textOn="开灯"
+        android:visibility="gone"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/general_brightness_llt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        >
+
+        <Button
+            android:id="@+id/brightness_dark_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="暗"
+            />
+
+        <Button
+            android:id="@+id/brightness_bright_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="亮"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/general_color_llt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/color_white_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#ffffffff"
+            android:text="白"
+            android:visibility="gone"
+            />
+
+        <Button
+            android:id="@+id/color_red_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#ffff0000"
+            android:text="红"
+            />
+
+        <Button
+            android:id="@+id/color_green_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#ff00ff00"
+            android:text="绿"
+            />
+        <Button
+            android:id="@+id/color_blue_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#ff0000ff"
+            android:text="蓝"
+            />
+
+    </LinearLayout>
+
+
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:paddingLeft="10dp"-->
+    <!--&gt;-->
+
+    <!--<TextView-->
+    <!--android:layout_width="100dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Bright(0-100)"-->
+    <!--/>-->
+
+    <!--<SeekBar-->
+    <!--android:id="@+id/brightness_sbr"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:max="100"-->
+    <!--android:progress="100"-->
+    <!--/>-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/brightness_tvw"-->
+    <!--android:layout_width="40dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="100"-->
+    <!--android:layout_marginLeft="20dp"-->
+    <!--/>-->
+    <!--</LinearLayout>-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:paddingLeft="10dp"-->
+    <!--&gt;-->
+
+    <!--<TextView-->
+    <!--android:layout_width="100dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Red(0-255)"-->
+    <!--/>-->
+
+    <!--<SeekBar-->
+    <!--android:id="@+id/red_sbr"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:max="255"-->
+    <!--android:progress="255"-->
+    <!--/>-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/red_tvw"-->
+    <!--android:layout_width="40dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="255"-->
+    <!--android:layout_marginLeft="20dp"-->
+    <!--/>-->
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:paddingLeft="10dp"-->
+    <!--&gt;-->
+
+    <!--<TextView-->
+    <!--android:layout_width="100dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Green(0-255)"-->
+    <!--/>-->
+
+    <!--<SeekBar-->
+    <!--android:id="@+id/green_sbr"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:max="255"-->
+    <!--android:progress="255"-->
+    <!--/>-->
+    <!--<TextView-->
+    <!--android:id="@+id/green_tvw"-->
+    <!--android:layout_width="40dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="255"-->
+    <!--android:layout_marginLeft="20dp"-->
+    <!--/>-->
+
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:paddingLeft="10dp"-->
+    <!--&gt;-->
+
+    <!--<TextView-->
+    <!--android:layout_width="100dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Blue(0-255)"-->
+    <!--/>-->
+
+    <!--<SeekBar-->
+    <!--android:id="@+id/blue_sbr"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:max="255"-->
+    <!--android:progress="255"-->
+    <!--/>-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/blue_tvw"-->
+    <!--android:layout_width="40dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="255"-->
+    <!--android:layout_marginLeft="20dp"-->
+    <!--/>-->
+
+    <!--</LinearLayout>-->
+
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="详细"-->
+    <!--android:layout_marginRight="10dp"-->
+    <!--android:layout_gravity="right"-->
+    <!--/>-->
+
+    <GridView
+        android:id="@+id/effect_gvw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:numColumns="5"
+        />
+
+</LinearLayout>

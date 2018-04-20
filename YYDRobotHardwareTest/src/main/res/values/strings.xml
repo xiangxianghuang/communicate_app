@@ -1,0 +1,260 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="apk_name">工厂模式</string>
+
+    <string name="toast_permissions">缺少相关权限，请允许相关权限！</string>
+
+    <string name="fail">失败</string>
+    <string name="success">成功</string>
+    <string name="result_test">测试结果</string>
+
+
+    <string name="test_touch_pad">触摸屏测试</string>
+
+    <string name="test_lcd">LCD测试</string>
+
+    <string name="test_battery">电源测试</string>
+
+    <string name="test_horn">喇叭测试</string>
+    <string name="horn_tips">一进入该页面,如果有声音表示喇叭正常。</string>
+
+    <string name="test_microphone">麦克风测试</string>
+    <string name="microphone_tips">点击按钮录制一段5秒的声音并播放！</string>
+    <string name="microphone_test_btn">麦克风测试</string>
+    <string name="microphone_ready_success">准备工作成功,开始录制%d秒音频，</string>
+    <string name="microphone_ready_fail">准备工作失败,再尝试一次;还是不行麦克风可能已经损坏!</string>
+    <string name="microphone_recorded">录制已结束,准备播放刚录制声音，</string>
+    <string name="microphone_playing">正在播放录制声音，</string>
+    <string name="microphone_record_done_error">录制结束出现错误。</string>
+    <string name="microphone_play_start_error">开始播放出现错误。</string>
+    <string name="microphone_recording">正在录制,还剩：%d秒，请稍等，</string>
+    <string name="microphone_play_done_error">播放中出现错误。</string>
+    <string name="microphone_play_done_success">播放正常结束。</string>
+
+
+    <string name="bluetooth_tips">蓝牙 信息</string>
+    <string name="bluetooth_scan">扫描蓝牙</string>
+    <string name="test_bluetooth">蓝牙测试</string>
+    <string name="find_end">查找结束</string>
+    <string name="bluetooth_opening">蓝牙正在打开...</string>
+    <string name="bluetooth_opened">蓝牙已经打开！</string>
+    <string name="bluetooth_closing">蓝牙正在关闭...</string>
+    <string name="bluetooth_closed">蓝牙已经关闭！</string>
+    <string name="name_null">无名</string>
+
+
+    <string name="battery_status">电池状态：</string>
+    <string name="battery_status_charging">充电中</string>
+    <string name="battery_status_discharging">未充电</string>
+    <string name="battery_status_none">未知</string>
+    <string name="battery_level">电池电量：</string>
+    <string name="battery_state">电池状态码：</string>
+
+    <string name="test_wifi">Wifi 测试</string>
+    <string name="wifi_tips">Wifi 信息</string>
+    <string name="wifi_scan">扫描Wifi</string>
+
+    <string name="test_screen">屏幕背光测试</string>
+    <string name="screen_min">最暗</string>
+    <string name="screen_max">最亮</string>
+
+    <string name="test_storage">存储测试</string>
+    <string name="storage_memory_info">内存信息</string>
+    <string name="storage_storage_info">内部储存信息</string>
+    <string name="storage_sd_info">其他存储信息</string>
+    <string name="storage_none_info">查不到相关信息</string>
+
+    <string name="test_camera">摄像头测试</string>
+
+    <string name="test_touch">触感测试</string>
+    <string name="touch_tips">根据下面几个点依次去触摸</string>
+    <string name="touch_single">单击触摸</string>
+
+    <string name="test_led">LED测试</string>
+
+    <string name="test_pir">人体红外感应测试</string>
+    <string name="pir_tips">请从外侧走到机器正前方</string>
+    <string name="pir_monitor_people">监测到人！！！</string>
+
+    <string name="test_motion">运动测试</string>
+    <string name="motion_fault_10">步科底盘启动不成功</string>
+    <string name="motion_fault_20">传感器板启动不成功或主板与传感器板连接异常</string>
+    <string name="motion_fault_21">传感器板启动后断开连接</string>
+    <string name="motion_fault_22">传感器数据帧接收出错</string>
+    <string name="motion_fault_40">slamware core启动不成功</string>
+    <string name="motion_fault_41">slamware core内部出错</string>
+    <string name="motion_fault_50">电量计初始化不成功</string>
+    <string name="motion_fault">未知错误代码 %d</string>
+
+
+
+    <string name="test_calculator">计算器</string>
+
+    <string name="test_id_card">身份证</string>
+    <string name="open_device">打开设备</string>
+    <!-- 身份证阅读机具 -->
+    <string name="idcard">二代身份证阅读机具</string>
+    <string name="idcard_sn">二代身份证阅读模块序列号：<xliff:g>%1$s</xliff:g></string>
+    <string name="name">姓名：</string>
+    <string name="sex">性别：</string>
+    <string name="nationality">民族：</string>
+    <string name="birthday">出生：</string>
+    <string name="address">住址：</string>
+    <string name="number">身份证号码：</string>
+    <string name="authority">签发机关：</string>
+    <string name="valid_date">有效期：</string>
+    <string name="fp_info">指纹信息：</string>
+    <string name="read_idcard">读取身份证</string>
+    <string name="read_idcard_id">读取身份证物理ID</string>
+    <string name="place_idcard">请将身份证靠近感应区。</string>
+    <string name="id_card_reader_open_success">身份证阅读机具打开成功！</string>
+    <string name="id_card_reader_open_failed">身份证阅读机具打开失败！</string>
+    <string name="id_card_reader_close_success">身份证阅读机具关闭成功！</string>
+    <string name="id_card_reader_close_failed">身份证阅读机具关闭失败！</string>
+    <string name="id_card_reader_power_on_failed">身份证阅读机具上电失败！</string>
+    <string name="id_card_reader_power_off_failed">身份证阅读机具断电失败！</string>
+    <string name="id_card_read_success">二代身份证读取成功！</string>
+    <string name="id_card_not_exist_or_reread">请将二代身份证移开后重新放置在读卡区域！</string>
+    <string name="id_card_read_failed">读卡失败！</string>
+    <string name="long_term">长期</string>
+    <string name="exist">存在</string>
+    <string name="not_exist">不存在</string>
+
+
+
+
+    <string name="test_printer">打印机</string>
+    <string name="Add_Path">添加路径</string>
+    <!-- CheckBox 打印位图功能选项-->
+    <string name="Open">开启下载</string>
+    <string name="Close">关闭下载</string>
+
+    <string name="Rotate">字体方向</string>
+    <string name="Normal">正常</string>
+    <string name="Rotation_90degrees">90度旋转</string>
+
+    <string name="Align_Mode">对齐方式</string>
+    <string name="Left">靠左</string>
+    <string name="Center">居中</string>
+    <string name="Right">靠右</string>
+
+    <string name="UnderLine">下&#160;&#160;划&#160;&#160;线</string>
+    <string name="Underline_1">下划线1</string>
+    <string name="Underline_2">下划线2</string>
+    <string name="Cancel">取消</string>
+
+    <string name="Cutter">切刀</string>
+    <string name="Total">全切</string>
+    <string name="Half">半切</string>
+
+    <string name="System">系统</string>
+    <string name="ExitSystem">退出</string>
+    <string name="VersionSystem">版本</string>
+
+    <string name="Htseat">识读字符</string>
+    <string name="No_print">不打印</string>
+    <string name="Above">上方</string>
+    <string name="Below">下方</string>
+    <string name="All">上下方</string>
+
+    <string name="Linespace">行间距</string>
+    <string name="line_30">30</string>
+    <string name="line_40">40</string>
+    <string name="line_50">50</string>
+    <string name="line_60">60</string>
+    <string name="line_70">70</string>
+
+    <string name="PrintTest_btn">测试文本打印</string>
+    <string name="PrintTicket_btn">小票打印</string>
+    <string name="Clear_btn">清除</string>
+    <string name="AddPath_btn">增加</string>
+    <string name="ClearPath_btn">清除</string>
+    <string name="Load_Bmp_btn">下载位图</string>
+    <string name="Print_Bmp_btn">打印位图</string>
+    <string name="Print_Img_btn">打印图片</string>
+    <string name="Bmp_path_et">显示Bmp图片路径</string>
+    <string name="Img_path_et">显示Img图片路径</string>
+    <string name="SelectBmpFile">选择Bmp</string>
+    <string name="SelectImgFile">选择Img</string>
+    <string name="PrintHorTable">打印水平制表</string>
+
+    <!-- <string name="Double_height_and_width">倍高倍宽模式</string>
+    <string name="print_1D_code">打印条形码</string>
+    <string name="print_2D_code">打印二维码</string>
+    <string name="Inverse_mode">反白模式</string>
+    <string name="Normal_mode">正常模式</string>
+    <string name="PrintInputContent">打印输入内容</string>
+    <string name="SetUnderLine">设定下划线</string>
+    <string name="Get_status">获取状态</string>
+    <string name="CutPaper">全&#160;&#160;&#160;&#160;切</string> -->
+
+    <string name="USB_Driver_Success">驱动成功</string>
+    <string name="USB_Driver_Failed">驱动失败</string>
+    <!-- 打印输入内容提示-hint -->
+    <string name="Print_code_content_hint">请输入QRCode信息！</string>
+    <string name="Print_code_content_et">www.masung.com.cn</string>
+    <string name="Print_test_times_hint">二维码宽度（1-9）</string>
+    <!-- 下载位图成功提示 -->
+    <string name="Download_bitmap_success">下载成功!</string>
+    <string name="Download_bitmap_failed">下载失败!</string>
+
+    <string name="D347QR">D347QrCode</string>
+    <string name="D245QR">D245QrCode</string>
+    <string name="T500IIQr">T500IIQrCode</string>
+
+
+
+
+    <string name="test_fingerprint">指纹</string>
+    <!-- 指纹仪 -->
+    <string name="fingerprint">指纹仪</string>
+    <string name="fps_sn">指纹传感器序列号：<xliff:g>%1$s</xliff:g></string>
+    <string name="fps_fw">指纹传感器内部固件版本号：<xliff:g>%1$s</xliff:g></string>
+    <string name="fp_collect_info">单次指纹采集信息：</string>
+    <string name="capture">取图：</string>
+    <string name="extract">提取特征：</string>
+    <string name="generalize">合成模板：</string>
+    <string name="verify">比对：</string>
+    <string name="enroll_fp">录入指纹</string>
+    <string name="verify_fp">比对指纹</string>
+    <string name="identify_fp">搜索指纹</string>
+    <string name="clear_fp_db">清空指纹库</string>
+    <string name="show_fp">显示指纹</string>
+    <string name="press_finger">请按压手指。</string>
+    <string name="enrolling">正在注册指纹……</string>
+    <string name="verifying">正在比对指纹……</string>
+    <string name="identifying">正在指纹库中查找指纹……</string>
+    <string name="fingerprint_device_open_success">指纹仪打开成功！</string>
+    <string name="fingerprint_device_open_failed">指纹仪打开失败！</string>
+    <string name="fingerprint_device_close_success">指纹仪关闭成功！</string>
+    <string name="fingerprint_device_close_failed">指纹仪关闭失败！</string>
+    <string name="fingerprint_device_power_on_failed">指纹仪上电失败！</string>
+    <string name="fingerprint_device_power_off_failed">指纹仪断电失败！</string>
+    <string name="algorithm_initialization_failed">Bione算法初始化失败！</string>
+    <string name="algorithm_cleanup_failed">Bione算法反初始化失败！</string>
+    <string name="not_done">未进行</string>
+    <string name="capture_image_success">指纹图像获取成功！</string>
+    <string name="capture_image_failed">采集指纹图像失败！</string>
+    <string name="enroll_failed_because_of_extract_feature">录入失败，提取特征出错！</string>
+    <string name="enroll_failed_because_of_make_template">录入失败，生成模板出错！</string>
+    <string name="enroll_failed_because_of_get_id">录入失败，获取可用的指纹ID失败！</string>
+    <string name="enroll_failed_because_of_error">录入失败！</string>
+    <string name="enroll_success">录入成功！指纹ID：</string>
+    <string name="verify_failed_because_of_extract_feature">比对失败，提取特征出错！</string>
+    <string name="verify_failed_because_of_error">比对失败！</string>
+    <string name="fingerprint_not_match">指纹不匹配！</string>
+    <string name="fingerprint_match">指纹匹配！</string>
+    <string name="identify_failed_because_of_extract_feature">比对失败，提取特征出错！</string>
+    <string name="identify_failed_because_of_error">比对失败！</string>
+    <string name="identify_match">匹配指纹ID：</string>
+    <string name="clear_fingerprint_database_success">清空指纹库成功！</string>
+    <string name="clear_fingerprint_database_failed">清空指纹库失败！</string>
+
+
+
+    <string name="test_key">按键</string>
+
+    <string name="test_wake_up_mic">唤醒麦</string>
+
+
+
+</resources>

@@ -7,7 +7,16 @@ public class MotionHelper extends RobotController{
 
 
     public static final String MOTOR_CALL_BACK_DATA="com.yongyida.robot.motor.callBackData";
-    public static final String SERIALPORT = "/dev/ttyMT2";
+    public static final String SERIAL_PORT_8163     = "/dev/ttyMT2";        // Y20 8163
+    public static final String SERIAL_PORT_8735     = "/dev/ttyMT1";        // Y50 8735
+
+    private String serialPort ;
+    public MotionHelper(String serialPort){
+
+        this.serialPort = serialPort ;
+    }
+
+
     private ControllListener mControllListener = new ControllListener(){
         public void onCallBack(int cmdType, byte[] data) {
 //            mIntent=new Intent(MOTOR_CALL_BACK_DATA);
@@ -24,7 +33,7 @@ public class MotionHelper extends RobotController{
 
         if(!isOpen){
 
-            int result = open(SERIALPORT);
+            int result = open(serialPort);
             if(result == 0){
 
                 isOpen = true ;

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.yongyida.robot.hardware.test">
+
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera.flash" />
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/apk_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        >
+
+        <activity android:name=".TestMainActivity"
+            android:screenOrientation="landscape"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.touchpad.TestTouchPadActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_touch_pad"
+            >
+            <intent-filter>
+            <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.lcd.TestLcdActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_lcd"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.battery.TestBatteryActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_battery"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.horn.TestHornActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_horn"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.microphone.TestMicrophoneActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_microphone"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.wifi.TestWifiActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_wifi"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.bluetooth.TestBluetoothActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_bluetooth"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.screen.TestScreenActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_screen"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.storage.TestStorageActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_storage"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+              <activity android:name=".item.camera.TestCameraActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_camera"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.touch.TestTouchActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_touch"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.led.TestLedActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_led"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.pir.TestPirActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_pir"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.motion.TestMotionActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_motion"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.calculator.TestCalculatorActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_calculator"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.idcard.TestIdCardActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_id_card"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.printer.TestPrinterActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_printer"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.fingerprint.TestFingerPrintActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_fingerprint"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.key.TestKeyActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_key"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".item.wakeupmic.TestWakeUpMicActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_wake_up_mic"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
+
+    </application>
+
+</manifest>
