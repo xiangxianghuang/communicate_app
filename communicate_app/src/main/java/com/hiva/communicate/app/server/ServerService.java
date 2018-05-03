@@ -83,20 +83,20 @@ public abstract class  ServerService extends Service {
                             onReceiver(baseSend,iResponseListener) ;
                         }catch (Exception e){
 
-                            if(iResponseListener != null){
-
-                                BaseResponse baseResponse = new BaseResponse(BaseResponse.RESULT_EXCEPTION , e.getMessage()) ;
-//                                iResponseListener.onResponse(baseResponse);
-
-                                Container responseContainer = new Container(ServerService.this,baseResponse) ;
-                                String responseString = responseContainer.toString() ;
-                                try {
-                                    responseListener.response(responseString);
-                                } catch (RemoteException e1) {
-                                    e.printStackTrace();
-                                }
-
-                            }
+//                            if(iResponseListener != null){
+//
+//                                BaseResponse baseResponse = new BaseResponse(BaseResponse.RESULT_EXCEPTION , e.getMessage()) ;
+////                                iResponseListener.onResponse(baseResponse);
+//
+//                                Container responseContainer = new Container(ServerService.this,baseResponse) ;
+//                                String responseString = responseContainer.toString() ;
+//                                try {
+//                                    responseListener.response(responseString);
+//                                } catch (RemoteException e1) {
+//                                    e.printStackTrace();
+//                                }
+//
+//                            }
 
                         }
                     }

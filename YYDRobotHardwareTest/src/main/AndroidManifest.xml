@@ -225,6 +225,15 @@
         </activity>
 
 
+        <activity android:name=".item.hand.TestHandActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_hand"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

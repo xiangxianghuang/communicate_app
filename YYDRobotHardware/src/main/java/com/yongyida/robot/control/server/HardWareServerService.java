@@ -10,7 +10,7 @@ import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.common.send.BaseSend;
 import com.hiva.communicate.app.server.ServerService;
 import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.communicate.app.hardware.BaseControl;
+import com.yongyida.robot.communicate.app.hardware.BaseHandler;
 import com.yongyida.robot.communicate.app.hardware.motion.data.MotionControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
 import com.yongyida.robot.control.model.HardwareConfig;
@@ -63,10 +63,10 @@ public class HardWareServerService extends ServerService {
 
         BaseResponse baseResponse ;
 
-        BaseControl baseControl = mHardwareConfig.getControl(send.getClass()) ;
-        if(baseControl != null){
+        BaseHandler baseHandler = mHardwareConfig.getControl(send.getClass()) ;
+        if(baseHandler != null){
 
-            baseResponse = baseControl.onControl(send) ;
+            baseResponse = baseHandler.onHandler(send) ;
 
         }else{
 

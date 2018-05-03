@@ -61,9 +61,7 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-
-//    implementation fileTree(include: ['*.jar'], dirs= ['libs', 'src/Y138/libs' ])
-
+    //    implementation fileTree(include: ['*.jar'], dirs= ['libs', 'src/Y138/libs' ])
     implementation 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.tencent.bugly:crashreport:2.6.6.1'
     compile 'com.tencent.bugly:nativecrashreport:3.3.1'
@@ -71,17 +69,13 @@ dependencies {
     //    compile 'com.hiva.communicate.app:communicate_app:1.0.1'
     //    compile 'com.hiva.communicate.app:communicate_app_hardware:1.0.1'
     //    compile 'com.hiva.communicate.app:communicate_app_client:1.0.1'
-
-
     implementation project(':communicate_app')
     implementation project(':communicate_app_client')
     implementation project(':communicate_app_hardware')
-
-
-//    compile(name: 'communicate_app-debug-1.1.0', ext: 'aar')
-//    compile(name: 'communicate_app_client-debug-1.1.0', ext: 'aar')
-//    compile(name: 'communicate_app_hardware-debug-1.1.0', ext: 'aar')
-
+    //    compile(name: 'communicate_app-debug-1.1.0', ext: 'aar')
+    //    compile(name: 'communicate_app_client-debug-1.1.0', ext: 'aar')
+    //    compile(name: 'communicate_app_hardware-debug-1.1.0', ext: 'aar')
     implementation project(':YYDRobotBreathLed')
     implementation project(':YYDRobotHardwareTest')
+    implementation project(':usb_uart')
 }

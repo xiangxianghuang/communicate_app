@@ -3,7 +3,7 @@ package com.yongyida.robot.breathled.utils;
 import android.graphics.Color;
 
 import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedHandle;
+import com.yongyida.robot.communicate.app.hardware.led.data.LedControl;
 
 import java.util.HashSet;
 
@@ -95,14 +95,14 @@ public class BreathLedHelper {
         LogHelper.i(TAG , LogHelper.__TAG__() + ", position : " + position);
 
         String positionString ;
-        if(position == LedHandle.POSITION_ALL){//全部
+        if(position == LedControl.POSITION_ALL){//全部
 
             positionString = BreathLedHelper.POSITION_ALL ;
 
-        }else if((position & LedHandle.POSITION_CHEST)== LedHandle.POSITION_CHEST){   // 胸部
+        }else if((position & LedControl.POSITION_CHEST)== LedControl.POSITION_CHEST){   // 胸部
 
-            if(((position & LedHandle.POSITION_LEFT_EAR) == LedHandle.POSITION_LEFT_EAR) || //左耳
-                    ((position & LedHandle.POSITION_RIGHT_EAR) == LedHandle.POSITION_RIGHT_EAR)){//右耳
+            if(((position & LedControl.POSITION_LEFT_EAR) == LedControl.POSITION_LEFT_EAR) || //左耳
+                    ((position & LedControl.POSITION_RIGHT_EAR) == LedControl.POSITION_RIGHT_EAR)){//右耳
 
                 positionString = BreathLedHelper.POSITION_ALL ;
 
@@ -111,8 +111,8 @@ public class BreathLedHelper {
                 positionString = BreathLedHelper.POSITION_CHEST ;
             }
 
-        }else if(((position & LedHandle.POSITION_LEFT_EAR) == LedHandle.POSITION_LEFT_EAR) || //左耳
-                ((position & LedHandle.POSITION_RIGHT_EAR) == LedHandle.POSITION_RIGHT_EAR)){//右耳
+        }else if(((position & LedControl.POSITION_LEFT_EAR) == LedControl.POSITION_LEFT_EAR) || //左耳
+                ((position & LedControl.POSITION_RIGHT_EAR) == LedControl.POSITION_RIGHT_EAR)){//右耳
 
             positionString = BreathLedHelper.POSITION_EAR ; //耳朵
 
@@ -124,18 +124,18 @@ public class BreathLedHelper {
         return positionString;
     }
 
-    public static String getPower(LedHandle.Power power){
+    public static String getPower(LedControl.Power power){
 
         if(power == null){
 
             return null ;
         }
 
-        return power == LedHandle.Power.POWER_ON ? FUNCTION_ON : FUNCTION_OFF;
+        return power == LedControl.Power.POWER_ON ? FUNCTION_ON : FUNCTION_OFF;
 
     }
 
-    public static String getColor(LedHandle.Color color){
+    public static String getColor(LedControl.Color color){
 
         if(color == null){
 
@@ -171,7 +171,7 @@ public class BreathLedHelper {
     }
 
 
-    public static String getEffect(LedHandle.Effect effect){
+    public static String getEffect(LedControl.Effect effect){
 
         if(effect == null){
 

@@ -3,7 +3,7 @@ package com.yongyida.robot.model.caro.led;
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.breathled.LedHelper;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedHandle;
+import com.yongyida.robot.communicate.app.hardware.led.data.LedControl;
 
 /**
  * Created by HuangXiangXiang on 2017/12/16.
@@ -14,10 +14,10 @@ public class LedStatueControl {
 
     private LedHelper mLedHelper = LedHelper.getInstance();
 
-    public BaseResponse onControl(LedHandle ledHandle){
+    public BaseResponse onControl(LedControl ledControl){
 
         /**位置*/
-//        int position = ledHandle.getPosition() ;
+//        int position = ledControl.getPosition() ;
 //        boolean isContain = LedHelper.getPosition(position);
 //        if (!isContain){
 //
@@ -25,7 +25,7 @@ public class LedStatueControl {
 //        }
 
         /**开关*/
-        LedHandle.Power power = ledHandle.getPower();
+        LedControl.Power power = ledControl.getPower();
         if(power != null){
 
             if(LedHelper.isPower(power)){
@@ -38,7 +38,7 @@ public class LedStatueControl {
         }
 
         /**亮度值*/
-        LedHandle.Brightness brightness = ledHandle.getBrightness() ;
+        LedControl.Brightness brightness = ledControl.getBrightness() ;
         if(brightness != null){
 
             mLedHelper.setLedBrightness(brightness.getValue()) ;
@@ -46,14 +46,14 @@ public class LedStatueControl {
 
 
         /**颜色值(0x000000-0xFFFFFF)*/
-        LedHandle.Color color = ledHandle.getColor();
+        LedControl.Color color = ledControl.getColor();
         if(color != null){
 
             mLedHelper.setLedColor(color.getRed(), color.getGreen(), color.getBlue()) ;
         }
 
         /**效果*/
-        LedHandle.Effect effect = ledHandle.getEffect();
+        LedControl.Effect effect = ledControl.getEffect();
         if(effect != null){
 
             //暂时不支持效果

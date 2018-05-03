@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.hiva.communicate.app.common.IResponseListener;
 import com.hiva.communicate.app.common.SendResponse;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedHandle;
+import com.yongyida.robot.communicate.app.hardware.led.data.LedControl;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
 
 /**
@@ -30,10 +30,10 @@ public final class LedClient extends BaseClient<LedSend> {
     /**
      * 在主线程发送led控制,需要回调函数
      * */
-    public SendResponse sendLedControl(LedHandle ledHandle, IResponseListener response){
+    public SendResponse sendLedControl(LedControl ledControl, IResponseListener response){
 
         LedSend ledSend = new LedSend() ;
-        ledSend.setLedHandle(ledHandle);
+        ledSend.setLedControl(ledControl);
 
         return send(ledSend,response);
     }
@@ -41,10 +41,10 @@ public final class LedClient extends BaseClient<LedSend> {
     /**
      * 在主线程发送led控制,不需要回调函数
      * */
-    public void sendLedControlInMainThread(LedHandle ledHandle, IResponseListener response) {
+    public void sendLedControlInMainThread(LedControl ledControl, IResponseListener response) {
 
         LedSend ledSend = new LedSend() ;
-        ledSend.setLedHandle(ledHandle);
+        ledSend.setLedControl(ledControl);
 
         sendInMainThread(ledSend,response);
     }

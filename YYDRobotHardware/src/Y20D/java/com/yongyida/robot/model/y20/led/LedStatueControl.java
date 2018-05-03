@@ -3,7 +3,7 @@ package com.yongyida.robot.model.y20.led;
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.breathled.utils.BreathLedHelper;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedHandle;
+import com.yongyida.robot.communicate.app.hardware.led.data.LedControl;
 
 /**
  * Created by HuangXiangXiang on 2017/12/16.
@@ -12,10 +12,10 @@ public class LedStatueControl {
 
     private final static String TAG = LogHelper.__FILE__() ;
 
-    public BaseResponse onControl(LedHandle ledHandle){
+    public BaseResponse onControl(LedControl ledControl){
 
         /**位置*/
-        int position = ledHandle.getPosition() ;
+        int position = ledControl.getPosition() ;
         String positionString = BreathLedHelper.getPosition(position);
         if (positionString == null){
 
@@ -23,7 +23,7 @@ public class LedStatueControl {
         }
 
         /**开关*/
-        LedHandle.Power power = ledHandle.getPower();
+        LedControl.Power power = ledControl.getPower();
         String powerString = BreathLedHelper.getPower(power) ;
         if(powerString != null){
 
@@ -31,7 +31,7 @@ public class LedStatueControl {
         }
 
         /**颜色值(0x000000-0xFFFFFF)*/
-        LedHandle.Color color = ledHandle.getColor();
+        LedControl.Color color = ledControl.getColor();
         String colorString = BreathLedHelper.getColor(color) ;
         if(colorString != null){
 
@@ -39,7 +39,7 @@ public class LedStatueControl {
         }
 
         /**效果*/
-        LedHandle.Effect effect = ledHandle.getEffect();
+        LedControl.Effect effect = ledControl.getEffect();
         String effectString = BreathLedHelper.getEffect(effect) ;
         if(effectString != null){
 

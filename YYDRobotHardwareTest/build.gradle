@@ -42,9 +42,7 @@ dependencies {
     //    compile(name: 'communicate_app_client-debug-1.1.0', ext: 'aar')
     //
     //    compile 'com.google.code.gson:gson:2.8.2'
-
     implementation project(':Aratek_BMApi_USB_Demo')
     implementation project(':UsbPrintMDemo')
-
     compile(name: 'UARTKit', ext: 'aar')
 }
