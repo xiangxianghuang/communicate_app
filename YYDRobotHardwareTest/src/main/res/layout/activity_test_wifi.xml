@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:orientation="vertical">
+
+
+    <Button
+        android:id="@+id/mifi_test_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mifi测试(打开Wifi连接入口)"
+        />
+
+    <TextView
+        android:id="@+id/wifi_info_tvw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textColor="#ff0"
+        android:text="@string/wifi_tips"
+        />
+
+    <TextView
+        android:id="@+id/scan_wifi_tvw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textColor="#0ff"
+        android:text="@string/wifi_scan"
+        />
+
+</LinearLayout>

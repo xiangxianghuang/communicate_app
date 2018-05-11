@@ -150,7 +150,7 @@ public class Y138MotionHandler extends MotionHandler {
                     case SOUND_LOCATION_LEFT:
 
                         MotionControl.Distance distance = motionControl.getDistance();
-                        ;
+
                         int d;
                         if (distance != null) {
                             d = distance.getValue();

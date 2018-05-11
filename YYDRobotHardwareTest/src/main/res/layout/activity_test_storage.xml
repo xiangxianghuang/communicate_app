@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="100dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/storage_memory_info"
+        style="@style/titleTextStyle"
+        />
+    <TextView
+        android:id="@+id/ram_tvw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/storage_memory_info"
+        style="@style/contentTextStyle"
+        />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/storage_storage_info"
+        style="@style/titleTextStyle"
+        />
+    <TextView
+        android:id="@+id/rom_tvw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/storage_memory_info"
+        style="@style/contentTextStyle"
+        />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/storage_sd_info"
+        style="@style/titleTextStyle"
+        />
+    <TextView
+        android:id="@+id/sdcard_tvw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/storage_memory_info"
+        style="@style/contentTextStyle"
+        />
+
+
+
+</LinearLayout>

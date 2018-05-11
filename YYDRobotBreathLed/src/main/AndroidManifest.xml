@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.yongyida.robot.breathled" >
+
+
+    <application>
+
+        <service android:name=".YYDRobotBreathLedService"/>
+
+    </application>
+</manifest>

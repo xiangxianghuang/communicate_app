@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/blue_tooth_info_tvw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="28dp"
+        android:textColor="#ff0"
+        android:text="@string/bluetooth_tips"
+        />
+
+    <TextView
+        android:id="@+id/scan_blue_tooth_tvw"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textSize="22dp"
+        android:textColor="#0ff"
+        android:text="@string/bluetooth_scan"
+        />
+
+    <TextView
+        android:id="@+id/blue_tooth_end_tvw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="26dp"
+        android:textColor="#f0f"
+        android:text="@string/find_end"
+        />
+</LinearLayout>
