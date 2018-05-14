@@ -15,7 +15,6 @@ import com.yongyida.robot.communicate.app.hardware.motion.data.HandAction;
 import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
 import com.yongyida.robot.hardware.client.MotionClient;
 import com.yongyida.robot.hardware.test.R;
-import com.yongyida.robot.hardware.test.item.TestBaseActivity;
 
 /**
  * Created by HuangXiangXiang on 2018/4/20.

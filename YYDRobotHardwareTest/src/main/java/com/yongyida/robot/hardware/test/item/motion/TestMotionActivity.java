@@ -315,13 +315,11 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 setShowSlamware(isChecked) ;
-
             }
         });
 
 
         mUltrasonicAndroidSct = view.findViewById(R.id.ultrasonic_android_sct) ;
-        mUltrasonicAndroidSct.setChecked(true);
         mUltrasonicAndroidSct.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -351,28 +349,32 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
 
 
 
-   private void setAllShow(){
-
-        UltrasonicControl ultrasonicControl = new UltrasonicControl() ;
-        ultrasonicControl.setShowSlamware(false);
-        ultrasonicControl.setShowAndroid(true);
-
-        MotionSend motionSend= new MotionSend() ;
-        motionSend.setUltrasonicControl(ultrasonicControl);
-
-        MotionClient.getInstance(TestMotionActivity.this).sendInMainThread(motionSend,null);
-    }
+//   private void setAllShow(){
+//
+//        UltrasonicControl ultrasonicControl = new UltrasonicControl() ;
+//        ultrasonicControl.setShowSlamware(false);
+//        ultrasonicControl.setShowAndroid(true);
+//
+//        MotionSend motionSend= new MotionSend() ;
+//        motionSend.setUltrasonicControl(ultrasonicControl);
+//
+//        MotionClient.getInstance(TestMotionActivity.this).sendInMainThread(motionSend,null);
+//    }
 
     private void setAllHide(){
 
-        UltrasonicControl ultrasonicControl = new UltrasonicControl() ;
-        ultrasonicControl.setShowSlamware(true);
-        ultrasonicControl.setShowAndroid(false);
+        if(mUltrasonicAndroidSct.isChecked()){
 
-        MotionSend motionSend= new MotionSend() ;
-        motionSend.setUltrasonicControl(ultrasonicControl);
+            UltrasonicControl ultrasonicControl = new UltrasonicControl() ;
+            ultrasonicControl.setShowAndroid(false);
 
-        MotionClient.getInstance(TestMotionActivity.this).sendInMainThread(motionSend,null);
+            MotionSend motionSend= new MotionSend() ;
+            motionSend.setUltrasonicControl(ultrasonicControl);
+
+            MotionClient.getInstance(TestMotionActivity.this).sendInMainThread(motionSend,null);
+
+        }
+
     }
 
 
@@ -442,7 +444,7 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
             }
 
 
-            setAllShow() ;
+//            setAllShow() ;
 
             registerReceiver() ;
         }
@@ -919,7 +921,7 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
     private UltrasonicAdapter mUltrasonicAdapter ;
     private class UltrasonicAdapter extends BaseAdapter{
 
-        private String[] POSITION_NAMES = {"前左腿","前右腿","肚子","左胸","右胸","后左腿","后右腿"} ;
+        private String[] POSITION_NAMES = {"肚子","左前脚","左胸","左后脚","右后脚","右胸","右前腿"} ;
 
         private int[] distances ;
         private int[] preDistances ;

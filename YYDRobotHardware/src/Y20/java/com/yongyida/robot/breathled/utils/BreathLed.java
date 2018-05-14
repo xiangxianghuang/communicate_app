@@ -55,9 +55,9 @@ public class BreathLed {
 	 * Red
 	 * Green
 	 * Blue
-	 * GreenBlue
-	 * RedBlue
-	 * RedGreen
+	 * GreenBlue // cyan
+	 * RedBlue	// 品红
+	 * RedGreen //yellow
 	 * White
 	 *
 	 * @return

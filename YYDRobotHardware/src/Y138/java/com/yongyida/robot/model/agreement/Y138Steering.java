@@ -180,13 +180,6 @@ public class Y138Steering {
         /**
          * 控制手臂单个舵机
          * @param direction  0 左 1 右
-         * @param id 舵机Id  舵机从上到下 的舵机ID
-         * @param mode  0x00 时间控制  0x01 速度控制
-         * @param negative 0 正向 1 反向
-         * @param type  0 偏移量 1 目标值
-         * @param distance  距离值
-         * @param parameter 控制参数
-         * @param delay 延迟时间
          *
          * */
         public void controlSingleArm(byte direction, ArmControl.Joint joint){

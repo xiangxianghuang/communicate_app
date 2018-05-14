@@ -323,7 +323,6 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:text="是否开启超声波给android"
-                android:checked="true"
                 />
 
             <GridView

@@ -87,7 +87,7 @@ public class Receiver {
     public SendManager getSendManager(){
 
         LogHelper.e(TAG , LogHelper.__TAG__());
-        if(sendManager == null){
+        if(sendManager == null || !sendManager.asBinder().isBinderAlive()){ // 新增判断绑定是否还活着
             LogHelper.e(TAG , LogHelper.__TAG__());
             if(isExist()){
 

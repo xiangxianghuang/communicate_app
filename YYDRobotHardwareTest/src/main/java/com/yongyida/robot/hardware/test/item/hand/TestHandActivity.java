@@ -1,11 +1,8 @@
 package com.yongyida.robot.hardware.test.item.hand;
 
 import android.app.FragmentTransaction;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.yongyida.robot.hardware.test.R;
