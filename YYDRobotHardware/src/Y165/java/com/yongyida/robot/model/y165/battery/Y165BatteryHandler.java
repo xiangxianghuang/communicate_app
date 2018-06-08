@@ -3,10 +3,9 @@ package com.yongyida.robot.model.y165.battery;
 import android.content.Context;
 
 import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.server.IResponseListener;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.battery.BatteryHandler;
-import com.yongyida.robot.communicate.app.hardware.battery.data.QueryBattery;
-import com.yongyida.robot.communicate.app.hardware.battery.response.BatteryResponse;
 import com.yongyida.robot.communicate.app.hardware.battery.send.BatterySend;
 import com.yongyida.robot.model.agreement.Y165Receive;
 
@@ -23,19 +22,21 @@ public class Y165BatteryHandler extends BatteryHandler {
         startListenBatteryChanged() ;   // 开始电池监听
     }
 
+
+
     @Override
-    public BaseResponse onHandler(BatterySend send) {
+    public BaseResponse onHandler(BatterySend send, IResponseListener responseListener) {
 
         LogHelper.i(TAG, LogHelper.__TAG__());
 
-        QueryBattery queryBattery = send.getQueryBattery() ;
-        if(queryBattery != null){
-
-            BatteryResponse batteryResponse = new BatteryResponse() ;
-            batteryResponse.setBatteryInfo(batteryInfo);
-
-            return batteryResponse ;
-        }
+//        QueryBattery queryBattery = send.getQueryBattery() ;
+//        if(queryBattery != null){
+//
+//            BatteryResponse batteryResponse = new BatteryResponse() ;
+//            batteryResponse.setBatteryInfo(batteryInfo);
+//
+//            return batteryResponse ;
+//        }
 
         return null;
     }

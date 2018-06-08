@@ -2,9 +2,11 @@ package com.yongyida.robot.model.y20.motion;
 
 import android.content.Context;
 
+import com.hiva.communicate.app.common.send.SendResponseListener;
 import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.server.IResponseListener;
 import com.yongyida.robot.communicate.app.hardware.motion.MotionHandler;
-import com.yongyida.robot.communicate.app.hardware.motion.data.MotionControl;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.MotionSendControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
 
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ public class Y20MotionHandler extends MotionHandler {
     }
 
     @Override
-    public BaseResponse onHandler(MotionSend send) {
+    public BaseResponse onHandler(MotionSend send, IResponseListener responseListener) {
         return null;
     }
 
@@ -34,7 +36,7 @@ public class Y20MotionHandler extends MotionHandler {
 
 
 
-    protected BaseResponse onControl(ArrayList<MotionControl> motionControls) {
+    protected BaseResponse onControl(ArrayList<MotionSendControl> motionControls) {
         return motionStatueControl.onControl(motionControls);
     }
 

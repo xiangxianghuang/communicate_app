@@ -2,7 +2,7 @@ package com.hiva.communicate.app.client;
 
 import android.content.Context;
 
-import com.hiva.communicate.app.common.IResponseListener;
+import com.hiva.communicate.app.common.send.SendResponseListener;
 import com.hiva.communicate.app.common.SendResponse;
 import com.hiva.communicate.app.common.send.BaseSend;
 
@@ -50,12 +50,12 @@ public class Client {
         return receivers.getReceiver(packageName) ;
     }
 
-    public SendResponse send(Receiver receiver, BaseSend baseSend, IResponseListener response){
+    public SendResponse send(Receiver receiver, BaseSend baseSend, SendResponseListener response){
 
         return receiver.send(baseSend,response) ;
     }
 
-    public SendResponse send(String packageName,String action, BaseSend baseSend, IResponseListener response){
+    public SendResponse send(String packageName,String action, BaseSend baseSend, SendResponseListener response){
 
         Receiver receiver = getReceiver(packageName, action) ;
 

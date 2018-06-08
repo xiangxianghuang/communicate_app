@@ -13,15 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.hiva.communicate.app.common.IResponseListener;
-import com.hiva.communicate.app.common.SendResponse;
-import com.hiva.communicate.app.common.response.BaseResponse;
-import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.communicate.app.hardware.battery.data.BatteryInfo;
-import com.yongyida.robot.communicate.app.hardware.battery.data.QueryBattery;
-import com.yongyida.robot.communicate.app.hardware.battery.response.BatteryResponse;
-import com.yongyida.robot.communicate.app.hardware.battery.send.BatterySend;
-import com.yongyida.robot.hardware.client.BatteryClient;
+import com.hiva.communicate.app.common.send.SendResponseListener;
+import com.hiva.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.hardware.battery.response.data.BatteryInfo;
+import com.yongyida.robot.communicate.app.hardware.battery.send.data.QueryBattery;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
 
@@ -192,60 +187,76 @@ public class TestBatteryActivity extends TestBaseActivity {
         unregisterReceiver(broadcastReceiver);
     }
 
+    private QueryBattery mQueryBattery = new QueryBattery() ;
+
+
 
     /**
      * 查询电池信息
      * */
     private void queryBatteryInfo(){
 
-        new Thread(){
+        SendResponseListener iResponseListener = new SendResponseListener<BatteryInfo>() {
 
             @Override
-            public void run() {
-
-                BatterySend batterySend = new BatterySend() ;
-                QueryBattery queryBattery = new QueryBattery() ;
-                batterySend.setQueryBattery(queryBattery);
-
-                final BatteryClient batteryClient = BatteryClient.getInstance(TestBatteryActivity.this) ;
-                IResponseListener responseListener = new IResponseListener() {
-                    @Override
-                    public void onResponse(BaseResponse response) {
-
-                        LogHelper.i(TAG, LogHelper.__TAG__() + ", response : " + response );
-
-                        BatteryResponse batteryResponse = (BatteryResponse) response;
-                        if(batteryResponse != null){
-
-                            BatteryInfo batteryInfo = batteryResponse.getBatteryInfo() ;
-
-                            Message message = myHandler.obtainMessage(MyHandler.BATTERY_INFO) ;
-                            message.obj = batteryInfo ;
-                            myHandler.sendMessage(message) ;
-                        }
-
-                    }
-                };
-
-                SendResponse sendResponse = batteryClient.send(batterySend,responseListener) ;
-                if (sendResponse == null) {
-
-                    // 发送不成功
-                    LogHelper.i(TAG, LogHelper.__TAG__());
-//                    Toast.makeText(TestBatteryActivity.this, "发送失败，返回为空！", Toast.LENGTH_LONG).show();
-
-                }else{
-
-                    int result = sendResponse.getResult() ;
-                    if(result != SendResponse.RESULT_SUCCESS)
-
-                        // 发送不成功
-                        LogHelper.i(TAG, LogHelper.__TAG__() + ", result : " + result);
-//                        Toast.makeText(TestBatteryActivity.this,"发送失败，返回为:" + result , Toast.LENGTH_LONG).show(); ;
-                    }
+            public void onSuccess(BatteryInfo batteryInfo) {
 
             }
-        }.start();
+
+            @Override
+            public void onFail(int result, String message) {
+
+            }
+        };
+
+        SendClient.getInstance(this).send(mQueryBattery, iResponseListener);
+
+
+//        new Thread(){
+//
+//            @Override
+//            public void run() {
+//
+//
+//                SendResponseListener responseListener = new SendResponseListener() {
+//                    @Override
+//                    public void onResponse(BaseResponse response) {
+//
+//                        LogHelper.i(TAG, LogHelper.__TAG__() + ", response : " + response );
+//
+//                        BaseResponseControl baseResponseControl = response.getBaseResponseControl();
+//                        if(baseResponseControl instanceof BatteryInfo){
+//
+//                            BatteryInfo batteryInfo = (BatteryInfo) baseResponseControl;
+//
+//                            Message message = myHandler.obtainMessage(MyHandler.BATTERY_INFO) ;
+//                            message.obj = batteryInfo ;
+//                            myHandler.sendMessage(message) ;
+//                        }
+//
+//                    }
+//                };
+//
+//                QueryBattery queryBattery = new QueryBattery() ;
+//                SendResponse sendResponse = SendClient.getInstance(TestBatteryActivity.this).sendInNotMainThread(queryBattery, responseListener) ;
+//                if (sendResponse == null) {
+//
+//                    // 发送不成功
+//                    LogHelper.i(TAG, LogHelper.__TAG__());
+////                    Toast.makeText(TestBatteryActivity.this, "发送失败，返回为空！", Toast.LENGTH_LONG).show();
+//
+//                }else{
+//
+//                    int result = sendResponse.getResult() ;
+//                    if(result != SendResponse.RESULT_SUCCESS)
+//
+//                        // 发送不成功
+//                        LogHelper.i(TAG, LogHelper.__TAG__() + ", result : " + result);
+////                        Toast.makeText(TestBatteryActivity.this,"发送失败，返回为:" + result , Toast.LENGTH_LONG).show(); ;
+//                    }
+//
+//            }
+//        }.start();
 
     }
 

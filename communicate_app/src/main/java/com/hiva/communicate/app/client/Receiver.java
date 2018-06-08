@@ -11,9 +11,10 @@ import android.os.RemoteException;
 import com.hiva.communicate.app.ResponseListener;
 import com.hiva.communicate.app.SendManager;
 import com.hiva.communicate.app.common.Container;
-import com.hiva.communicate.app.common.IResponseListener;
+import com.hiva.communicate.app.common.send.SendResponseListener;
 import com.hiva.communicate.app.common.SendResponse;
 import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.BaseResponseControl;
 import com.hiva.communicate.app.common.send.BaseSend;
 import com.hiva.communicate.app.utils.AppUtils;
 import com.hiva.communicate.app.utils.LogHelper;
@@ -70,6 +71,8 @@ public class Receiver {
         @Override
         public void onServiceDisconnected(ComponentName name) {
 
+            LogHelper.e(TAG , LogHelper.__TAG__());
+            sendManager = null ;
         }
     } ;
 
@@ -87,7 +90,7 @@ public class Receiver {
     public SendManager getSendManager(){
 
         LogHelper.e(TAG , LogHelper.__TAG__());
-        if(sendManager == null || !sendManager.asBinder().isBinderAlive()){ // 新增判断绑定是否还活着
+        if(sendManager == null){
             LogHelper.e(TAG , LogHelper.__TAG__());
             if(isExist()){
 
@@ -117,12 +120,12 @@ public class Receiver {
     }
 
 
-    public static boolean isMainThread() {
+    private static boolean isMainThread() {
 
         return Looper.getMainLooper().getThread() == Thread.currentThread();
     }
 
-    public SendResponse send(BaseSend send , final IResponseListener response) {
+    public SendResponse send(BaseSend send , final SendResponseListener response) {
 
         ResponseListener responseListener = null;
         if(response != null){
@@ -141,15 +144,41 @@ public class Receiver {
                         Class clazz = Class.forName(container.getClassName()) ;
                         LogHelper.i(TAG , LogHelper.__TAG__() + ",clazz : " + clazz);
 
-                        baseResponse = (BaseResponse) container.getData(clazz);
+                        String data = container.getData().toString() ;
+                        LogHelper.i(TAG , LogHelper.__TAG__() + ",data : " + data);
+
+//                        baseResponse = (BaseResponse) container.getData(clazz);
+                        baseResponse = Container.fromJson(data, BaseResponse.class);
 
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
-                        LogHelper.i(TAG , LogHelper.__TAG__() + ",ClassNotFoundException : " + e);
+                        LogHelper.e(TAG , LogHelper.__TAG__() + ",ClassNotFoundException : " + e);
+                    }catch (Exception e){
+
+                        LogHelper.e(TAG , LogHelper.__TAG__() + ", Exception : " + e);
                     }
 
                     LogHelper.i(TAG , LogHelper.__TAG__() + ",baseResponse : " + baseResponse);
-                    response.onResponse(baseResponse);
+
+                    if(baseResponse == null){
+
+                        response.onFail(BaseResponse.RESULT_NONE_DATA, null);
+
+                    }else {
+
+                        int result = baseResponse.getResult() ;
+                        if(result == BaseResponse.RESULT_SUCCESS){
+
+                            BaseResponseControl baseResponseControl = baseResponse.getBaseResponseControl() ;
+
+                            response.onSuccess(baseResponseControl);
+
+                        }else {
+
+                            response.onFail(result, baseResponse.getMessage());
+                        }
+                    }
+
 
                 }
             };
@@ -169,6 +198,8 @@ public class Receiver {
             sendResponseString = sendManager.send(sendContainer.toString(), responseListener) ;
 
         } catch (Exception e) {
+
+            LogHelper.e(TAG , LogHelper.__TAG__() + ",e : " + e.getMessage());
 
             return new SendResponse(SendResponse.RESULT_SEND_EXCEPTION,e.getMessage()) ;
         }

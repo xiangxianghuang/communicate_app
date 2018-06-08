@@ -6,7 +6,7 @@ import android.os.BatteryManager;
 
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.BaseHandler;
-import com.yongyida.robot.communicate.app.hardware.battery.data.BatteryInfo;
+import com.yongyida.robot.communicate.app.hardware.battery.response.data.BatteryInfo;
 import com.yongyida.robot.communicate.app.hardware.battery.send.BatterySend;
 import com.yongyida.robot.model.agreement.Y128Steering;
 

@@ -7,7 +7,6 @@ import com.yongyida.robot.serial.SerialSend;
  */
 public class Y165Send {
 
-
     private static Y165Send ourInstance ;
     public static Y165Send getInstance() {
 

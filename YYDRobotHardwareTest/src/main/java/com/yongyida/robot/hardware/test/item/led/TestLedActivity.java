@@ -13,58 +13,71 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.yongyida.robot.communicate.app.hardware.TestData;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedControl;
-import com.yongyida.robot.communicate.app.hardware.touch.send.TouchSend;
-import com.yongyida.robot.hardware.client.LedClient;
-import com.yongyida.robot.hardware.client.TouchClient;
+import com.hiva.communicate.app.common.response.BaseResponseControl;
+import com.hiva.communicate.app.common.send.SendResponseListener;
+import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.send.SendClient;
+import com.hiva.communicate.app.utils.LogHelper;
+import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSendControl;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.data.ModelInfo;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
+import com.yongyida.robot.hardware.test.item.led.dialog.MoreColorDialog;
+import com.yongyida.robot.hardware.test.item.led.view.HorizontalListView;
 
 /**
  * Created by HuangXiangXiang on 2018/3/2.
  */
 public class TestLedActivity extends TestBaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, CompoundButton.OnCheckedChangeListener {
 
+    private static final String TAG = TestLedActivity.class.getSimpleName() ;
 
-    private static int [] POSITION_VALUE  ;
+    private static LedSendControl.Position[] POSITION_VALUE  ;
     private static String [] POSITION_NAME ;
     static{
 
         if(ModelInfo.getInstance().getModel().contains("YQ110")){
 
-            POSITION_VALUE = new int[]{ LedControl.POSITION_CHEST} ;
+            POSITION_VALUE = new LedSendControl.Position[]{ LedSendControl.Position.CHEST} ;
             POSITION_NAME = new String[] { "胸部"} ;
+
+        }else if(ModelInfo.getInstance().getModel().contains("Y138")) {
+
+            POSITION_VALUE = new LedSendControl.Position[]{ LedSendControl.Position.CHEST, LedSendControl.Position.EAR} ;
+            POSITION_NAME = new String[] { "胸部","耳朵"} ;
 
         }else if(ModelInfo.getInstance().getModel().contains("Y165")) {
 
-            POSITION_VALUE = new int[]{ LedControl.POSITION_EYE} ;
+            POSITION_VALUE = new LedSendControl.Position[]{ LedSendControl.Position.EYE} ;
             POSITION_NAME = new String[] { "眼睛"} ;
 
         }else{
 
-            POSITION_VALUE = new int[]{LedControl.POSITION_LEFT_EAR, LedControl.POSITION_RIGHT_EAR, LedControl.POSITION_CHEST} ;
+            POSITION_VALUE = new LedSendControl.Position[]{LedSendControl.Position.LEFT_EAR, LedSendControl.Position.RIGHT_EAR, LedSendControl.Position.CHEST} ;
             POSITION_NAME = new String[]{"左耳朵","右耳朵", "胸部"} ;
         }
     }
 
 
 
-
-
-    private static LedControl.Effect[] EFFECT_VALUE ;
+    private static LedSendControl.Effect[] EFFECT_VALUE ;
     private static String [] EFFECT_NAME ;
     static{
 
         if(ModelInfo.getInstance().getModel().contains("Y165")){
 
-            EFFECT_VALUE = new LedControl.Effect[]{LedControl.Effect.NORMAL, LedControl.Effect.LED_OFF} ;
+            EFFECT_VALUE = new LedSendControl.Effect[]{LedSendControl.Effect.LED_ON, LedSendControl.Effect.LED_OFF} ;
             EFFECT_NAME = new String[]{"常亮","常灭"} ;
+
+        }else if(ModelInfo.getInstance().getModel().contains("Y138")) {
+
+            EFFECT_VALUE = new LedSendControl.Effect[]{LedSendControl.Effect.LED_ON, LedSendControl.Effect.LED_OFF, LedSendControl.Effect.BREATH_LOW, LedSendControl.Effect.BREATH_MIDDLE, LedSendControl.Effect.BREATH_FAST} ;
+            EFFECT_NAME = new String[]{"常亮","常灭","呼吸灯(慢)","呼吸灯(中)", "呼吸灯(快)"} ;
+
         }else {
 
-            EFFECT_VALUE = new LedControl.Effect[]{LedControl.Effect.NORMAL, LedControl.Effect.LED_OFF, LedControl.Effect.BREATH_LOW, LedControl.Effect.BREATH_MIDDLE, LedControl.Effect.BREATH_FAST} ;
-            EFFECT_NAME = new String[]{"常亮","常灭","呼吸灯(慢)","呼吸灯(中)", "呼吸灯(快)"} ;
+            EFFECT_VALUE = new LedSendControl.Effect[]{LedSendControl.Effect.LED_ON, LedSendControl.Effect.LED_OFF, LedSendControl.Effect.BREATH_LOW, LedSendControl.Effect.BREATH_MIDDLE, LedSendControl.Effect.BREATH_FAST, LedSendControl.Effect.HORSE_RACE} ;
+            EFFECT_NAME = new String[]{"常亮","常灭","呼吸灯(慢)","呼吸灯(中)", "呼吸灯(快)","跑马灯"} ;
         }
     }
 
@@ -102,6 +115,7 @@ public class TestLedActivity extends TestBaseActivity implements View.OnClickLis
      * 蓝
      */
     private Button mColorBlueBtn;
+    private Button mColorMoreBtn;
     private LinearLayout mGeneralColorLlt;
     private GridView mEffectGvw;
 
@@ -129,6 +143,8 @@ public class TestLedActivity extends TestBaseActivity implements View.OnClickLis
         mColorGreenBtn.setOnClickListener(this);
         mColorBlueBtn = (Button) view.findViewById(R.id.color_blue_btn);
         mColorBlueBtn.setOnClickListener(this);
+        mColorMoreBtn = (Button) view.findViewById(R.id.color_more_btn);
+        mColorMoreBtn.setOnClickListener(this);
         mGeneralColorLlt = (LinearLayout) view.findViewById(R.id.general_color_llt);
         mEffectGvw = (GridView) view.findViewById(R.id.effect_gvw);
         mEffectGvw.setOnItemClickListener(this);
@@ -171,26 +187,26 @@ public class TestLedActivity extends TestBaseActivity implements View.OnClickLis
     }
 
 
-    private void startTest(){
-
-        TestData testData = new TestData() ;
-        testData.setTest(true);
-        TouchSend touchSend = new TouchSend() ;
-        touchSend.setTestData(testData);
-
-        TouchClient.getInstance(this).sendInMainThread(touchSend, null);
-
-    }
-
-    private void stopTest(){
-
-        TestData testData = new TestData() ;
-        testData.setTest(false);
-        TouchSend touchSend = new TouchSend() ;
-        touchSend.setTestData(testData);
-
-        TouchClient.getInstance(this).sendInMainThread(touchSend, null);
-    }
+//    private void startTest(){
+//
+//        TestData testData = new TestData() ;
+//        testData.setTest(true);
+//        TouchSend touchSend = new TouchSend() ;
+//        touchSend.setTestData(testData);
+//
+//        SendClient.getInstance(this).sendInMainThread(TestData, null);
+//
+//    }
+//
+//    private void stopTest(){
+//
+//        TestData testData = new TestData() ;
+//        testData.setTest(false);
+//        TouchSend touchSend = new TouchSend() ;
+//        touchSend.setTestData(testData);
+//
+//        TouchClient.getInstance(this).sendInMainThread(touchSend, null);
+//    }
 
 
     @Override
@@ -207,18 +223,22 @@ public class TestLedActivity extends TestBaseActivity implements View.OnClickLis
 
         } else if (i == R.id.color_red_btn) {
 
-            ledControl.setColor(LedControl.Color.value(255,0,0));
+            ledControl.setColor(0xFF0000);
             sendLedControl() ;
 
         } else if (i == R.id.color_green_btn) {
 
-            ledControl.setColor(LedControl.Color.value(0,255,0));
+            ledControl.setColor(0x00FF00);
             sendLedControl() ;
 
         } else if (i == R.id.color_blue_btn) {
 
-            ledControl.setColor(LedControl.Color.value(0,0,255));
+            ledControl.setColor(0x0000FF);
             sendLedControl() ;
+
+        } else if (i == R.id.color_more_btn) {
+
+            new MoreColorDialog(this, ledControl).show();
 
         } else {
 
@@ -226,13 +246,27 @@ public class TestLedActivity extends TestBaseActivity implements View.OnClickLis
         }
     }
 
-    private LedControl ledControl = new LedControl();
+    private LedSendControl ledControl = new LedSendControl();
 
 
     public void  sendLedControl(){
 
-        LedClient.getInstance(this).sendLedControlInMainThread(ledControl, null);
+        SendClient.getInstance(this).send(ledControl,responseListener);
     }
+    private SendResponseListener responseListener = new SendResponseListener(){
+
+        @Override
+        public void onSuccess(BaseResponseControl baseResponseControl) {
+
+            LogHelper.i(TAG, LogHelper.__TAG__() + "baseResponseControl : " + baseResponseControl);
+        }
+
+        @Override
+        public void onFail(int result, String message) {
+
+            LogHelper.i(TAG, LogHelper.__TAG__() + "result : " + result + ", message : " + message );
+        }
+    } ;
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -349,10 +383,10 @@ public class TestLedActivity extends TestBaseActivity implements View.OnClickLis
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-//        LedControl ledStatue = new LedControl();
+//        LedSendControl ledStatue = new LedSendControl();
 //        ledStatue.setPosition(POSITION_VALUE[ledPositionCheckPosition]);
 //
-//        LedControl.Power power = isChecked ? LedControl.Power.POWER_ON : LedControl.Power.POWER_OFF ;
+//        LedSendControl.Power power = isChecked ? LedSendControl.Power.POWER_ON : LedSendControl.Power.POWER_OFF ;
 //
 //        ledStatue.setPower(power);
 //

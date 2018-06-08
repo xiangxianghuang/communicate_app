@@ -1,6 +1,9 @@
 package com.yongyida.robot.model.agreement;
 
-import com.yongyida.robot.communicate.app.hardware.motion.data.ArmControl;
+import com.yongyida.robot.communicate.app.hardware.hand.send.data.ArmSendControl;
+import com.yongyida.robot.communicate.app.hardware.hand.send.data.FingerSendControl;
+import com.yongyida.robot.communicate.app.hardware.hand.send.data.constant.Direction;
+import com.yongyida.robot.communicate.app.hardware.hand.send.data.constant.PreHandAction;
 
 import java.util.ArrayList;
 
@@ -19,15 +22,15 @@ import java.util.ArrayList;
  */
 public class Y138Steering {
 
-    /**总线舵机(0x01)*/
-    public static final byte TYPE_BUS                       = 0x01 ;
+    /**手臂(0x01)*/
+    public static final byte TYPE_ARM                       = 0x01 ;
     /**呼吸灯控制命令(0x02)*/
     public static final byte TYPE_LED                       = 0x02 ;
-    /**舵机控制命令(0x03)  (上下)*/
-    public static final byte TYPE_HEAD_UP_DOWN              = 0x03 ;
-    /**舵机控制命令(0x04)  (左右)*/
-    public static final byte TYPE_HEAD_LEFT_RIGHT           = 0x04 ;
-    /**步进电机控制命令(0x05)*/
+    /**舵机控制命令(0x03)  (左右)*/
+    public static final byte TYPE_HEAD_LEFT_RIGHT           = 0x03 ;
+    /**舵机控制命令(0x04)  (上下)*/
+    public static final byte TYPE_HEAD_UP_DOWN              = 0x04 ;
+    /**手指(0x05)*/
     public static final byte TYPE_STEPPER_MOTOR             = 0x05 ;
     /**触摸控制命令(0x06)*/
     public static final byte TYPE_TOUCH                     = 0x06 ;
@@ -98,19 +101,27 @@ public class Y138Steering {
 
     public static abstract class SingleChip{
 
-        protected final byte[] content ;
+        protected byte[] content ;
+        protected byte[] fixedContent  ;     // 定长数据
+        protected byte[] changeContent ;    // 变长数据
+
 
         public SingleChip(){
 
-            this(12) ;
+            fixedContent = setDataLength(12) ;
+            content = fixedContent ;
         }
-        public SingleChip(int length){
 
-            content = new byte[length] ;
+        protected byte[] setDataLength(int length){
 
-            content[0] = getFunction();
-            content[1] = getType();
+            byte[] data = new byte[length] ;
+
+            data[0] = getFunction();
+            data[1] = getType();
+
+            return data;
         }
+
 
         public abstract byte getType();     // 类型码
 
@@ -131,8 +142,6 @@ public class Y138Steering {
      * */
     public static class SteerArm extends SingleChip{
 
-
-
         @Override
         public byte getFunction() {
 
@@ -141,7 +150,7 @@ public class Y138Steering {
         @Override
         public byte getType() {
 
-            return TYPE_BUS;
+            return TYPE_ARM;
         }
 
 
@@ -152,12 +161,12 @@ public class Y138Steering {
          * */
         public void queryStatue(byte direction, byte id){
 
+            content = fixedContent ;
+
             content[2] = 0x01 ;
 
             content[3] = direction ;
             content[4] = id ;
-
-
         }
 
 
@@ -168,6 +177,8 @@ public class Y138Steering {
          * */
         public void changeId( int srcId , int destId){
 
+            content = fixedContent ;
+
             content[2] = 0x02 ;
 
 //            content[3] = direction ;
@@ -177,25 +188,55 @@ public class Y138Steering {
         }
 
 
+//        /**
+//         * 控制手臂单个舵机
+//         * @param direction  0 左 1 右
+//         *
+//         * */
+//        public void controlSingleArm(byte direction, ArmSendControl.Joint joint){
+//
+//            content[2] = 0x03 ;
+//
+//            content[3] = direction ;
+//
+//            content[4] = (byte) joint.getId();
+//            content[5] = (byte) ((joint.mode.value & 0x0F) | ((joint.negativeValue() & 0x01) << 4 ) | ((joint.type.value & 0x01) << 5 )) ;
+//            content[6] =  (byte) ((joint.typeValue >> 8) & 0xFF);
+//            content[7] = (byte) (joint.typeValue & 0xFF) ;
+//            content[8] = (byte) ((joint.modeValue >> 8) & 0xFF) ;
+//            content[9] = (byte) (joint.modeValue & 0xFF);
+//            content[10] = (byte) ((joint.delay >> 8) & 0xFF) ;
+//            content[11] = (byte) (joint.delay & 0xFF) ;
+//
+//        }
+
         /**
-         * 控制手臂单个舵机
-         * @param direction  0 左 1 右
-         *
+         * 控制手臂多个舵机
          * */
-        public void controlSingleArm(byte direction, ArmControl.Joint joint){
+        public void controlArms(byte direction, ArrayList<ArmSendControl.Joint> joints){
+
+            final int size = joints.size() ;
+            changeContent = setDataLength(size*8 + 5) ;
+            content = changeContent ;
 
             content[2] = 0x03 ;
-
             content[3] = direction ;
+            content[4] = (byte) size;
 
-            content[4] = (byte) joint.getId();
-            content[5] = (byte) ((joint.mode.value & 0x0F) | ((joint.negativeValue() & 0x01) << 4 ) | ((joint.type.value & 0x01) << 5 )) ;
-            content[6] =  (byte) ((joint.typeValue >> 8) & 0xFF);
-            content[7] = (byte) (joint.typeValue & 0xFF) ;
-            content[8] = (byte) ((joint.modeValue >> 8) & 0xFF) ;
-            content[9] = (byte) (joint.modeValue & 0xFF);
-            content[10] = (byte) ((joint.delay >> 8) & 0xFF) ;
-            content[11] = (byte) (joint.delay & 0xFF) ;
+            for (int i = 0 ; i < size ; i ++){
+
+                ArmSendControl.Joint joint = joints.get(i) ;
+
+                content[8*i+5] = (byte) joint.getId();
+                content[8*i+6] = (byte) ((joint.mode.value & 0x0F) | ((joint.negativeValue() & 0x01) << 4 ) | ((joint.type.value & 0x01) << 5 )) ;
+                content[8*i+7] = (byte) (joint.typeValue & 0xFF) ;
+                content[8*i+8] =  (byte) ((joint.typeValue >> 8) & 0xFF);
+                content[8*i+9] = (byte) (joint.modeValue & 0xFF);
+                content[8*i+10] = (byte) ((joint.modeValue >> 8) & 0xFF) ;
+                content[8*i+11] = (byte) (joint.delay & 0xFF) ;
+                content[8*i+12] = (byte) ((joint.delay >> 8) & 0xFF) ;
+
+            }
 
         }
 
@@ -204,6 +245,8 @@ public class Y138Steering {
          *
          * */
         public void resetHardware(){
+
+            content = fixedContent ;
 
             content[2] = 0x04 ;
 
@@ -214,42 +257,34 @@ public class Y138Steering {
          * */
         public void resetSoftware(){
 
+            content = fixedContent ;
+
             content[2] = 0x05 ;
 
+        }
+
+
+        /**
+         * 开启示教模式
+         * */
+        public void openTeacherMode(){
+
+            content = fixedContent ;
+
+            content[2] = 6 ;
+            content[3] = 1 ;
         }
 
         /**
-         * 控制手臂多个舵机
+         * 关闭示教模式
          * */
-        public void controlMultipleArm(byte direction, ArrayList<ArmControl.Joint> joints){
+        public void closeTeacherMode(){
 
-            content[2] = 0x05 ;
+            content = fixedContent ;
 
-            content[3] = direction ;
-            int length = joints.size() ;
-            content[4] = (byte) length;
-            for (int i = 0 ; i < length ; i ++){
-
-                ArmControl.Joint joint = joints.get(i) ;
-
-                content[8*i+5] = (byte) joint.getId();
-                content[8*i+6] = (byte) ((joint.mode.value & 0x0F) | ((joint.negativeValue() & 0x01) << 4 ) | ((joint.type.value & 0x01) << 5 )) ;
-                content[8*i+7] =  (byte) ((joint.typeValue >> 8) & 0xFF);
-                content[8*i+8] = (byte) (joint.typeValue & 0xFF) ;
-                content[8*i+9] = (byte) ((joint.modeValue >> 8) & 0xFF) ;
-                content[8*i+10] = (byte) (joint.modeValue & 0xFF);
-                content[8*i+11] = (byte) ((joint.delay >> 8) & 0xFF) ;
-                content[8*i+12] = (byte) (joint.delay & 0xFF) ;
-
-            }
-
-
-
+            content[2] = 6 ;
+            content[3] = 0 ;
         }
-
-
-
-
 
 
     }
@@ -271,6 +306,13 @@ public class Y138Steering {
         public static final byte POSITION_RIGHT_FOOT                    = 0x20 ;
         public static final byte POSITION_FOOT                          = 0x30 ;
 
+
+        public static final byte MODE_OFF                               = 0x00 ; // 常灭
+        public static final byte MODE_ON                                = 0x01 ; // 常亮
+        public static final byte MODE_BREATH                            = 0x02 ; // 呼吸
+        public static final byte MODE_HORSE                             = 0x03 ; // 跑马
+
+
         @Override
         public byte getFunction() {
 
@@ -283,9 +325,6 @@ public class Y138Steering {
             return TYPE_LED;
         }
 
-
-
-
         /**设置位置*/
         public void setPosition(byte position){
 
@@ -294,21 +333,53 @@ public class Y138Steering {
 
         /**
          * 设置灯的速度
-         *  1 - 60 速值越小 闪烁越快
-         *  0x00 常灭
-         *  0xFF 常亮
          * */
-        public void setSpeed(byte speed){
+        public void setLedOffMode(){
 
-            content[3] = speed ;
+            setMode(MODE_OFF, 0 );
+        }
+        /**
+         * 设置灯的速度
+         * */
+        public void setLedOnMode(){
+
+            setMode(MODE_ON, 0 );
         }
 
-        public void setColor(byte red, byte green ,byte blue){
+        /**
+         * 设置灯的速度
+         * */
+        public void setLedBreathMode(int parameter){
 
-            content[4] = red ;
-            content[5] = green ;
-            content[6] = blue ;
+            setMode(MODE_BREATH, parameter );
         }
+
+
+        /**
+         * 跑马灯效果
+         * */
+        public void setLedHorseMode(int parameter){
+
+            setMode(MODE_HORSE, parameter );
+        }
+
+        public void setMode(byte mode, int parameter){
+
+            content[3] = mode ;
+
+            content[4] = (byte) (parameter & 0xFF);
+            content[5] = (byte) ((parameter >> 8) & 0xFF) ;
+        }
+
+
+        public void setColor(byte red, byte green, byte blue){
+
+            content[6] = red ;
+            content[7] = green ;
+            content[8] = blue ;
+        }
+
+
 
     }
 
@@ -322,10 +393,15 @@ public class Y138Steering {
         public static final byte TURN_POSITIVE              = 0x02; //正值（头向右、头向下）
 
 
-        public static final byte CONTROL_TYPE_STOP          = 0x00; //停止
-        public static final byte CONTROL_TYPE_TIME          = 0x01; //时间
-        public static final byte CONTROL_TYPE_SPEED         = 0x02; //速度
-        public static final byte CONTROL_TYPE_LOOP          = 0x03; //循环
+        public static final byte TYPE_BY                    = 0x00; // 偏移量
+        public static final byte TYPE_TO                    = 0x01; // 目标值
+
+
+        public static final byte MODE_STOP                  = 0x00; //停止
+        public static final byte MODE_TIME                  = 0x01; //时间
+        public static final byte MODE_SPEED                 = 0x02; //速度
+        public static final byte MODE_LOOP                  = 0x03; //循环
+        public static final byte MODE_RESET                 = 0x04; //重置
 
         @Override
         public byte getFunction() {
@@ -338,9 +414,13 @@ public class Y138Steering {
          * */
         public void turnReset(){
 
-            content[2] = TURN_RESET;
-            content[3] = 0x00;
-            content[4] = 0x00;
+            controlHead((byte)0,TYPE_TO, MODE_RESET,0, 10,0) ;
+        }
+
+
+        public void turnLoop(){
+
+            controlHead((byte)0,TYPE_TO,MODE_LOOP, 100, 10,0) ;
         }
 
         /**
@@ -348,11 +428,7 @@ public class Y138Steering {
          * */
         protected void turnNegative(int angle){
 
-//            short ang = (short) (1500 - 2*angle);
-
-            content[2] = TURN_NEGATIVE ;
-            content[3] = (byte) (0xFF & (angle>>8));
-            content[4] = (byte) (0xFF & angle) ;
+            controlHead((byte)1,TYPE_TO, MODE_SPEED,angle, 10,0) ;
         }
 
         /**
@@ -360,54 +436,23 @@ public class Y138Steering {
          * */
         protected void turnPositive(int angle){
 
-//            short ang = (short) (1500 - 2*angle);
-
-            content[2] = TURN_POSITIVE ;
-            content[3] = (byte) (0xFF & (angle>>8));
-            content[4] = (byte) (0xFF & angle) ;
+            controlHead((byte)0,TYPE_TO, MODE_SPEED,angle, 10,0) ;
         }
 
-
-        /**停止运动*/
-        public void setStopMode(){
-
-            content[5] = CONTROL_TYPE_STOP;
-            content[6] = 0x00 ;
-            content[7] = 0x00 ;
-        }
 
         /**
-         * 设置时间模式
          *
          * */
-        public void setTimeMode(int value){
+        public void controlHead(byte isNegative, byte type,byte mode,
+                                int typeValue, int modeValue, int delay){
 
-            content[5] = CONTROL_TYPE_TIME;
-            content[6] = (byte) (0xFF & (value>>8)) ;
-            content[7] = (byte) (0xFF & value) ;
-        }
-
-
-        /**
-         * 设置速度模式
-         * @param value 表示速度数据值取值范围 0x00 - 0x0F
-         * */
-        public void setSpeedMode(int value){
-
-            content[5] = CONTROL_TYPE_SPEED;
-            content[6] = 0x00 ;
-            content[7] = (byte) value;
-        }
-
-        /**
-         * 设备循环模式
-         * @param value 数据值取值范围 0x00 - 0x0F
-         * */
-        public void setLoopMode(int value){
-
-            content[5] = CONTROL_TYPE_LOOP ;
-            content[6] = 0x00 ;
-            content[7] = (byte) value;
+            content[2] = (byte) ((mode & 0x0F) | ((isNegative & 0x01) << 4 ) | ((type & 0x01) << 5 )) ;
+            content[3] = (byte) (typeValue & 0xFF) ;
+            content[4] = (byte) ((typeValue >> 8) & 0xFF);
+            content[5] = (byte) (modeValue & 0xFF);
+            content[6] = (byte) ((modeValue >> 8) & 0xFF) ;
+            content[7] = (byte) (delay & 0xFF) ;
+            content[8] = (byte) ((delay >> 8) & 0xFF) ;
 
         }
 
@@ -429,7 +474,7 @@ public class Y138Steering {
          * */
         public void turnUp(int angle){
 
-            int ang = (1500 - 2*angle);
+            int ang = (1500 + 2*angle);
             turnNegative(ang);
         }
 
@@ -438,7 +483,7 @@ public class Y138Steering {
          * */
         public void turnDown(int angle){
 
-            short ang = (short) (1500 - 2*angle);
+            short ang = (short) (1500 + 2*angle);
             turnPositive(ang);
         }
 
@@ -478,9 +523,8 @@ public class Y138Steering {
     /**
      *  步进电机(0x05)
      *  控制手指
-     *
      * */
-    public static class SteerStepperMotor extends SingleChip{
+    public static class SteerFinger extends SingleChip{
 
 
         @Override
@@ -497,26 +541,31 @@ public class Y138Steering {
          * 手指控制
          *
          * @param direction 方向  3[4-5]  0 左手  1右手
-         * @param position 位置   3[0-3]  0-4 大拇指到小指
-         * @param open 手势 4[4] 0 摊开 1 紧握
-         * @param type 控制模式 4[5] 0 偏移量  1 目标值
-         * @param mode 控制类型 4[0-3] 0 停止 1 时间模式 2 速度模式 3 循环
-         * @param distance 5-6 距离
-         * @param parameter 7-8 控制参数
          *
          * */
-        public void controlFinger(byte direction, byte position,
-                  byte open, byte type, byte mode, short distance, short parameter){
+        public void controlFingers(byte direction, ArrayList<FingerSendControl.Finger> fingers){
+
+            final int size = fingers.size() ;
+            changeContent = setDataLength(size*8 + 5) ;
+            content = changeContent ;
 
             content[2] = 0x00 ;
+            content[3] = direction ;
+            content[4] = (byte) size;
 
-            content[3] = (byte) (((direction & 0x0F) << 4) | (position & 0x0F));
-            content[4] = (byte) (((type & 0x01) << 5) | ((open & 0x01) << 4 )| (mode & 0x0F)) ;
-            content[5] = (byte) ((distance >> 8) & 0xFF);
-            content[6] = (byte) (distance & 0xFF) ;
-            content[7] = (byte) ((parameter >> 8) & 0xFF) ;
-            content[8] = (byte) (parameter & 0xFF) ;
+            for (int i = 0 ; i < size ; i++){
 
+                FingerSendControl.Finger finger = fingers.get(i) ;
+
+                content[8*i+5] = (byte) finger.id ;
+                content[8*i+6] = (byte) ((finger.mode.value & 0x0F) | ((finger.openValue() & 0x01) << 4 ) | ((finger.type.value & 0x01) << 5 )) ;
+                content[8*i+7] = (byte) (finger.typeValue & 0xFF) ;
+                content[8*i+8] =  (byte) ((finger.typeValue >> 8) & 0xFF);
+                content[8*i+9] = (byte) (finger.modeValue & 0xFF);
+                content[8*i+10] = (byte) ((finger.modeValue >> 8) & 0xFF) ;
+                content[8*i+11] = (byte) (finger.delay & 0xFF) ;
+                content[8*i+12] = (byte) ((finger.delay >> 8) & 0xFF) ;
+            }
         }
 
 
@@ -540,21 +589,6 @@ public class Y138Steering {
      * */
     public static class SteerAction extends SingleChip{
 
-        public final static byte RESET_ARM           = 0x01 ;    // 手臂初始
-        public final static byte RESET_PALM          = 0x02 ;    // 手掌初始
-        public final static byte FINGER_WHEEL        = 0x03 ;    // 手指轮动
-        public final static byte GESTURE_HAND_SHAKE  = 0x04 ;    // 握手
-        public final static byte GESTURE_OK          = 0x05 ;    // OK
-        public final static byte GESTURE_GOOD        = 0x06 ;    // 点赞
-        public final static byte GESTURE_DANCE       = 0x07 ;    // 跳舞
-        public final static byte GESTURE_ROCK        = 0x08 ;    // 石头
-        public final static byte GESTURE_SCISSORS    = 0x09 ;    // 剪刀
-        public final static byte GESTURE_PAPER       = 0x0A ;    // 布
-
-        public final static byte DIRECTION_LEFT      = 0x00 ;   // 左
-        public final static byte DIRECTION_RIGHT     = 0x01 ;   // 右
-        public final static byte DIRECTION_ALL       = 0x02 ;   // 全部
-
         @Override
         public byte getType() {
             return TYPE_ACTION;
@@ -566,59 +600,16 @@ public class Y138Steering {
         }
 
 
-        public void setData(int type , int value){
+        public void setData(PreHandAction preHandAction, Direction direction ){
 
-            content[2] = (byte) type;
-            content[3] = (byte) value;
+            content[2] = preHandAction.value;
+            content[3] = direction.value;
         }
-
-        /**
-         * 恢复至初始状态
-         * @param position  0x01 表示手臂 0x02 表示手掌
-         * @param direction 0x00 左侧 0x01 右侧 0x02 两侧
-         *
-         * */
-        public void reset(byte position, byte direction){
-
-            content[2] = position ;
-            content[3] = direction ;
-        }
-
-        /**
-         * 手指轮动
-         * @param times 次数 取值范围 0x00-0xff
-         * */
-        public void fingerWheel(byte times){
-
-            content[2] = FINGER_WHEEL ;
-            content[3] = times;
-        }
-
-
-        /**
-         * 设置手势
-         * @param gesture
-         * @see #GESTURE_HAND_SHAKE  握手(0x04)
-         * @see #GESTURE_OK  OK(0x05)
-         * @see #GESTURE_GOOD  点赞(0x06)
-         * @see #GESTURE_DANCE  跳舞(0x07)
-         * @see #GESTURE_ROCK  石头(0x08)
-         * @see #GESTURE_SCISSORS  剪刀(0x09)
-         * @see #GESTURE_PAPER  布(0x0A)
-         *
-         * */
-        public void setGesture(byte gesture){
-
-            content[2] = gesture ;
-            content[3] = 0x00;
-        }
-
 
     }
 
     /**
      *  示教模式(0x09)
-     *  (待写)
      * */
     public static class SteerTeacher extends SingleChip{
         @Override
@@ -628,8 +619,26 @@ public class Y138Steering {
 
         @Override
         public byte getFunction() {
-            return 0;
+            return FUNCTION_SEND_STEER;
         }
+
+
+        /**
+         * 开启示教模式
+         * */
+        public void openTeacherMode(){
+
+            content[2] = 1 ;
+        }
+
+        /**
+         * 关闭示教模式
+         * */
+        public void closeTeacherMode(){
+
+            content[2] = 0 ;
+        }
+
     }
 
 

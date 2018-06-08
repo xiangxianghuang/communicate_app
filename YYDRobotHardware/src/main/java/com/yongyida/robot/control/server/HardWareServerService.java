@@ -5,14 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import com.hiva.communicate.app.common.IResponseListener;
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.common.send.BaseSend;
+import com.hiva.communicate.app.server.IResponseListener;
 import com.hiva.communicate.app.server.ServerService;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.BaseHandler;
-import com.yongyida.robot.communicate.app.hardware.motion.data.MotionControl;
-import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.MotionSendControl;
 import com.yongyida.robot.control.model.HardwareConfig;
 
 /**
@@ -61,20 +60,27 @@ public class HardWareServerService extends ServerService {
 
         LogHelper.i(TAG, LogHelper.__TAG__() + "，BaseSend : " + send);
 
-        BaseResponse baseResponse ;
+        BaseResponse baseResponse = null;
 
         BaseHandler baseHandler = mHardwareConfig.getControl(send.getClass()) ;
         if(baseHandler != null){
 
-            baseResponse = baseHandler.onHandler(send) ;
+            try{
+
+                baseResponse = baseHandler.onHandler(send ,responseListener) ;
+                LogHelper.i(TAG, LogHelper.__TAG__() + "，baseResponse : " + baseResponse);
+            }catch (Exception e){
+
+                LogHelper.e(TAG, LogHelper.__TAG__() + "，Exception : " + e );
+            }
 
         }else{
 
             LogHelper.e(TAG, LogHelper.__TAG__() + "，无对应的处理方式!" );
             baseResponse = new BaseResponse(BaseResponse.RESULT_CAN_NOT_HANDLE,null) ;
         }
-
-        if(responseListener != null){
+        LogHelper.i(TAG, LogHelper.__TAG__() + "，baseResponse : " + baseResponse);
+        if(responseListener != null && baseResponse != null){
 
             responseListener.onResponse(baseResponse);
         }
@@ -101,11 +107,11 @@ public class HardWareServerService extends ServerService {
                     int time = intent.getIntExtra(KEY_TIME, 1000) ;
 
                     LogHelper.i(TAG, LogHelper.__TAG__() + " motionAction : " + motionAction + ", time : "+ time);
-                    MotionControl.Action action1 = MotionControl.Action.valueOf(motionAction);
+                    MotionSendControl.Action action1 = MotionSendControl.Action.valueOf(motionAction);
                     motionControl.setAction(action1);
                     motionControl.getTime().setValue(time);
 
-                    onReceiver(motionSend, null) ;
+                    onReceiver(motionControl.getSend(), null) ;
 
                 }catch (Exception e){
                     LogHelper.e(TAG, LogHelper.__TAG__() + "Exception " + e );
@@ -117,13 +123,10 @@ public class HardWareServerService extends ServerService {
 
 
 
-    private MotionSend motionSend =  new MotionSend() ;
-    private MotionControl motionControl = new MotionControl() ;
+    private MotionSendControl motionControl = new MotionSendControl() ;
     private void registerReceiver(){
 
-        motionControl.setTime(new MotionControl.Time());
-
-        motionSend.setMotionControl(motionControl) ;
+        motionControl.setTime(new MotionSendControl.Time());
 
         IntentFilter filter = new IntentFilter() ;
         filter.addAction(ACTION_MOVE);

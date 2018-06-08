@@ -3,11 +3,11 @@ package com.yongyida.robot.model.y20.led;
 
 import android.content.Context;
 
+import com.hiva.communicate.app.common.send.SendResponseListener;
 import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.server.IResponseListener;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.led.LedHandler;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedControl;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedScene;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
 
 /**
@@ -23,78 +23,18 @@ public class Y20LedHandler extends LedHandler {
 
 
     @Override
-    public BaseResponse onHandler(LedSend ledSend) {
+    public BaseResponse onHandler(LedSend ledSend, IResponseListener responseListener) {
 
-         LedScene ledScene = ledSend.getLedScene() ;
-        if(ledScene != null){
-
-            return onControl(ledScene) ;
-        }
+//         LedScene ledScene = ledSend.getLedScene() ;
+//        if(ledScene != null){
+//
+//            return onControl(ledScene) ;
+//        }
 
         return null;
     }
 
-    public BaseResponse onControl(LedControl ledControl) {
-        return null;
-    }
 
-    public BaseResponse onControl(LedScene ledScene){
-
-        LogHelper.i(TAG , LogHelper.__TAG__() + ledScene.name());
-
-        switch (ledScene){
-//            case POWER_ON:
-//
-//                poweredOn() ;
-//                break;
-//            case WAKE_UP:
-//
-//                wakeUp() ;
-//                break;
-//            case LISTENING:
-//
-//                listening() ;
-//                break;
-//            case RECOGNITION:
-//
-//                recognition() ;
-//                break;
-//            case DIALOG:
-//
-//                dialog() ;
-//                break;
-//            case SLEEP:
-//
-//                sleep() ;
-//                break;
-//            case POWER_OFF:
-//
-//                powerOff() ;
-//                break;
-//            case CONNECT_NET:
-//
-//                connectNet() ;
-//                break;
-//            case LOW_POWER:
-//            case CHARGING:
-//
-//                lowPowerOrCharging() ;
-//                break;
-//            case PLAY_MEDIA:
-//            case PLAY_TTS:
-//
-//                play() ;
-//                break;
-//            case STAND_BY:
-//
-//                standBy();
-//                break;
-
-        }
-
-
-        return  null ;
-    }
 
 
 

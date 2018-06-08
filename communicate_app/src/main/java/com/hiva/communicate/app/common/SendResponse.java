@@ -14,6 +14,9 @@ public class SendResponse {
     public static final int RESULT_NO_METHOD                    = 0x02 ; //接收端不能处理
     public static final int RESULT_SEND_EXCEPTION               = 0x04 ; //发送失败
     public static final int RESULT_JSON_EXCEPTION               = 0x05 ; //机械返回数据异常
+    public static final int RESULT_NO_SETTING_PERMISSION        = 0x07 ; //没有设置权限
+    public static final int RESULT_NO_SEND                      = 0x08 ; //没有对应的处理集合
+    public static final int RESULT_FACTORY_MODE                 = 0x06 ; //工厂模式
 
     private final int result ;
     private final String message ;

@@ -1,7 +1,7 @@
 package com.yongyida.robot.model.y20.motion;
 
 import com.hiva.communicate.app.common.response.BaseResponse;
-import com.yongyida.robot.communicate.app.hardware.motion.data.MotionControl;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.MotionSendControl;
 import com.yongyida.robot.serial.MotionHelper;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class MotionStatueControl {
         motionHelper = new MotionHelper(serialPort);
     }
 
-    protected BaseResponse onControl(ArrayList<MotionControl> motionControls) {
+    protected BaseResponse onControl(ArrayList<MotionSendControl> motionControls) {
 
 //        motionHelper.open();
 //
@@ -56,7 +56,7 @@ public class MotionStatueControl {
         return null;
     }
 
-    private void onHead(MotionControl motionData, boolean isLeftRight){
+    private void onHead(MotionSendControl motionData, boolean isLeftRight){
 
         boolean isForward = true ;// 是否是正转
 
@@ -124,7 +124,7 @@ public class MotionStatueControl {
     }
 
 
-    private void onFootControl(MotionControl leftFoot, MotionControl rightFoot){
+    private void onFootControl(MotionSendControl leftFoot, MotionSendControl rightFoot){
 
         boolean isLefForward = true ;// 是否是正转
         boolean isRightForward = true ;// 是否是正转

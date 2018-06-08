@@ -11,10 +11,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.communicate.app.hardware.motion.data.ArmControl;
-import com.yongyida.robot.communicate.app.hardware.motion.data.ChangeArmId;
-import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
-import com.yongyida.robot.hardware.client.MotionClient;
+import com.yongyida.robot.communicate.app.hardware.hand.send.data.ArmSendControl;
+import com.yongyida.robot.communicate.app.hardware.hand.send.data.ChangeArmId;
+import com.yongyida.robot.communicate.app.hardware.hand.send.data.constant.Direction;
+import com.yongyida.robot.communicate.app.hardware.hand.send.data.constant.Mode;
+import com.yongyida.robot.communicate.app.hardware.hand.send.data.constant.Type;
+import com.hiva.communicate.app.common.send.SendClient;
 import com.yongyida.robot.hardware.test.R;
 
 /**
@@ -164,9 +166,7 @@ public class TestChangeArmIdFragment extends Fragment implements View.OnClickLis
             setSrcId() ;
             setDestId();
 
-            mMotionSend.setArmControl(null);
-            mMotionSend.setChangeArmId(mChangeArmId);
-            MotionClient.getInstance(getActivity()).sendInMainThread(mMotionSend, null);
+            SendClient.getInstance(getActivity()).send(mChangeArmId, null);
 
         } else if (i == R.id.positive_turn_btn) {
 
@@ -180,7 +180,6 @@ public class TestChangeArmIdFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    private MotionSend mMotionSend = new MotionSend() ;
     private ChangeArmId mChangeArmId = new ChangeArmId();
 
     private void setSrcId() {
@@ -283,31 +282,31 @@ public class TestChangeArmIdFragment extends Fragment implements View.OnClickLis
 
 
     // 控制手臂
-    private ArmControl mArmControl = new ArmControl() ;
-    private ArmControl.Joint mJoint ;
+    private ArmSendControl mArmControl = new ArmSendControl() ;
+    private ArmSendControl.Joint mJoint ;
 
     private void turnArm(boolean isNegative){
 
         if(mJoint == null){
 
-            mJoint = new ArmControl.Joint() ;
-            mJoint.setType(ArmControl.Type.TO);
+            mJoint = new ArmSendControl.Joint() ;
+            mJoint.setType(Type.TO);
             mJoint.setTypeValue(10);
 
-            mJoint.setMode(ArmControl.Mode.TIME);
+            mJoint.setMode(Mode.TIME);
             mJoint.setModeValue(1000);
 
-            mArmControl.setJoint(mJoint);
+            mArmControl.addJoint(mJoint);
         }
 
 
         int destCheckId = mDestRgp.getCheckedRadioButtonId() ;
         if(destCheckId ==  R.id.dest_right_rbn){
 
-            mArmControl.setDirection(ArmControl.Direction.RIGHT);
+            mArmControl.setDirection(Direction.RIGHT);
         }else {
 
-            mArmControl.setDirection(ArmControl.Direction.LEFT);
+            mArmControl.setDirection(Direction.LEFT);
         }
 
 
@@ -338,9 +337,7 @@ public class TestChangeArmIdFragment extends Fragment implements View.OnClickLis
         mJoint.setId(destIdCheckIndex);
         mJoint.setNegative(isNegative);
 
-        mMotionSend.setChangeArmId(null);
-        mMotionSend.setArmControl(mArmControl);
-        MotionClient.getInstance(getActivity()).sendInMainThread(mMotionSend, null);
+        SendClient.getInstance(getActivity()).send(mArmControl, null);
 
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.yongyida.robot.communicate.app.hardware.BaseHandler;
+import com.yongyida.robot.communicate.app.hardware.pir.send.PirSend;
 
 /**
  */

@@ -7,14 +7,12 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +21,16 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.GridView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hiva.communicate.app.common.send.SendClient;
+import com.hiva.communicate.app.setting.send.data.FactoryConfig;
 import com.yongyida.robot.hardware.test.data.ModelInfo;
 import com.yongyida.robot.hardware.test.data.SettingData;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,13 +49,15 @@ public class TestMainActivity extends Activity implements AdapterView.OnItemClic
     /**
      * 选择打开的，所有功能只能在工厂模式,外面的不能调用
      */
-    private SwitchCompat mEnableSct;
+    private Switch mEnableSth;
     /**
      * Version:0.0.1
      */
     private TextView mVersionTvw;
 
-    private static boolean isOpen ;
+    private boolean isOpen ;
+
+    private FactoryConfig mFactoryConfig = new FactoryConfig() ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,13 +71,23 @@ public class TestMainActivity extends Activity implements AdapterView.OnItemClic
         mVersionTvw.setOnClickListener(this);
 
         isOpen = SettingData.isOpen(this);
-        mEnableSct.setChecked(isOpen);
-        mEnableSct.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        if(isOpen){
+
+            mFactoryConfig.setFactory(true);
+            SendClient.getInstance(this).send(mFactoryConfig, null);
+        }
+
+        mEnableSth.setChecked(isOpen);
+        mEnableSth.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 isOpen = isChecked ;
                 SettingData.saveIsOpen(TestMainActivity.this,isOpen);
+
+                mFactoryConfig.setFactory(isChecked);
+                SendClient.getInstance(TestMainActivity.this).send(mFactoryConfig, null);
             }
         });
 
@@ -106,11 +116,23 @@ public class TestMainActivity extends Activity implements AdapterView.OnItemClic
 
         mBackBtn = (Button) findViewById(R.id.back_btn);
         mBackBtn.setOnClickListener(this);
-        mEnableSct = (SwitchCompat) findViewById(R.id.enable_sct);
+        mEnableSth = (Switch) findViewById(R.id.enable_sth);
         mItemGvw = (GridView) findViewById(R.id.item_gvw);
         mVersionTvw = (TextView) findViewById(R.id.version_tvw);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+
+        if(isOpen){
+
+            mFactoryConfig.setFactory(false);
+            SendClient.getInstance(this).send(mFactoryConfig, null);
+        }
+
+    }
 
     private void checkPermission(Activity context){
 

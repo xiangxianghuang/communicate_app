@@ -5,15 +5,26 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.hardware.usb.IUsbManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 
 import com.yongyida.robot.utils.LogHelper;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import cn.wch.ch34xuartdriver.CH34xUARTDriver;
 
 /**
  * Created by HuangXiangXiang on 2018/4/18.
+ * USB 转串口
  */
 public class UART {
 
@@ -46,6 +57,8 @@ public class UART {
 
         boolean isSupported = mDriver.UsbFeatureSupported();
         LogHelper.i(TAG, LogHelper.__TAG__() + ", isSupported " + isSupported);
+
+        openDevice(null) ;
     }
 
 
@@ -75,13 +88,54 @@ public class UART {
 
         }else {
 
-            PendingIntent pi = PendingIntent.getBroadcast(this.mContext, 0, new Intent(ACTION_USB_PERMISSION), 0);
             registerReceiver() ;
-            this.mUsbManager.requestPermission(usbDevice, pi);
+            if(!requestUsbPermissionWithDialog(mContext,usbDevice)){
+
+                requestUsbPermission(mContext, usbDevice) ;
+            }
 
         }
         return false ;
     }
+
+    private void requestUsbPermission(Context context,UsbDevice usbDevice){
+
+        LogHelper.i(TAG , LogHelper.__TAG__()) ;
+
+        PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(ACTION_USB_PERMISSION), 0);
+        this.mUsbManager.requestPermission(usbDevice, pi);
+    }
+
+    /**
+     * 请求打开USB权限,如果使用和系统相同签名可以不用弹出确认对话框
+     * 并且需要 android.permission.MANAGE_USB 权限
+     * */
+    private boolean requestUsbPermissionWithDialog(Context context,UsbDevice usbDevice){
+
+        LogHelper.i(TAG , LogHelper.__TAG__()) ;
+
+        final PackageManager pm = context.getPackageManager();
+        try {
+            ApplicationInfo aInfo = pm.getApplicationInfo(context.getPackageName(),0);
+
+            IBinder b = ServiceManager.getService(Context.USB_SERVICE);
+            IUsbManager service = IUsbManager.Stub.asInterface(b);
+            service.grantDevicePermission(usbDevice, aInfo.uid);    // uid 用于对某个ID复制权限
+
+            Intent intent = new Intent(ACTION_USB_PERMISSION);
+            context.sendBroadcast(intent);
+
+            return  true ;
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+            LogHelper.e(TAG , LogHelper.__TAG__() + " Exception : " + e);
+        }
+
+        return false ;
+    }
+
 
     /**关闭设备*/
     public void closeDevice() {
@@ -148,7 +202,7 @@ public class UART {
 
         private boolean isRun ;
 
-        private byte[] buffer = new byte[64];
+        private byte[] buffer = new byte[256];
 
 
         public ReadThread(){
@@ -159,12 +213,15 @@ public class UART {
         @Override
         public void run() {
 
+            LogHelper.i(TAG, LogHelper.__TAG__()) ;
+
             while (isRun && isOpen){
 
-                int length = mDriver.ReadData(buffer, 64) ;
+                int length = mDriver.ReadData(buffer, buffer.length) ;
                 if(length > 0){
 
 //                    LogHelper.i(TAG, LogHelper.__TAG__() + ", length : " + length + ", data : " + toHexString(buffer, length));
+                    parseData(buffer, length) ;
 
                 }
             }
@@ -177,6 +234,252 @@ public class UART {
             isRun = false ;
         }
 
+    }
+
+
+    private static final byte CB_ID_VERSION             = 0x00 ;
+    private static final byte CB_ID_PING                = 0x01 ;
+    private static final byte CB_DEV_STATE              = 0x02 ;
+    private static final byte CB_ID_SENSOR              = 0x03 ;
+    private static final byte CB_DEV_LEFT_ARM_ANGLE     = 0x04 ;
+    private static final byte CB_DEV_RIGHT_ARM_ANGLE    = 0x05 ;
+    private static final byte CB_DEV_HEAD_ANGLE         = 0x06 ;
+    private static final byte CB_DEV_LEFT_PALM_ANGLE    = 0x07 ;
+    private static final byte CB_DEV_RIGHT_PALM_ANGLE   = 0x08 ;
+
+
+    private int leftArm0 ;
+    private int leftArm1 ;
+    private int leftArm2 ;
+    private int leftArm3 ;
+    private int leftArm4 ;
+    private int leftArm5 ;
+
+    private int rightArm0 ;
+    private int rightArm1 ;
+    private int rightArm2 ;
+    private int rightArm3 ;
+    private int rightArm4 ;
+    private int rightArm5 ;
+
+
+    private int leftPalm0 ;
+    private int leftPalm1 ;
+    private int leftPalm2 ;
+    private int leftPalm3 ;
+    private int leftPalm4 ;
+
+    private int rightPalm0 ;
+    private int rightPalm1 ;
+    private int rightPalm2 ;
+    private int rightPalm3 ;
+    private int rightPalm4 ;
+
+
+    public int[] leftArms = new int[6];
+    public int[] rightArms = new int[6];
+    public int[] leftFingers = new int[5];
+    public int[] rightFingers = new int[5];
+
+    public static byte getCheck(byte[] data , int length){
+
+        byte check = 0 ;
+        length = length  - 1 ;
+        for (int i = 2 ; i < length ; i++){
+
+            check ^= data[i] ;
+        }
+
+        return check;
+    }
+
+    float headTotal = 0  ;
+    float headError = 0  ;
+
+    float checkTotal = 0  ;
+    float checkError = 0  ;
+
+    private void parseData(byte[] data, int length){
+
+        headTotal++ ;
+        if((data[0] != (byte)0xAA) || data[1] != (byte)0x55){
+
+            headError++ ;
+            LogHelper.w(TAG, LogHelper.__TAG__() + "数据头错误"+(headError/headTotal)+", length : " + length + ", data : " + toHexString(data, length));
+            return;
+        }
+        checkTotal++ ;
+        if(getCheck(data, length) != data[length-1] ){
+            checkError++ ;
+            LogHelper.w(TAG, LogHelper.__TAG__() + "校验异常比率 : "+(checkError/checkTotal)+", length : " + length + ", data : " + toHexString(data, length));
+            return;
+        }
+
+        switch (data[4]){
+
+            case CB_ID_VERSION:
+
+                break;
+            case CB_ID_PING:
+
+                break;
+            case CB_DEV_STATE:
+
+                break;
+            case CB_ID_SENSOR:
+
+                byte d = data[5] ;  // 00 表示 舵机板正常  ; 01 表示 右手 ; 02 表示 左手
+                LogHelper.i(TAG, LogHelper.__TAG__() + ", length : " + length + ", data : " + toHexString(data, length));
+
+                break;
+            case CB_DEV_LEFT_ARM_ANGLE:
+
+                byte f = data[5] ;// 左手运行状态 00 表示正常； 01表示未知错误（一般舵机未知错误）；02 无响应
+                int leftArm0 = byte2Int(data[6] , data[7]) ;
+                int leftArm1 = byte2Int(data[8] , data[9]) ;
+                int leftArm2 = byte2Int(data[10] , data[11]);
+                int leftArm3 = byte2Int(data[12] , data[13]) ;
+                int leftArm4 = byte2Int(data[14] , data[15]);
+                int leftArm5 = byte2Int(data[16] , data[17]);
+
+                if(this.leftArm0 != leftArm0 || this.leftArm1 != leftArm1 || this.leftArm2 != leftArm2 ||
+                        this.leftArm3 != leftArm3 || this.leftArm4 != leftArm4 || this.leftArm5 != leftArm5 ){
+
+                    leftArms[0] = this.leftArm0 = leftArm0 ;
+                    leftArms[1] = this.leftArm1 = leftArm1 ;
+                    leftArms[2] = this.leftArm2 = leftArm2 ;
+                    leftArms[3] = this.leftArm3 = leftArm3 ;
+                    leftArms[4] = this.leftArm4 = leftArm4 ;
+                    leftArms[5] = this.leftArm5 = leftArm5 ;
+
+                    LogHelper.i(TAG, LogHelper.__TAG__() + "左臂运行状态：" + f +
+                            ", leftArm0 : " + leftArm0 + ", leftArm1 : " + leftArm1 +
+                            ", leftArm2 : " + leftArm2 + ", leftArm3 : " + leftArm3 +
+                            ", leftArm4 : " + leftArm4 + ", leftArm5 : " + leftArm5  );
+
+                    for (DataChangeListener dataChangeListener : dataChangeListeners.values()) {
+
+                        dataChangeListener.onLeftArmChanged(leftArms);
+                    }
+                }
+
+                break;
+            case CB_DEV_RIGHT_ARM_ANGLE:
+
+                f = data[5] ;// 右手运行状态 00 表示正常； 01表示未知错误（一般舵机未知错误）；02 无响应
+                int rightArm0 = byte2Int(data[6] , data[7]) ;
+                int rightArm1 = byte2Int(data[8] , data[9]) ;
+                int rightArm2 = byte2Int(data[10] , data[11]);
+                int rightArm3 = byte2Int(data[12] , data[13]) ;
+                int rightArm4 = byte2Int(data[14] , data[15]);
+                int rightArm5 = byte2Int(data[16] , data[17]);
+
+                if(this.rightArm0 != rightArm0 || this.rightArm1 != rightArm1 || this.rightArm2 != rightArm2 ||
+                        this.rightArm3 != rightArm3 || this.rightArm4 != rightArm4 || this.rightArm5 != rightArm5 ){
+
+                    rightArms[0] = this.rightArm0 = rightArm0 ;
+                    rightArms[1] = this.rightArm1 = rightArm1 ;
+                    rightArms[2] = this.rightArm2 = rightArm2 ;
+                    rightArms[3] = this.rightArm3 = rightArm3 ;
+                    rightArms[4] = this.rightArm4 = rightArm4 ;
+                    rightArms[5] = this.rightArm5 = rightArm5 ;
+
+
+                    LogHelper.i(TAG, LogHelper.__TAG__() + "右臂运行状态：" + f +
+                            ", rightArm0 : " + rightArm0 + ", rightArm1 : " + rightArm1 +
+                            ", rightArm2 : " + rightArm2 + ", rightArm3 : " + rightArm3 +
+                            ", rightArm4 : " + rightArm4 + ", rightArm5 : " + rightArm5  );
+
+                    for (DataChangeListener dataChangeListener : dataChangeListeners.values()) {
+
+                        dataChangeListener.onRightArmChanged(rightArms);
+                    }
+                }
+
+
+                break;
+            case CB_DEV_HEAD_ANGLE:
+
+                break;
+            case CB_DEV_LEFT_PALM_ANGLE:
+
+                f = data[5] ;// 左手指 运行状态 00 表示正常； 01表示未知错误（一般舵机未知错误）；02 无响应
+                int leftPalm0 = byte2Int(data[6] , data[7]) ;
+                int leftPalm1 = byte2Int(data[8] , data[9]) ;
+                int leftPalm2 = byte2Int(data[10] , data[11]);
+                int leftPalm3 = byte2Int(data[12] , data[13]) ;
+                int leftPalm4 = byte2Int(data[14] , data[15]);
+
+
+                if(this.leftPalm0 != leftPalm0 || this.leftPalm1 != leftPalm1 || this.leftPalm2 != leftPalm2 ||
+                        this.leftPalm3 != leftPalm3 || this.leftPalm4 != leftPalm4 ){
+
+                    leftFingers[0] = this.leftPalm0 = leftPalm0 ;
+                    leftFingers[1] = this.leftPalm1 = leftPalm1 ;
+                    leftFingers[2] = this.leftPalm2 = leftPalm2 ;
+                    leftFingers[3] = this.leftPalm3 = leftPalm3 ;
+                    leftFingers[4] = this.leftPalm4 = leftPalm4 ;
+
+
+                    LogHelper.i(TAG, LogHelper.__TAG__() + "左指运行状态：" + f +
+                            ", leftPalm0 : " + leftPalm0 + ", leftPalm1 : " + leftPalm1 +
+                            ", leftPalm2 : " + leftPalm2 + ", leftPalm3 : " + leftPalm3 +
+                            ", leftPalm4 : " + leftPalm4 );
+
+                    for (DataChangeListener dataChangeListener : dataChangeListeners.values()) {
+
+                        dataChangeListener.onLeftFinger(leftFingers);
+                    }
+                }
+
+
+
+                break ;
+
+            case CB_DEV_RIGHT_PALM_ANGLE:
+
+                f = data[5] ;// 右手指 运行状态 00 表示正常； 01表示未知错误（一般舵机未知错误）；02 无响应
+                int rightPalm0 = byte2Int(data[6] , data[7]) ;
+                int rightPalm1 = byte2Int(data[8] , data[9]) ;
+                int rightPalm2 = byte2Int(data[10] , data[11]);
+                int rightPalm3 = byte2Int(data[12] , data[13]) ;
+                int rightPalm4 = byte2Int(data[14] , data[15]);
+
+
+                if(this.rightPalm0 != rightPalm0 || this.rightPalm1 != rightPalm1 || this.rightPalm2 != rightPalm2 ||
+                        this.rightPalm3 != rightPalm3 || this.rightPalm4 != rightPalm4 ){
+
+                    rightFingers[0] = this.rightPalm0 = rightPalm0 ;
+                    rightFingers[1] = this.rightPalm1 = rightPalm1 ;
+                    rightFingers[2] = this.rightPalm2 = rightPalm2 ;
+                    rightFingers[3] = this.rightPalm3 = rightPalm3 ;
+                    rightFingers[4] = this.rightPalm4 = rightPalm4 ;
+
+                    LogHelper.i(TAG, LogHelper.__TAG__() + "右指运行状态：" + f +
+                            ", rightPalm0 : " + rightPalm0 + ", rightPalm1 : " + rightPalm1 +
+                            ", rightPalm2 : " + rightPalm2 + ", rightPalm3 : " + rightPalm3 +
+                            ", rightPalm4 : " + rightPalm4 );
+
+                    for (DataChangeListener dataChangeListener : dataChangeListeners.values()) {
+
+                        dataChangeListener.onRightFinger(rightFingers);
+                    }
+                }
+
+                break;
+
+            default:
+                break;
+
+        }
+
+
+    }
+
+
+    private int byte2Int(byte b1 , byte b2){
+
+        return  ((b1 & 0xFF) << 8) | (b2 & 0xFF ) ;
     }
 
 
@@ -272,7 +575,6 @@ public class UART {
     }
 
 
-
     /**
      * 将byte数字转变成String格式
      * */
@@ -294,7 +596,7 @@ public class UART {
             length = len ;
         }
 
-        String format = "0x%02X" ;
+        String format = "%02X" ;
         StringBuilder sb = new StringBuilder() ;
         for (int i= 0 ; i < length-1 ; i++){
 
@@ -305,5 +607,34 @@ public class UART {
 
         return sb.toString() ;
     }
+
+
+    public interface DataChangeListener{
+
+        void onLeftArmChanged(int[] leftArms) ;
+
+        void onRightArmChanged(int[] rightArms) ;
+
+        void onLeftFinger(int[] leftFingers) ;
+
+        void onRightFinger(int[] leftRights) ;
+
+    }
+
+    private final HashMap<String, DataChangeListener> dataChangeListeners = new HashMap<>() ;
+    public void addDataChangeListener(String tag, DataChangeListener dataChangeListener){
+
+        LogHelper.i(TAG, LogHelper.__TAG__()) ;
+        dataChangeListeners.put(tag, dataChangeListener);
+    }
+
+
+    public void removeDataChangeListener(String tag){
+
+        LogHelper.i(TAG, LogHelper.__TAG__()) ;
+        dataChangeListeners.remove(tag) ;
+    }
+
+
 
 }

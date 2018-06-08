@@ -1,7 +1,5 @@
 package com.yongyida.robot.breathled;
 
-import com.yongyida.robot.communicate.app.hardware.led.data.LedControl;
-
 import java.util.ArrayList;
 
 /**
@@ -207,25 +205,25 @@ public class LedHelper {
         }
     }
 
-    public static boolean getPosition(int position){
-
-        if(position == LedControl.POSITION_ALL){//全部
-
-            return true ;
-
-        }else if(((position & LedControl.POSITION_LEFT_EAR) == LedControl.POSITION_LEFT_EAR) || //左耳
-                ((position & LedControl.POSITION_RIGHT_EAR) == LedControl.POSITION_RIGHT_EAR)){//右耳
-
-            return true ;
-        }
-
-        return false ;
-    }
-
-    public static boolean isPower(LedControl.Power power){
-
-        return power == LedControl.Power.POWER_ON ;
-    }
+//    public static boolean getPosition(int position){
+//
+//        if(position == LedControl.POSITION_ALL){//全部
+//
+//            return true ;
+//
+//        }else if(((position & LedSendControl.POSITION_LEFT_EAR) == LedSendControl.POSITION_LEFT_EAR) || //左耳
+//                ((position & LedSendControl.POSITION_RIGHT_EAR) == LedSendControl.POSITION_RIGHT_EAR)){//右耳
+//
+//            return true ;
+//        }
+//
+//        return false ;
+//    }
+//
+//    public static boolean isPower(LedControl.Power power){
+//
+//        return power == LedControl.Power.POWER_ON ;
+//    }
 
 
 }

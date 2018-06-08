@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     >
 
-    <com.yongyida.robot.hardware.test.item.led.HorizontalListView
+    <com.yongyida.robot.hardware.test.item.led.view.HorizontalListView
         android:id="@+id/led_position_gvw"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -49,6 +49,8 @@
             />
     </LinearLayout>
 
+
+
     <LinearLayout
         android:id="@+id/general_color_llt"
         android:layout_width="match_parent"
@@ -90,6 +92,13 @@
             android:text="蓝"
             />
 
+        <Button
+            android:id="@+id/color_more_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="更多"
+            />
     </LinearLayout>
 
 

@@ -14,7 +14,6 @@
             <option value="$PROJECT_DIR$/YYDRobotHardware" />
             <option value="$PROJECT_DIR$/YYDRobotHardwareTest" />
             <option value="$PROJECT_DIR$/communicate_app" />
-            <option value="$PROJECT_DIR$/communicate_app_client" />
             <option value="$PROJECT_DIR$/communicate_app_hardware" />
             <option value="$PROJECT_DIR$/usb_uart" />
           </set>

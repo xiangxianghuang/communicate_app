@@ -9,8 +9,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedControl;
-import com.yongyida.robot.hardware.client.LedClient;
+
+//import com.yongyida.robot.communicate.app.hardware.led.data.LedControl;
 
 /**
  * Created by HuangXiangXiang on 2018/4/2.
@@ -19,7 +19,7 @@ public class YYDRobotBreathLedService extends Service {
 
     private static final String TAG = YYDRobotBreathLedService.class.getSimpleName() ;
 
-    private LedControl mLedControl = new LedControl();
+//    private LedSendControl mLedControl = new LedSendControl();
 
     public static void startBreathLedService(Context context){
 
@@ -41,7 +41,7 @@ public class YYDRobotBreathLedService extends Service {
         LogHelper.i(TAG, LogHelper.__TAG__()) ;
         super.onCreate();
 
-        mLedControl.setPosition(LedControl.POSITION_CHEST);
+//        mLedControl.setPosition(LedControl.POSITION_CHEST);
 
         registerReceiver() ;
     }
@@ -163,8 +163,8 @@ public class YYDRobotBreathLedService extends Service {
             case CHARGING_FULL:
 
                 //绿灯常亮
-                mLedControl.setColor(LedControl.Color.value(0,255,0));
-                mLedControl.setEffect(LedControl.Effect.NORMAL);
+//                mLedControl.setColor(LedControl.Color.value(0,255,0));
+//                mLedControl.setEffect(LedControl.Effect.NORMAL);
                 sendLedControl() ;
 
                 break;
@@ -172,40 +172,40 @@ public class YYDRobotBreathLedService extends Service {
             case CHARGING:
 
                 //绿灯呼吸
-                mLedControl.setColor(LedControl.Color.value(0,255,0));
-                mLedControl.setEffect(LedControl.Effect.BREATH_MIDDLE);
+//                mLedControl.setColor(LedControl.Color.value(0,255,0));
+//                mLedControl.setEffect(LedControl.Effect.BREATH_MIDDLE);
                 sendLedControl() ;
                 break;
 
             case NO_CHARGING_5:
 
                 //红灯常亮
-                mLedControl.setColor(LedControl.Color.value(255,0,0));
-                mLedControl.setEffect(LedControl.Effect.NORMAL);
+//                mLedControl.setColor(LedControl.Color.value(255,0,0));
+//                mLedControl.setEffect(LedControl.Effect.NORMAL);
                 sendLedControl() ;
                 break;
 
             case NO_CHARGING_10:
 
                 //红灯慢闪
-                mLedControl.setColor(LedControl.Color.value(255,0,0));
-                mLedControl.setEffect(LedControl.Effect.BREATH_LOW);
+//                mLedControl.setColor(LedControl.Color.value(255,0,0));
+//                mLedControl.setEffect(LedControl.Effect.BREATH_LOW);
                 sendLedControl() ;
                 break;
 
             case NO_CHARGING_NORMAL:
 
                 //灭灯
-//                mLedControl.setColor(LedControl.Color.value(0,0,255));
-                mLedControl.setEffect(LedControl.Effect.LED_OFF);
+////                mLedControl.setColor(LedControl.Color.value(0,0,255));
+//                mLedControl.setEffect(LedControl.Effect.LED_OFF);
                 sendLedControl() ;
                 break;
 
             case SCREEN_0FF:
 
                 //蓝灯呼吸
-                mLedControl.setColor(LedControl.Color.value(0,0,255));
-                mLedControl.setEffect(LedControl.Effect.BREATH_MIDDLE);
+//                mLedControl.setColor(LedControl.Color.value(0,0,255));
+//                mLedControl.setEffect(LedControl.Effect.BREATH_MIDDLE);
                 sendLedControl() ;
                 break;
         }
@@ -219,7 +219,7 @@ public class YYDRobotBreathLedService extends Service {
 
     private void sendLedControl(){
 
-        LedClient.getInstance(this).sendLedControlInMainThread(mLedControl, null);
+//        LedClient.getInstance(this).sendLedControlInMainThread(mLedControl, null);
     }
 
 }

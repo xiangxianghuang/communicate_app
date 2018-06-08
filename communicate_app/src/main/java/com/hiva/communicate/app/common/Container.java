@@ -12,18 +12,13 @@ import com.google.gson.Gson;
 public class Container {
 
     private  static final String TAG = Container.class.getSimpleName() ;
+    private final static Gson GSON = new Gson() ;
 
     // 数据来源
     private String packageName ;
 
     private String className ;
     private Object data ;
-
-    private boolean isNeedJudge = false ;
-
-    private String confirmClassName ;
-
-    private final static Gson GSON = new Gson() ;
 
     public static Container fromJson(String json){
 
@@ -35,7 +30,8 @@ public class Container {
         this.packageName = (context == null) ? null : context.getPackageName() ;
 
         this.className = object.getClass().getName() ;
-        this.data = object ;
+//        this.data = object ;
+        this.data = toJson(object) ;
     }
 
     public String getClassName() {
@@ -47,28 +43,8 @@ public class Container {
         return packageName;
     }
 
-    public boolean isNeedJudge() {
-        return isNeedJudge;
-    }
-
-    /**
-     * 是否需要预判
-     * */
-    public void setNeedJudge(boolean needJudge) {
-        isNeedJudge = needJudge;
-    }
-
     public Object getData() {
         return data;
-    }
-
-    public void setConfirmClassName(String confirmClassName){
-
-        this.confirmClassName = confirmClassName ;
-    }
-
-    public String getConfirmClassName() {
-        return confirmClassName;
     }
 
     public <T>T getData(Class<T> classOfT){
@@ -87,12 +63,15 @@ public class Container {
         return GSON.toJson(this);
     }
 
-    private static String toJson(Object object) {
+
+
+
+    public static String toJson(Object object) {
 
         return GSON.toJson(object);
     }
 
-    private static <T>T fromJson(String json ,Class<T> classOfT){
+    public static <T>T fromJson(String json ,Class<T> classOfT){
 
         return GSON.fromJson(json, classOfT) ;
     }

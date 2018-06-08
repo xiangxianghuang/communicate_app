@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 
+import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.movecontrol.SlamController;
 
 /**
@@ -17,35 +18,78 @@ public class SlamMotion {
 
     private static final String TAG = SlamMotion.class.getSimpleName();
 
+
+    private static SlamMotion mSlamMotion ;
+    public static SlamMotion getInstance(Context context){
+
+        if(mSlamMotion == null){
+
+            mSlamMotion = new SlamMotion(context.getApplicationContext()) ;
+        }
+
+        return mSlamMotion ;
+    }
+
+
     private Context mContext ;
 
-    private boolean isByDistance;
     private SlamController mSlamController ;
+
+    private SlamMotion(Context context){
+
+        this.mContext = context;
+        bindSystemService() ;
+    }
 
     private ServiceConnection mMoveServiceConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
 
+            LogHelper.i(TAG, LogHelper.__TAG__());
+
             mSlamController = SlamController.Stub.asInterface(service);
+
+            if(mBindSystemServiceListener != null){
+
+                try {
+                    mBindSystemServiceListener.onBindSuccess();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
 
         }
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
 
+            LogHelper.i(TAG, LogHelper.__TAG__());
+            mSlamController = null ;
         }
     };
 
 
+    private void bindSystemService(BindSystemServiceListener bindSystemServiceListener){
 
-    public SlamMotion(Context context){
+        LogHelper.i(TAG, LogHelper.__TAG__());
+        this.mBindSystemServiceListener = bindSystemServiceListener ;
 
-        this.mContext = context;
-        bindService() ;
+        if(mSlamController == null){
+
+            bindSystemService() ;
+
+        }else {
+
+            try {
+                this.mBindSystemServiceListener.onBindSuccess();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
-
-    public void bindService(){
+    public void bindSystemService(){
 
         Intent intent = new Intent();
         intent.setAction("com.yongyida.robot.MoveService");
@@ -59,134 +103,145 @@ public class SlamMotion {
         mContext.unbindService(mMoveServiceConnection);
     }
 
+    private BindSystemServiceListener mBindSystemServiceListener ;
+    private interface BindSystemServiceListener{
+
+        void onBindSuccess() throws RemoteException;
+    }
+
     public int forward(int arg) {
 
-        if(mSlamController != null){
+        LogHelper.i(TAG, LogHelper.__TAG__());
 
-            try {
+        BindSystemServiceListener bindSystemServiceListener = new BindSystemServiceListener(){
+            @Override
+            public void onBindSuccess() throws RemoteException {
+
+                LogHelper.i(TAG, LogHelper.__TAG__());
                 mSlamController.forward() ;
-            } catch (RemoteException e) {
-                e.printStackTrace();
+
+                mBindSystemServiceListener = null ;
             }
-        }
+        } ;
+        bindSystemService(bindSystemServiceListener);
 
         return 0 ;
     }
 
     public int back(int arg) {
 
-        if(mSlamController != null){
+        LogHelper.i(TAG, LogHelper.__TAG__());
 
-            try {
+        BindSystemServiceListener bindSystemServiceListener = new BindSystemServiceListener(){
+            @Override
+            public void onBindSuccess() throws RemoteException {
+
+                LogHelper.i(TAG, LogHelper.__TAG__());
                 mSlamController.back() ;
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
 
-        return  0;
+                mBindSystemServiceListener = null ;
+            }
+        } ;
+        bindSystemService(bindSystemServiceListener);
+
+        return 0 ;
     }
 
     public int left(int arg) {
 
-        if(mSlamController != null){
+        LogHelper.i(TAG, LogHelper.__TAG__());
 
-            try {
+        BindSystemServiceListener bindSystemServiceListener = new BindSystemServiceListener(){
+            @Override
+            public void onBindSuccess() throws RemoteException {
+
+                LogHelper.i(TAG, LogHelper.__TAG__());
                 mSlamController.left() ;
-            } catch (RemoteException e) {
-                e.printStackTrace();
+
+                mBindSystemServiceListener = null ;
             }
-        }
+        } ;
+        bindSystemService(bindSystemServiceListener);
 
        return 0 ;
     }
 
     public int right(int arg) {
 
-        if(mSlamController != null){
+        LogHelper.i(TAG, LogHelper.__TAG__());
 
-            try {
+        BindSystemServiceListener bindSystemServiceListener = new BindSystemServiceListener(){
+            @Override
+            public void onBindSuccess() throws RemoteException {
+
+                LogHelper.i(TAG, LogHelper.__TAG__());
                 mSlamController.right() ;
-            } catch (RemoteException e) {
-                e.printStackTrace();
+
+                mBindSystemServiceListener = null ;
             }
-        }
+        } ;
+        bindSystemService(bindSystemServiceListener);
 
         return 0 ;
     }
 
-//    public int turnLeft(int arg) {
+
+//    @Deprecated
+//    public int point(final int position) {
 //
-//        return IResult.CONTROLLER_NOT_IMPLEMENTED;
-//    }
+//        LogHelper.i(TAG, LogHelper.__TAG__());
 //
-//    public int turnRight(int arg) {
+//        BindSystemServiceListener bindSystemServiceListener = new BindSystemServiceListener(){
+//            @Override
+//            public void onBindSuccess() throws RemoteException {
 //
-//        return IResult.CONTROLLER_NOT_IMPLEMENTED;
-//    }
+//                LogHelper.i(TAG, LogHelper.__TAG__());
+//                mSlamController.point(position) ;
 //
-//    public int backTurnLeft(int arg) {
 //
-//        return IResult.CONTROLLER_NOT_IMPLEMENTED;
-//    }
+//            }
+//        } ;
+//        bindSystemService(bindSystemServiceListener);
 //
-//    public int backTurnRight(int arg) {
-//
-//        return IResult.CONTROLLER_NOT_IMPLEMENTED;
+//        return  0 ;
 //    }
 
-    public int point(int position) {
 
-        if(mSlamController != null){
+    public int turnSoundAngle(final int angle) {
 
-            try {
-                mSlamController.point(position) ;
-            } catch (RemoteException e) {
-                e.printStackTrace();
+        LogHelper.i(TAG, LogHelper.__TAG__());
+
+        BindSystemServiceListener bindSystemServiceListener = new BindSystemServiceListener(){
+            @Override
+            public void onBindSuccess() throws RemoteException {
+
+                LogHelper.i(TAG, LogHelper.__TAG__() + ", angle : " + angle);
+
+                mSlamController.turnSoundAngle(angle) ;
+
+                mBindSystemServiceListener = null ;
             }
-        }
-
-        return  0 ;
-    }
-
-    public int introduceEnd(int position) {
-
-        if(mSlamController != null){
-
-            try {
-                mSlamController.introduceEnd(position) ;
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return 0 ;
-    }
-
-    public int turnSoundAngle(int angle) {
-
-        if(mSlamController != null){
-
-            try {
-                mSlamController.turnSoundAngle(angle);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
+        } ;
+        bindSystemService(bindSystemServiceListener);
 
         return 0 ;
     }
 
     public int stop() {
 
-        if(mSlamController != null){
+        LogHelper.i(TAG, LogHelper.__TAG__());
 
-            try {
-                mSlamController.stop();
-            } catch (RemoteException e) {
-                e.printStackTrace();
+        BindSystemServiceListener bindSystemServiceListener = new BindSystemServiceListener(){
+            @Override
+            public void onBindSuccess() throws RemoteException {
+
+                LogHelper.i(TAG, LogHelper.__TAG__() );
+                mSlamController.stop() ;
+
+                mBindSystemServiceListener = null ;
             }
-        }
+        } ;
+        bindSystemService(bindSystemServiceListener);
 
         return 0 ;
     }

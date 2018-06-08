@@ -22,24 +22,22 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.hiva.communicate.app.common.IResponseListener;
+import com.hiva.communicate.app.common.send.SendResponseListener;
 import com.hiva.communicate.app.common.SendResponse;
 import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.BaseResponseControl;
+import com.hiva.communicate.app.common.send.SendClient;
 import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.communicate.app.hardware.motion.MotionResponse;
-import com.yongyida.robot.communicate.app.hardware.motion.data.MotionControl;
-import com.yongyida.robot.communicate.app.hardware.motion.data.MoveFault;
-import com.yongyida.robot.communicate.app.hardware.motion.data.QueryMoveFault;
-import com.yongyida.robot.communicate.app.hardware.motion.data.UltrasonicControl;
-import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.MotionSendControl;
+import com.yongyida.robot.communicate.app.hardware.motion.response.data.MoveFault;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.QueryMoveFault;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.UltrasonicSendControl;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.TestMainActivity;
-import com.yongyida.robot.hardware.client.MotionClient;
 import com.yongyida.robot.hardware.test.data.ModelInfo;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
 
 import java.lang.ref.WeakReference;
-import java.util.Random;
 
 /**
  * Created by HuangXiangXiang on 2018/2/25.
@@ -167,31 +165,24 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
             @Override
             public void run() {
 
-                MotionSend motionSend= new MotionSend() ;
                 QueryMoveFault queryMoveFault = new QueryMoveFault() ;
-                motionSend.setQueryMoveFault(queryMoveFault);
-
-                final MotionClient motionClient = MotionClient.getInstance(TestMotionActivity.this) ;
-                IResponseListener responseListener = new IResponseListener() {
+                SendResponseListener responseListener = new SendResponseListener<MoveFault>() {
                     @Override
-                    public void onResponse(BaseResponse response) {
+                    public void onSuccess(MoveFault moveFault) {
 
-                        LogHelper.i(TAG, LogHelper.__TAG__() + ", response : " + response );
+                        Message message = motionHandler.obtainMessage(MotionHandler.MOVE_FAULT) ;
+                        message.obj = moveFault ;
+                        motionHandler.sendMessage(message) ;
+                    }
 
-                        MotionResponse motionResponse = (MotionResponse) response;
-                        if(motionResponse != null){
-
-                            MoveFault moveFault = motionResponse.getMoveFault() ;
-
-                            Message message = motionHandler.obtainMessage(MotionHandler.MOVE_FAULT) ;
-                            message.obj = moveFault ;
-                            motionHandler.sendMessage(message) ;
-                        }
+                    @Override
+                    public void onFail(int result, String message) {
 
                     }
+
                 };
 
-                SendResponse sendResponse = motionClient.send(motionSend,responseListener) ;
+                SendResponse sendResponse = SendClient.getInstance(TestMotionActivity.this).sendInNotMainThread(queryMoveFault,responseListener) ;
                 if (sendResponse == null) {
 
                     // 发送不成功
@@ -298,13 +289,10 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                UltrasonicControl ultrasonicControl = new UltrasonicControl() ;
+                UltrasonicSendControl ultrasonicControl = new UltrasonicSendControl() ;
                 ultrasonicControl.setShowAndroid(isChecked);
 
-                MotionSend motionSend= new MotionSend() ;
-                motionSend.setUltrasonicControl(ultrasonicControl);
-
-                MotionClient.getInstance(TestMotionActivity.this).sendInMainThread(motionSend,null);
+                SendClient.getInstance(TestMotionActivity.this).send(ultrasonicControl,null);
 
             }
         });
@@ -351,7 +339,7 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
 
 //   private void setAllShow(){
 //
-//        UltrasonicControl ultrasonicControl = new UltrasonicControl() ;
+//        UltrasonicSendControl ultrasonicControl = new UltrasonicSendControl() ;
 //        ultrasonicControl.setShowSlamware(false);
 //        ultrasonicControl.setShowAndroid(true);
 //
@@ -365,43 +353,30 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
 
         if(mUltrasonicAndroidSct.isChecked()){
 
-            UltrasonicControl ultrasonicControl = new UltrasonicControl() ;
+            UltrasonicSendControl ultrasonicControl = new UltrasonicSendControl() ;
             ultrasonicControl.setShowAndroid(false);
 
-            MotionSend motionSend= new MotionSend() ;
-            motionSend.setUltrasonicControl(ultrasonicControl);
-
-            MotionClient.getInstance(TestMotionActivity.this).sendInMainThread(motionSend,null);
-
+            SendClient.getInstance(TestMotionActivity.this).send(ultrasonicControl, null);
         }
-
     }
-
-
 
     private void setShowSlamware(boolean isChecked){
 
-        UltrasonicControl ultrasonicControl = new UltrasonicControl() ;
+        UltrasonicSendControl ultrasonicControl = new UltrasonicSendControl() ;
         ultrasonicControl.setShowSlamware(isChecked);
 
-        MotionSend motionSend= new MotionSend() ;
-        motionSend.setUltrasonicControl(ultrasonicControl);
 
-        MotionClient.getInstance(TestMotionActivity.this).sendInMainThread(motionSend,null);
+        SendClient.getInstance(TestMotionActivity.this).send(ultrasonicControl, null);
     }
 
 
     private void setShowAndroid(boolean isChecked){
 
-        UltrasonicControl ultrasonicControl = new UltrasonicControl() ;
+        UltrasonicSendControl ultrasonicControl = new UltrasonicSendControl() ;
         ultrasonicControl.setShowAndroid(isChecked);
 
-        MotionSend motionSend= new MotionSend() ;
-        motionSend.setUltrasonicControl(ultrasonicControl);
-
-        MotionClient.getInstance(TestMotionActivity.this).sendInMainThread(motionSend,null);
+        SendClient.getInstance(TestMotionActivity.this).send(ultrasonicControl, null);
     }
-
 
 
     @Override
@@ -555,74 +530,74 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
         int i = v.getId();
         if (i == R.id.head_left_right_reset_btn) {
 
-            MotionControl motionControl = new MotionControl() ;
+            MotionSendControl motionControl = new MotionSendControl() ;
 
-            motionControl.setAction(MotionControl.Action.HEAD_LEFT_RIGHT_RESET);
-            motionControl.setMode(MotionControl.Mode.DISTANCE_SPEED);
+            motionControl.setAction(MotionSendControl.Action.HEAD_LEFT_RIGHT_RESET);
+            motionControl.setMode(MotionSendControl.Mode.DISTANCE_SPEED);
 
             sendMotionStatue(motionControl) ;
 
         }else if (i == R.id.head_left_btn) {
 
-            MotionControl motionControl = new MotionControl() ;
-            motionControl.setAction(MotionControl.Action.HEAD_LEFT);
-            motionControl.setMode(MotionControl.Mode.DISTANCE_SPEED);
-            motionControl.setDistance(MotionControl.Distance.valueOf(200));
-            motionControl.setSpeed(MotionControl.Speed.valueOf(20));
+            MotionSendControl motionControl = new MotionSendControl() ;
+            motionControl.setAction(MotionSendControl.Action.HEAD_LEFT);
+            motionControl.setMode(MotionSendControl.Mode.DISTANCE_SPEED);
+            motionControl.setDistance(MotionSendControl.Distance.valueOf(200));
+            motionControl.setSpeed(MotionSendControl.Speed.valueOf(20));
 
             sendMotionStatue(motionControl) ;
 
         } else if (i == R.id.head_right_btn) {
 
-            MotionControl motionControl = new MotionControl() ;
-            motionControl.setAction(MotionControl.Action.HEAD_RIGHT);
-            motionControl.setMode(MotionControl.Mode.TIME_SPEED);
-            motionControl.setDistance(MotionControl.Distance.valueOf(200));
-            motionControl.setSpeed(MotionControl.Speed.valueOf(20));
+            MotionSendControl motionControl = new MotionSendControl() ;
+            motionControl.setAction(MotionSendControl.Action.HEAD_RIGHT);
+            motionControl.setMode(MotionSendControl.Mode.TIME_SPEED);
+            motionControl.setDistance(MotionSendControl.Distance.valueOf(200));
+            motionControl.setSpeed(MotionSendControl.Speed.valueOf(20));
 
             sendMotionStatue(motionControl) ;
 
         } else if (i == R.id.head_left_right_stop_btn) {
 
-            MotionControl motionControl = new MotionControl() ;
-            motionControl.setAction(MotionControl.Action.HEAD_LEFT_RIGHT_SHAKE);
-            motionControl.setMode(MotionControl.Mode.DISTANCE_SPEED);
+            MotionSendControl motionControl = new MotionSendControl() ;
+            motionControl.setAction(MotionSendControl.Action.HEAD_LEFT_RIGHT_SHAKE);
+            motionControl.setMode(MotionSendControl.Mode.DISTANCE_SPEED);
 
             sendMotionStatue(motionControl) ;
 
 
         } else if (i == R.id.head_up_down_reset_btn) {
 
-            MotionControl motionControl = new MotionControl() ;
-            motionControl.setAction(MotionControl.Action.HEAD_UP_DOWN_RESET);
-            motionControl.setMode(MotionControl.Mode.DISTANCE_SPEED);
+            MotionSendControl motionControl = new MotionSendControl() ;
+            motionControl.setAction(MotionSendControl.Action.HEAD_UP_DOWN_RESET);
+            motionControl.setMode(MotionSendControl.Mode.DISTANCE_SPEED);
 
             sendMotionStatue(motionControl) ;
 
         } else if (i == R.id.head_up_btn) {
 
-            MotionControl motionControl = new MotionControl() ;
-            motionControl.setAction(MotionControl.Action.HEAD_UP);
-            motionControl.setMode(MotionControl.Mode.TIME_SPEED);
-            motionControl.setDistance(MotionControl.Distance.valueOf(200));
-            motionControl.setSpeed(MotionControl.Speed.valueOf(20));
+            MotionSendControl motionControl = new MotionSendControl() ;
+            motionControl.setAction(MotionSendControl.Action.HEAD_UP);
+            motionControl.setMode(MotionSendControl.Mode.TIME_SPEED);
+            motionControl.setDistance(MotionSendControl.Distance.valueOf(200));
+            motionControl.setSpeed(MotionSendControl.Speed.valueOf(20));
 
             sendMotionStatue(motionControl) ;
 
         } else if (i == R.id.head_down_btn) {
 
-            MotionControl motionControl = new MotionControl() ;
-            motionControl.setAction(MotionControl.Action.HEAD_DOWN);
-            motionControl.setMode(MotionControl.Mode.TIME_SPEED);
-            motionControl.setDistance(MotionControl.Distance.valueOf(200));
-            motionControl.setSpeed(MotionControl.Speed.valueOf(20));
+            MotionSendControl motionControl = new MotionSendControl() ;
+            motionControl.setAction(MotionSendControl.Action.HEAD_DOWN);
+            motionControl.setMode(MotionSendControl.Mode.TIME_SPEED);
+            motionControl.setDistance(MotionSendControl.Distance.valueOf(200));
+            motionControl.setSpeed(MotionSendControl.Speed.valueOf(20));
 
             sendMotionStatue(motionControl) ;
         } else if (i == R.id.head_up_down_stop_btn) {
 
-            MotionControl motionControl = new MotionControl() ;
-            motionControl.setAction(MotionControl.Action.HEAD_UP_DOWN_SHAKE);
-            motionControl.setMode(MotionControl.Mode.DISTANCE_SPEED);
+            MotionSendControl motionControl = new MotionSendControl() ;
+            motionControl.setAction(MotionSendControl.Action.HEAD_UP_DOWN_SHAKE);
+            motionControl.setMode(MotionSendControl.Mode.DISTANCE_SPEED);
 
             sendMotionStatue(motionControl) ;
 
@@ -630,16 +605,16 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
 
             stopRandomMove() ;
 
-            MotionControl motionControl = new MotionControl() ;
-            motionControl.setAction(MotionControl.Action.FOOT_FORWARD);
-            motionControl.setMode(MotionControl.Mode.TIME_SPEED);
+            MotionSendControl motionControl = new MotionSendControl() ;
+            motionControl.setAction(MotionSendControl.Action.FOOT_FORWARD);
+            motionControl.setMode(MotionSendControl.Mode.TIME_SPEED);
             if(mIsSerialSct.isChecked()){
 
-                motionControl.setType(MotionControl.Type.SERIAL );
-                motionControl.setSpeed(MotionControl.Speed.valueOf(speed));
+                motionControl.setType(MotionSendControl.Type.SERIAL );
+                motionControl.setSpeed(MotionSendControl.Speed.valueOf(speed));
 
             }else{
-                motionControl.setType(MotionControl.Type.SLAM );
+                motionControl.setType(MotionSendControl.Type.SLAM );
             }
 
             sendMotionStatue(motionControl) ;
@@ -648,16 +623,16 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
 
             stopRandomMove() ;
 
-            MotionControl motionControl = new MotionControl() ;
-            motionControl.setAction(MotionControl.Action.FOOT_BACK);
-            motionControl.setMode(MotionControl.Mode.TIME_SPEED);
+            MotionSendControl motionControl = new MotionSendControl() ;
+            motionControl.setAction(MotionSendControl.Action.FOOT_BACK);
+            motionControl.setMode(MotionSendControl.Mode.TIME_SPEED);
             if(mIsSerialSct.isChecked()){
 
-                motionControl.setType(MotionControl.Type.SERIAL );
-                motionControl.setSpeed(MotionControl.Speed.valueOf(speed));
+                motionControl.setType(MotionSendControl.Type.SERIAL );
+                motionControl.setSpeed(MotionSendControl.Speed.valueOf(speed));
 
             }else{
-                motionControl.setType(MotionControl.Type.SLAM );
+                motionControl.setType(MotionSendControl.Type.SLAM );
             }
 
             sendMotionStatue(motionControl) ;
@@ -666,16 +641,16 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
 
             stopRandomMove() ;
 
-            MotionControl motionControl = new MotionControl() ;
-            motionControl.setAction(MotionControl.Action.FOOT_LEFT);
-            motionControl.setMode(MotionControl.Mode.TIME_SPEED);
+            MotionSendControl motionControl = new MotionSendControl() ;
+            motionControl.setAction(MotionSendControl.Action.FOOT_LEFT);
+            motionControl.setMode(MotionSendControl.Mode.TIME_SPEED);
             if(mIsSerialSct.isChecked()){
 
-                motionControl.setType(MotionControl.Type.SERIAL );
-                motionControl.setSpeed(MotionControl.Speed.valueOf(speed));
+                motionControl.setType(MotionSendControl.Type.SERIAL );
+                motionControl.setSpeed(MotionSendControl.Speed.valueOf(speed));
 
             }else{
-                motionControl.setType(MotionControl.Type.SLAM );
+                motionControl.setType(MotionSendControl.Type.SLAM );
             }
             sendMotionStatue(motionControl) ;
 
@@ -683,16 +658,16 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
 
             stopRandomMove() ;
 
-            MotionControl motionControl = new MotionControl() ;
-            motionControl.setAction(MotionControl.Action.FOOT_RIGHT);
-            motionControl.setMode(MotionControl.Mode.TIME_SPEED);
+            MotionSendControl motionControl = new MotionSendControl() ;
+            motionControl.setAction(MotionSendControl.Action.FOOT_RIGHT);
+            motionControl.setMode(MotionSendControl.Mode.TIME_SPEED);
             if(mIsSerialSct.isChecked()){
 
-                motionControl.setType(MotionControl.Type.SERIAL );
-                motionControl.setSpeed(MotionControl.Speed.valueOf(speed));
+                motionControl.setType(MotionSendControl.Type.SERIAL );
+                motionControl.setSpeed(MotionSendControl.Speed.valueOf(speed));
 
             }else{
-                motionControl.setType(MotionControl.Type.SLAM );
+                motionControl.setType(MotionSendControl.Type.SLAM );
             }
 
             sendMotionStatue(motionControl) ;
@@ -701,8 +676,8 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
 
             stopRandomMove() ;
 
-            MotionControl motionControl = new MotionControl() ;
-            motionControl.setAction(MotionControl.Action.FOOT_STOP);
+            MotionSendControl motionControl = new MotionSendControl() ;
+            motionControl.setAction(MotionSendControl.Action.FOOT_STOP);
             sendMotionStatue(motionControl) ;
 
         } else if (i == R.id.sound_location_btn) {
@@ -717,10 +692,10 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
                 mSoundLocationEtt.setText(String.valueOf(ang));
             }
 
-            MotionControl motionControl = new MotionControl() ;
-            motionControl.setAction(MotionControl.Action.SOUND_LOCATION);
-            motionControl.setType(mIsSerialSct.isChecked() ? MotionControl.Type.SERIAL : MotionControl.Type.SLAM);
-            motionControl.setDistance(MotionControl.Distance.valueOf(ang));
+            MotionSendControl motionControl = new MotionSendControl() ;
+            motionControl.setAction(MotionSendControl.Action.SOUND_LOCATION);
+            motionControl.setType(mIsSerialSct.isChecked() ? MotionSendControl.Type.SERIAL : MotionSendControl.Type.SLAM);
+            motionControl.setDistance(MotionSendControl.Distance.valueOf(ang));
             sendMotionStatue(motionControl) ;
 
         } else if(i == R.id.random_move_btn){
@@ -780,20 +755,20 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
             while (isRun){
 
                 // 前
-                MotionControl motionControl = new MotionControl() ;
-                motionControl.setAction(MotionControl.Action.FOOT_FORWARD);
+                MotionSendControl motionControl = new MotionSendControl() ;
+                motionControl.setAction(MotionSendControl.Action.FOOT_FORWARD);
 
                 if(mIsSerialSct.isChecked()){
 
-                    motionControl.setType(MotionControl.Type.SERIAL );
-                    motionControl.setSpeed(MotionControl.Speed.valueOf(speed));
+                    motionControl.setType(MotionSendControl.Type.SERIAL );
+                    motionControl.setSpeed(MotionSendControl.Speed.valueOf(speed));
 
                 }else{
-                    motionControl.setType(MotionControl.Type.SLAM );
+                    motionControl.setType(MotionSendControl.Type.SLAM );
                 }
 
-                motionControl.setMode(MotionControl.Mode.TIME_SPEED);
-                motionControl.setTime(MotionControl.Time.valueOf(MAX_FORWARD_BACK));
+                motionControl.setMode(MotionSendControl.Mode.TIME_SPEED);
+                motionControl.setTime(MotionSendControl.Time.valueOf(MAX_FORWARD_BACK));
 
                 sendMotionStatue(motionControl) ;
 
@@ -806,26 +781,26 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
 
                     return;
                 }
-                motionControl = new MotionControl() ;
-                motionControl.setAction(MotionControl.Action.FOOT_STOP);
+                motionControl = new MotionSendControl() ;
+                motionControl.setAction(MotionSendControl.Action.FOOT_STOP);
                 sendMotionStatue(motionControl) ;
 
 
                 // 后
-                motionControl = new MotionControl() ;
-                motionControl.setAction(MotionControl.Action.FOOT_BACK);
+                motionControl = new MotionSendControl() ;
+                motionControl.setAction(MotionSendControl.Action.FOOT_BACK);
 
                 if(mIsSerialSct.isChecked()){
 
-                    motionControl.setType(MotionControl.Type.SERIAL );
-                    motionControl.setSpeed(MotionControl.Speed.valueOf(speed));
+                    motionControl.setType(MotionSendControl.Type.SERIAL );
+                    motionControl.setSpeed(MotionSendControl.Speed.valueOf(speed));
 
                 }else{
-                    motionControl.setType(MotionControl.Type.SLAM );
+                    motionControl.setType(MotionSendControl.Type.SLAM );
                 }
 
-                motionControl.setMode(MotionControl.Mode.TIME_SPEED);
-                motionControl.setTime(MotionControl.Time.valueOf(MAX_FORWARD_BACK));
+                motionControl.setMode(MotionSendControl.Mode.TIME_SPEED);
+                motionControl.setTime(MotionSendControl.Time.valueOf(MAX_FORWARD_BACK));
 
                 sendMotionStatue(motionControl) ;
 
@@ -838,26 +813,26 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
 
                     return;
                 }
-                motionControl = new MotionControl() ;
-                motionControl.setAction(MotionControl.Action.FOOT_STOP);
+                motionControl = new MotionSendControl() ;
+                motionControl.setAction(MotionSendControl.Action.FOOT_STOP);
                 sendMotionStatue(motionControl) ;
 
 
                 // 左
-                motionControl = new MotionControl() ;
-                motionControl.setAction(MotionControl.Action.FOOT_LEFT);
+                motionControl = new MotionSendControl() ;
+                motionControl.setAction(MotionSendControl.Action.FOOT_LEFT);
 
                 if(mIsSerialSct.isChecked()){
 
-                    motionControl.setType(MotionControl.Type.SERIAL );
-                    motionControl.setSpeed(MotionControl.Speed.valueOf(speed));
+                    motionControl.setType(MotionSendControl.Type.SERIAL );
+                    motionControl.setSpeed(MotionSendControl.Speed.valueOf(speed));
 
                 }else{
-                    motionControl.setType(MotionControl.Type.SLAM );
+                    motionControl.setType(MotionSendControl.Type.SLAM );
                 }
 
-                motionControl.setMode(MotionControl.Mode.TIME_SPEED);
-                motionControl.setTime(MotionControl.Time.valueOf(MAX_LEFT_RIGHT));
+                motionControl.setMode(MotionSendControl.Mode.TIME_SPEED);
+                motionControl.setTime(MotionSendControl.Time.valueOf(MAX_LEFT_RIGHT));
 
                 sendMotionStatue(motionControl) ;
 
@@ -871,26 +846,26 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
 
                     return;
                 }
-                motionControl = new MotionControl() ;
-                motionControl.setAction(MotionControl.Action.FOOT_STOP);
+                motionControl = new MotionSendControl() ;
+                motionControl.setAction(MotionSendControl.Action.FOOT_STOP);
                 sendMotionStatue(motionControl) ;
 
 
                 // 右
-                motionControl = new MotionControl() ;
-                motionControl.setAction(MotionControl.Action.FOOT_RIGHT);
+                motionControl = new MotionSendControl() ;
+                motionControl.setAction(MotionSendControl.Action.FOOT_RIGHT);
 
                 if(mIsSerialSct.isChecked()){
 
-                    motionControl.setType(MotionControl.Type.SERIAL );
-                    motionControl.setSpeed(MotionControl.Speed.valueOf(speed));
+                    motionControl.setType(MotionSendControl.Type.SERIAL );
+                    motionControl.setSpeed(MotionSendControl.Speed.valueOf(speed));
 
                 }else{
-                    motionControl.setType(MotionControl.Type.SLAM );
+                    motionControl.setType(MotionSendControl.Type.SLAM );
                 }
 
-                motionControl.setMode(MotionControl.Mode.TIME_SPEED);
-                motionControl.setTime(MotionControl.Time.valueOf(MAX_LEFT_RIGHT));
+                motionControl.setMode(MotionSendControl.Mode.TIME_SPEED);
+                motionControl.setTime(MotionSendControl.Time.valueOf(MAX_LEFT_RIGHT));
 
                 sendMotionStatue(motionControl) ;
                 try {
@@ -898,8 +873,8 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                motionControl = new MotionControl() ;
-                motionControl.setAction(MotionControl.Action.FOOT_STOP);
+                motionControl = new MotionSendControl() ;
+                motionControl.setAction(MotionSendControl.Action.FOOT_STOP);
                 sendMotionStatue(motionControl) ;
             }
 
@@ -908,13 +883,12 @@ public class TestMotionActivity extends TestBaseActivity implements View.OnClick
     }
 
 
-
     /**
      *
      * */
-    private void sendMotionStatue(MotionControl motionControl){
+    private void sendMotionStatue(MotionSendControl motionControl){
 
-        MotionClient.getInstance(this).sendMotionControlInMainThread(motionControl, null);
+        SendClient.getInstance(this).send(motionControl, null);
     }
 
 

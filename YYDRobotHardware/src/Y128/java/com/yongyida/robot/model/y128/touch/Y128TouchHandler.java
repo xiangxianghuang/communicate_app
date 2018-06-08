@@ -2,12 +2,13 @@ package com.yongyida.robot.model.y128.touch;
 
 import android.content.Context;
 
+import com.hiva.communicate.app.common.send.SendResponseListener;
 import com.hiva.communicate.app.common.response.BaseResponse;
-import com.yongyida.robot.communicate.app.hardware.TestData;
+import com.hiva.communicate.app.common.send.data.BaseSendControl;
+import com.hiva.communicate.app.server.IResponseListener;
 import com.yongyida.robot.communicate.app.hardware.touch.TouchHandler;
-import com.yongyida.robot.communicate.app.hardware.touch.data.QueryTouchInfo;
-import com.yongyida.robot.communicate.app.hardware.touch.data.TouchInfo;
-import com.yongyida.robot.communicate.app.hardware.touch.response.TouchResponse;
+import com.yongyida.robot.communicate.app.hardware.touch.send.data.QueryTouchInfo;
+import com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchInfo;
 import com.yongyida.robot.communicate.app.hardware.touch.send.TouchSend;
 import com.yongyida.robot.control.model.ModelInfo;
 import com.yongyida.robot.model.agreement.Y128Receive;
@@ -97,25 +98,13 @@ public class Y128TouchHandler extends TouchHandler {
 
 
     @Override
-    public BaseResponse onHandler(TouchSend send) {
+    public BaseResponse onHandler(TouchSend send, IResponseListener responseListener) {
 
-        QueryTouchInfo queryTouchPosition = send.getQueryTouchPosition() ;
-        if(queryTouchPosition != null){
+        BaseSendControl baseControl = send.getBaseControl() ;
+
+        if(baseControl instanceof QueryTouchInfo){
             // 查询
-
-            TouchResponse touchResponse = new TouchResponse() ;
-            touchResponse.setTouchPositions(touchPositions);
-
-            return touchResponse ;
-        }
-
-
-        TestData testData = send.getTestData();
-        if(testData != null){
-
-            setTest(testData.isTest());
-
-            return  null ;
+            return touchPositions.getResponse() ;
         }
 
 

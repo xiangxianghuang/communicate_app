@@ -4,13 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.SparseArray;
 
+import com.hiva.communicate.app.common.send.SendResponseListener;
 import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.send.data.BaseSendControl;
+import com.hiva.communicate.app.server.IResponseListener;
+import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.motion.MotionHandler;
-import com.yongyida.robot.communicate.app.hardware.motion.MotionResponse;
-import com.yongyida.robot.communicate.app.hardware.motion.data.MotionControl;
-import com.yongyida.robot.communicate.app.hardware.motion.data.MoveFault;
-import com.yongyida.robot.communicate.app.hardware.motion.data.QueryMoveFault;
-import com.yongyida.robot.communicate.app.hardware.motion.data.UltrasonicControl;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.MotionSendControl;
+import com.yongyida.robot.communicate.app.hardware.motion.response.data.MoveFault;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.QueryMoveFault;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.UltrasonicSendControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
 import com.yongyida.robot.model.agreement.Y128Receive;
 import com.yongyida.robot.model.agreement.Y128Steering;
@@ -19,6 +22,8 @@ import com.yongyida.robot.model.agreement.Y128Steering;
  * Created by HuangXiangXiang on 2018/3/5.
  */
 public class Y128MotionHandler extends MotionHandler {
+
+    private static final String TAG = Y128MotionHandler.class.getSimpleName() ;
 
 
     private SerialSendHeadLeftRight mSerialSendHeadLeftRight ;
@@ -44,7 +49,7 @@ public class Y128MotionHandler extends MotionHandler {
         mSerialSoundLocation = new SerialSoundLocation() ;
         mSerialUltrasonic = new SerialUltrasonic() ;
 
-        mSlamMotion = new SlamMotion(context);
+        mSlamMotion = SlamMotion.getInstance(context);
 
         Y128Receive serialReceive = Y128Receive.getInstance() ;
         serialReceive.setOnMoveFaultListener(mOnMoveFaultListener);
@@ -63,27 +68,27 @@ public class Y128MotionHandler extends MotionHandler {
     }
 
     @Override
-    public BaseResponse onHandler(MotionSend send) {
+    public BaseResponse onHandler(MotionSend send, IResponseListener responseListener) {
 
-        QueryMoveFault queryMoveFault = send.getQueryMoveFault() ;
-        if(queryMoveFault != null){
+        BaseSendControl baseSendControl = send.getBaseControl() ;
+        LogHelper.i(TAG , LogHelper.__TAG__() );
 
-            MotionResponse motionResponse = new MotionResponse() ;
-            motionResponse.setMoveFault(moveFault);
+        if(baseSendControl instanceof  QueryMoveFault){
 
-            return motionResponse ;
+            return moveFault.getResponse() ;
         }
 
-        UltrasonicControl ultrasonicControl = send.getUltrasonicControl() ;
-        if(ultrasonicControl != null){
+        if(baseSendControl instanceof UltrasonicSendControl){
 
-            UltrasonicControl.Android android = ultrasonicControl.getAndroid() ;
+            UltrasonicSendControl ultrasonicControl = (UltrasonicSendControl) baseSendControl;
+
+            UltrasonicSendControl.Android android = ultrasonicControl.getAndroid() ;
             if(android != null){
 
                 mSerialUltrasonic.setSendAndroidMode(android.ordinal());
             }
 
-            UltrasonicControl.Slamware slamware = ultrasonicControl.getSlamware() ;
+            UltrasonicSendControl.Slamware slamware = ultrasonicControl.getSlamware() ;
             if(slamware != null){
 
                 mSerialUltrasonic.setSendSlamwareMode(slamware.ordinal());
@@ -95,17 +100,17 @@ public class Y128MotionHandler extends MotionHandler {
         }
 
 
-        MotionControl motionControl = send.getMotionControl() ;
-        if(motionControl != null){
+        if(baseSendControl instanceof MotionSendControl){
+            MotionSendControl motionControl = (MotionSendControl) baseSendControl;
 
-            MotionControl.Action action = motionControl.getAction() ;
+            MotionSendControl.Action action = motionControl.getAction() ;
             if(action != null){
 
                 switch (action){
 
                     case HEAD_LEFT:
 
-                        MotionControl.Distance distance = motionControl.getDistance() ;
+                        MotionSendControl.Distance distance = motionControl.getDistance() ;
                         int value  ;
                         if(distance != null){
                             value = distance.getValue() ;
@@ -144,7 +149,7 @@ public class Y128MotionHandler extends MotionHandler {
                         break;
                     case HEAD_UP:
 
-                        MotionControl.Time time = motionControl.getTime() ;
+                        MotionSendControl.Time time = motionControl.getTime() ;
                         if(time != null){
 
                             value = time.getValue() ;
@@ -190,12 +195,12 @@ public class Y128MotionHandler extends MotionHandler {
                             value = 2000 ;
                         }
 
-                        MotionControl.Type type = motionControl.getType();
-                        if(MotionControl.Type.SLAM == type) {
+                        MotionSendControl.Type type = motionControl.getType();
+                        if(MotionSendControl.Type.SLAM == type) {
                             mSlamMotion.forward(value);
 
-                        }else if(MotionControl.Type.SERIAL == type){
-                            MotionControl.Speed speed = motionControl.getSpeed() ;
+                        }else if(MotionSendControl.Type.SERIAL == type){
+                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
                             if(speed != null){
 
                                 mSerialSendMove.setSpeed(speed.getValue());
@@ -206,7 +211,7 @@ public class Y128MotionHandler extends MotionHandler {
                         }else{
                             mSlamMotion.forward(value);
 
-                            MotionControl.Speed speed = motionControl.getSpeed() ;
+                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
                             if(speed != null){
 
                                 mSerialSendMove.setSpeed(speed.getValue());
@@ -228,11 +233,11 @@ public class Y128MotionHandler extends MotionHandler {
                         }
 
                         type = motionControl.getType();
-                        if(MotionControl.Type.SLAM == type) {
+                        if(MotionSendControl.Type.SLAM == type) {
                             mSlamMotion.back(value);
 
-                        }else if(MotionControl.Type.SERIAL == type){
-                            MotionControl.Speed speed = motionControl.getSpeed() ;
+                        }else if(MotionSendControl.Type.SERIAL == type){
+                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
                             if(speed != null){
 
                                 mSerialSendMove.setSpeed(speed.getValue());
@@ -243,7 +248,7 @@ public class Y128MotionHandler extends MotionHandler {
                         }else{
                             mSlamMotion.back(value);
 
-                            MotionControl.Speed speed = motionControl.getSpeed() ;
+                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
                             if(speed != null){
 
                                 mSerialSendMove.setSpeed(speed.getValue());
@@ -262,12 +267,12 @@ public class Y128MotionHandler extends MotionHandler {
                             value = 2000 ;
                         }
                         type = motionControl.getType();
-                        if(MotionControl.Type.SLAM == type) {
+                        if(MotionSendControl.Type.SLAM == type) {
                             mSlamMotion.left(value);
 
-                        }else if(MotionControl.Type.SERIAL == type){
+                        }else if(MotionSendControl.Type.SERIAL == type){
 
-                            MotionControl.Speed speed = motionControl.getSpeed() ;
+                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
                             if(speed != null){
 
                                 mSerialSendMove.setSpeed(speed.getValue());
@@ -277,7 +282,7 @@ public class Y128MotionHandler extends MotionHandler {
                         }else{
                             mSlamMotion.left(value);
 
-                            MotionControl.Speed speed = motionControl.getSpeed() ;
+                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
                             if(speed != null){
 
                                 mSerialSendMove.setSpeed(speed.getValue());
@@ -297,12 +302,12 @@ public class Y128MotionHandler extends MotionHandler {
                         }
 
                         type = motionControl.getType();
-                        if(MotionControl.Type.SLAM == type) {
+                        if(MotionSendControl.Type.SLAM == type) {
                             mSlamMotion.right(value);
 
-                        }else if(MotionControl.Type.SERIAL == type){
+                        }else if(MotionSendControl.Type.SERIAL == type){
 
-                            MotionControl.Speed speed = motionControl.getSpeed() ;
+                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
                             if(speed != null){
 
                                 mSerialSendMove.setSpeed(speed.getValue());
@@ -312,7 +317,7 @@ public class Y128MotionHandler extends MotionHandler {
                         }else{
                             mSlamMotion.right(value);
 
-                            MotionControl.Speed speed = motionControl.getSpeed() ;
+                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
                             if(speed != null){
 
                                 mSerialSendMove.setSpeed(speed.getValue());
@@ -324,9 +329,9 @@ public class Y128MotionHandler extends MotionHandler {
                     case FOOT_STOP:
 
                         type = motionControl.getType();
-                        if(MotionControl.Type.SLAM == type) {
+                        if(MotionSendControl.Type.SLAM == type) {
                             mSlamMotion.stop();
-                        }else if(MotionControl.Type.SERIAL == type){
+                        }else if(MotionSendControl.Type.SERIAL == type){
                             mSerialSendMove.stop();
 
                         }else{
@@ -374,10 +379,10 @@ public class Y128MotionHandler extends MotionHandler {
                         }
 
                         type = motionControl.getType();
-                        if(MotionControl.Type.SLAM == type) {
+                        if(MotionSendControl.Type.SLAM == type) {
                             mSlamMotion.turnSoundAngle(d) ;
 
-                        }else if(MotionControl.Type.SERIAL == type){
+                        }else if(MotionSendControl.Type.SERIAL == type){
                             mSerialSoundLocation.soundLocation(d);
 
                         }else{
@@ -391,11 +396,11 @@ public class Y128MotionHandler extends MotionHandler {
                     case STOP:
 
                         type = motionControl.getType();
-                        if(MotionControl.Type.SLAM == type) {
+                        if(MotionSendControl.Type.SLAM == type) {
 
                             mSlamMotion.stop();
 
-                        }else if(MotionControl.Type.SERIAL == type){
+                        }else if(MotionSendControl.Type.SERIAL == type){
 
                             mSerialSendHeadLeftRight.headLeftRightStop() ;
                             mSerialSendHeadUpDown.headUpDownStop() ;

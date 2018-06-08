@@ -3,7 +3,7 @@ package com.yongyida.robot.model.agreement;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.battery.BatteryHandler;
 import com.yongyida.robot.communicate.app.hardware.touch.TouchHandler;
-import com.yongyida.robot.communicate.app.hardware.touch.data.TouchInfo;
+import com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchInfo;
 import com.yongyida.robot.model.y128.motion.Y128MotionHandler;
 import com.yongyida.robot.serial.SerialReceive;
 

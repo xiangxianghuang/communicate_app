@@ -1,31 +1,13 @@
 package com.yongyida.robot.communicate.app.hardware.led.send;
 
 import com.hiva.communicate.app.common.send.BaseSend;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedControl;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedScene;
+import com.yongyida.robot.communicate.app.hardware.led.send.data.BaseLedSendControl;
 
 /**
  * Created by HuangXiangXiang on 2017/11/30.
  * 修改Led灯状态
  */
-public class LedSend extends BaseSend{
+public final class LedSend extends BaseSend<BaseLedSendControl>{
 
-    private LedControl ledControl;
-    private LedScene ledScene ;
 
-    public LedScene getLedScene() {
-        return ledScene;
-    }
-
-    public void setLedScene(LedScene ledScene) {
-        this.ledScene = ledScene;
-    }
-
-    public LedControl getLedControl() {
-        return ledControl;
-    }
-
-    public void setLedControl(LedControl ledControl) {
-        this.ledControl = ledControl;
-    }
 }

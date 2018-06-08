@@ -60,6 +60,8 @@ public final class SerialSend{
                 mFileOutputStream = new FileOutputStream(sensorFd);
 
             }catch (Exception e){
+
+                LogHelper.e(TAG, LogHelper.__TAG__() + " Exception : " + e.getMessage());
             }
         }
 
@@ -77,6 +79,8 @@ public final class SerialSend{
 
         FileOutputStream fileOutputStream = getFileOutputStream();
         if(fileOutputStream == null){
+
+            LogHelper.i(TAG, LogHelper.__TAG__() + " fileOutputStream is null!  " + toHexString(data));
 
             return RESULT_SEND_FAIL ;
         }

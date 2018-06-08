@@ -39,7 +39,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="手臂"
+            android:text="更改手臂ID"
+            />
+
+        <RadioButton
+            android:id="@+id/teacher_rbn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="示教"
             />
 
 

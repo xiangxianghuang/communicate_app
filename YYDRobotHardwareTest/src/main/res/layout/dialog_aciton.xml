@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="动作耗时"
+            />
+
+        <EditText
+            android:id="@+id/time_ett"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:inputType="number"
+            android:text="2000"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="动作等待"
+            />
+
+        <EditText
+            android:id="@+id/delay_ett"
+            android:layout_width="200dp"
+            android:layout_height="49dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:inputType="number"
+            android:text="3000"
+            />
+
+
+    </LinearLayout>
+
+    <Switch
+        android:id="@+id/changed_action_sth"
+        android:layout_width="345dp"
+        android:layout_height="29dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="是否使用当前的动作数据"
+
+        />
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="左手指" />
+
+        <EditText
+            android:id="@+id/left_finger_0"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:imeOptions="flagNoExtractUi|actionNext"
+            android:nextFocusForward="@id/left_finger_1"
+            />
+
+        <EditText
+            android:id="@+id/left_finger_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:imeOptions="flagNoExtractUi|actionNext"
+            android:nextFocusForward="@id/left_finger_2"
+            />
+
+        <EditText
+            android:id="@+id/left_finger_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:imeOptions="flagNoExtractUi|actionNext"
+            android:nextFocusForward="@id/left_finger_3"
+            />
+
+        <EditText
+            android:id="@+id/left_finger_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:imeOptions="flagNoExtractUi|actionNext"
+            android:nextFocusForward="@id/left_finger_4"
+            />
+
+        <EditText
+            android:id="@+id/left_finger_4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:imeOptions="flagNoExtractUi|actionNext"
+            android:nextFocusForward="@id/right_finger_0"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="右手指" />
+
+        <EditText
+            android:id="@+id/right_finger_0"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:layout_weight="1"
+            android:imeOptions="flagNoExtractUi|actionNext"
+            android:nextFocusForward="@id/right_finger_1"
+            />
+
+        <EditText
+            android:id="@+id/right_finger_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:layout_weight="1"
+            android:imeOptions="flagNoExtractUi|actionNext"
+            android:nextFocusForward="@id/right_finger_2"
+            />
+
+        <EditText
+            android:id="@+id/right_finger_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:layout_weight="1"
+            android:imeOptions="flagNoExtractUi|actionNext"
+            android:nextFocusForward="@id/right_finger_3"
+            />
+
+        <EditText
+            android:id="@+id/right_finger_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:layout_weight="1"
+            android:imeOptions="flagNoExtractUi|actionNext"
+            android:nextFocusForward="@id/right_finger_4"
+            />
+
+        <EditText
+            android:id="@+id/right_finger_4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:imeOptions="flagNoExtractUi|actionDone"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/cancel_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="取消"
+            />
+
+        <Button
+            android:id="@+id/ok_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            android:text="确定"
+            />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

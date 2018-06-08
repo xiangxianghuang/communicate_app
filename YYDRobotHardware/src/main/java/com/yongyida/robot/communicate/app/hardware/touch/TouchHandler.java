@@ -3,9 +3,8 @@ package com.yongyida.robot.communicate.app.hardware.touch;
 import android.content.Context;
 import android.content.Intent;
 
-import com.hiva.communicate.app.common.response.BaseResponse;
 import com.yongyida.robot.communicate.app.hardware.BaseHandler;
-import com.yongyida.robot.communicate.app.hardware.touch.data.TouchInfo;
+import com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchInfo;
 import com.yongyida.robot.communicate.app.hardware.touch.send.TouchSend;
 
 /**

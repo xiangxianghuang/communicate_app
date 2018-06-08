@@ -15,16 +15,14 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hiva.communicate.app.common.IResponseListener;
+import com.hiva.communicate.app.common.send.SendResponseListener;
 import com.hiva.communicate.app.common.SendResponse;
 import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.BaseResponseControl;
 import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.communicate.app.hardware.TestData;
-import com.yongyida.robot.communicate.app.hardware.touch.data.QueryTouchInfo;
-import com.yongyida.robot.communicate.app.hardware.touch.data.TouchInfo;
-import com.yongyida.robot.communicate.app.hardware.touch.response.TouchResponse;
-import com.yongyida.robot.communicate.app.hardware.touch.send.TouchSend;
-import com.yongyida.robot.hardware.client.TouchClient;
+import com.yongyida.robot.communicate.app.hardware.touch.send.data.QueryTouchInfo;
+import com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchInfo;
+import com.hiva.communicate.app.common.send.SendClient;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
 
@@ -194,30 +192,27 @@ public class TestTouchActivity extends TestBaseActivity {
             @Override
             public void run() {
 
-                QueryTouchInfo queryTouchInfo = new QueryTouchInfo() ;
-                TouchSend touchSend= new TouchSend(queryTouchInfo) ;
 
-                final TouchClient touchClient = TouchClient.getInstance(TestTouchActivity.this) ;
-                IResponseListener responseListener = new IResponseListener() {
+
+                SendResponseListener responseListener = new SendResponseListener<TouchInfo>() {
+
                     @Override
-                    public void onResponse(BaseResponse response) {
+                    public void onSuccess(TouchInfo touchInfo) {
 
-                        LogHelper.i(TAG, LogHelper.__TAG__() + ", response : " + response );
+                        Message message = mTouchHandler.obtainMessage(TouchHandler.TOUCH_INFO) ;
+                        message.obj = touchInfo ;
+                        mTouchHandler.sendMessage(message) ;
+                    }
 
-                        TouchResponse touchResponse = (TouchResponse) response;
-                        if(touchResponse != null){
-
-                            TouchInfo touchInfo = touchResponse.getTouchPositions() ;
-
-                            Message message = mTouchHandler.obtainMessage(TouchHandler.TOUCH_INFO) ;
-                            message.obj = touchInfo ;
-                            mTouchHandler.sendMessage(message) ;
-                        }
+                    @Override
+                    public void onFail(int result, String message) {
 
                     }
+
                 };
 
-                SendResponse sendResponse = touchClient.send(touchSend,responseListener) ;
+                QueryTouchInfo queryTouchInfo = new QueryTouchInfo() ;
+                SendResponse sendResponse = SendClient.getInstance(TestTouchActivity.this).sendInNotMainThread(queryTouchInfo, responseListener) ;
                 if (sendResponse == null) {
 
                     // 发送不成功
@@ -242,23 +237,23 @@ public class TestTouchActivity extends TestBaseActivity {
 
     private void startTest(){
 
-        TestData testData = new TestData() ;
-        testData.setTest(true);
-        TouchSend touchSend = new TouchSend() ;
-        touchSend.setTestData(testData);
-
-        TouchClient.getInstance(TestTouchActivity.this).sendInMainThread(touchSend, null);
+//        TestData testData = new TestData() ;
+//        testData.setTest(true);
+//        TouchSend touchSend = new TouchSend() ;
+//        touchSend.setTestData(testData);
+//
+//        TouchClient.getInstance(TestTouchActivity.this).sendInMainThread(touchSend, null);
 
     }
 
     private void stopTest(){
 
-        TestData testData = new TestData() ;
-        testData.setTest(false);
-        TouchSend touchSend = new TouchSend() ;
-        touchSend.setTestData(testData);
-
-        TouchClient.getInstance(TestTouchActivity.this).sendInMainThread(touchSend, null);
+//        TestData testData = new TestData() ;
+//        testData.setTest(false);
+//        TouchSend touchSend = new TouchSend() ;
+//        touchSend.setTestData(testData);
+//
+//        TouchClient.getInstance(TestTouchActivity.this).sendInMainThread(touchSend, null);
     }
 
 

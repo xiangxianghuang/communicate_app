@@ -2,7 +2,6 @@ package com.yongyida.robot.model.y20.led;
 
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedScene;
 import com.yongyida.robot.led.ear.ChestLedHelper;
 import com.yongyida.robot.led.ear.EarLedHelper;
 
@@ -16,53 +15,53 @@ public class LedSceneControl {
 
     private final static String TAG = LogHelper.__FILE__() ;
 
-    public BaseResponse onControl(LedScene ledScene){
-
-        LogHelper.i(TAG , LogHelper.__TAG__() + ledScene.name());
-
-        stopTimer();
-
-        switch (ledScene){
-
-            case WAKE_UP:
-            case LISTEN:
-            case ANALYSE:
-
-                wakeUp() ;
-                break;
-
-            case TALK:
-
-                talk() ;
-                break;
-            case POWER_OFF:
-
-                powerOff() ;
-                break;
-            case NORMAL_SCREEN_ON:
-
-                normalScreenOn() ;
-                break;
-            case NORMAL_SCREEN_OFF:
-
-                normalScreenOFF() ;
-                break;
-            case LOW_POWER:
-            case CHARGING:
-
-                lowPowerOrCharging() ;
-                break;
-            case FULL_POWER:
-
-                fullPower() ;
-                break;
-
-        }
-
-
-        return  null ;
-    }
-
+//    public BaseResponse onControl(LedScene ledScene){
+//
+//        LogHelper.i(TAG , LogHelper.__TAG__() + ledScene.name());
+//
+//        stopTimer();
+//
+//        switch (ledScene){
+//
+//            case WAKE_UP:
+//            case LISTEN:
+//            case ANALYSE:
+//
+//                wakeUp() ;
+//                break;
+//
+//            case TALK:
+//
+//                talk() ;
+//                break;
+//            case POWER_OFF:
+//
+//                powerOff() ;
+//                break;
+//            case NORMAL_SCREEN_ON:
+//
+//                normalScreenOn() ;
+//                break;
+//            case NORMAL_SCREEN_OFF:
+//
+//                normalScreenOFF() ;
+//                break;
+//            case LOW_POWER:
+//            case CHARGING:
+//
+//                lowPowerOrCharging() ;
+//                break;
+//            case FULL_POWER:
+//
+//                fullPower() ;
+//                break;
+//
+//        }
+//
+//
+//        return  null ;
+//    }
+//
 
 
 

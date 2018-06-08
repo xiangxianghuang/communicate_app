@@ -5,19 +5,22 @@ import android.content.Context;
 import com.hiva.communicate.app.common.send.BaseSend;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.BaseHandler;
-import com.yongyida.robot.communicate.app.hardware.battery.BatteryHandler;
 import com.yongyida.robot.communicate.app.hardware.battery.send.BatterySend;
+import com.yongyida.robot.communicate.app.hardware.hand.HandHandler;
+import com.yongyida.robot.communicate.app.hardware.hand.send.HandSend;
 import com.yongyida.robot.communicate.app.hardware.led.LedHandler;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
 import com.yongyida.robot.communicate.app.hardware.motion.MotionHandler;
 import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
-import com.yongyida.robot.communicate.app.hardware.pir.PirSend;
+import com.yongyida.robot.communicate.app.hardware.pir.send.PirSend;
 import com.yongyida.robot.communicate.app.hardware.touch.TouchHandler;
 import com.yongyida.robot.communicate.app.hardware.touch.send.TouchSend;
 import com.yongyida.robot.model.y128.battery.Y128BatteryHandler;
 import com.yongyida.robot.model.y128.led.Y128LedHandler;
 import com.yongyida.robot.model.y128.motion.Y128MotionHandler;
 import com.yongyida.robot.model.y128.touch.Y128TouchHandler;
+import com.yongyida.robot.model.y138.hand.Y138HandHandler;
+import com.yongyida.robot.model.y138.led.Y138LedHandler;
 import com.yongyida.robot.model.y138.montrol.Y138MotionHandler;
 import com.yongyida.robot.model.y165.battery.Y165BatteryHandler;
 import com.yongyida.robot.model.y165.led.Y165LedHandler;
@@ -56,10 +59,19 @@ public final class HardwareConfig {
 
 
     private HashMap<Class, BaseHandler<BaseSend>> mControls = new HashMap() ;
-    private void addControl(Class clazz,BaseHandler control){
+//    private void addControl(Class clazz,BaseHandler control){
+//
+//        mControls.put(clazz, control);
+//    }
 
-        mControls.put(clazz, control);
+    private void addControl(BaseHandler control){
+
+        Class clazz = control.getSendClass();
+        LogHelper.i(TAG , LogHelper.__TAG__() + ", clazz : " + clazz) ;
+
+        mControls.put(control.getSendClass(), control);
     }
+
     public BaseHandler<BaseSend> getControl(Class clazz){
 
         return mControls.get(clazz) ;
@@ -80,22 +92,22 @@ public final class HardwareConfig {
             return;
         }
 
-        if(model.contains("Y128") | model.contains("YQ110")){
+//        if(model.contains("Y128") | model.contains("YQ110")){
+//
+//            initY128();
+//
+//        }else if(model.contains("Y165")){
+//
+//            initY165() ;
+//
+//        }else if(model.contains("Y138")){
+//
+//            initY138();
+//
+//        }
 
-            initY128();
 
-        }else if(model.contains("Y165")){
-
-            initY165() ;
-
-        }else if(model.contains("Y138")){
-
-            initY138();
-
-        }
-
-
-
+        initY138();
     }
 
 
@@ -130,16 +142,16 @@ public final class HardwareConfig {
         LogHelper.i(TAG , LogHelper.__TAG__() );
 
         Y128BatteryHandler batteryControl = new Y128BatteryHandler(mContext) ;
-        addControl(BatterySend.class, batteryControl) ;
+        addControl(batteryControl) ;
 
         TouchHandler touchControl = new Y128TouchHandler(mContext) ;
-        addControl(TouchSend.class, touchControl) ;
+        addControl(touchControl) ;
 
         LedHandler ledControl = new Y128LedHandler(mContext) ;
-        addControl(LedSend.class, ledControl) ;
+        addControl(ledControl) ;
 
         MotionHandler motionControl = new Y128MotionHandler(mContext) ;
-        addControl(MotionSend.class, motionControl) ;
+        addControl(motionControl) ;
 
     }
 
@@ -154,11 +166,14 @@ public final class HardwareConfig {
 //        TouchHandler touchControl = new Y128TouchHandler(mContext) ;
 //        addControl(TouchSend.class, touchControl) ;
 //
-//        LedHandler ledControl = new Y128LedHandler(mContext) ;
-//        addControl(LedSend.class, ledControl) ;
+        LedHandler ledControl = new Y138LedHandler(mContext) ;
+        addControl(ledControl) ;
 
         MotionHandler motionControl = new Y138MotionHandler(mContext) ;
-        addControl(MotionSend.class, motionControl) ;
+        addControl( motionControl) ;
+
+        HandHandler handHandler = new Y138HandHandler(mContext) ;
+        addControl( handHandler) ;
 
     }
 
@@ -168,14 +183,13 @@ public final class HardwareConfig {
         LogHelper.i(TAG , LogHelper.__TAG__() );
 
         Y165BatteryHandler batteryControl = new Y165BatteryHandler(mContext) ;
-        addControl(BatterySend.class, batteryControl) ;
+        addControl(batteryControl) ;
 
         Y165PirHandler pirControl = new Y165PirHandler(mContext);
-        addControl(PirSend.class, pirControl) ;
+        addControl(pirControl) ;
 
         LedHandler ledControl = new Y165LedHandler(mContext);
-        addControl(LedSend.class, ledControl) ;
-
+        addControl(ledControl) ;
 
     }
 

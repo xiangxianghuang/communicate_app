@@ -15,10 +15,8 @@ import com.yongyida.robot.hardware.test.item.TestBaseActivity;
 public class TestHandActivity extends TestBaseActivity implements RadioGroup.OnCheckedChangeListener {
 
 
-
     private RadioGroup mTypeRgp;
     private FrameLayout mContentFlt;
-
 
     @Override
     protected View initContentView() {
@@ -48,6 +46,7 @@ public class TestHandActivity extends TestBaseActivity implements RadioGroup.OnC
     private TestFingerFragment mTestFingerFragment = new TestFingerFragment() ;
     private TestArmFragment mTestArmFragment = new TestArmFragment() ;
     private TestChangeArmIdFragment mTestChangeArmIdFragment = new TestChangeArmIdFragment() ;
+    private TestTeacherFragment mTestTeacherFragment = new TestTeacherFragment() ;
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -76,6 +75,11 @@ public class TestHandActivity extends TestBaseActivity implements RadioGroup.OnC
             ft.replace(R.id.content_flt, mTestChangeArmIdFragment) ;
             ft.commit() ;
 
+        }else if(checkedId == R.id.teacher_rbn ){
+
+            FragmentTransaction ft = getFragmentManager().beginTransaction() ;
+            ft.replace(R.id.content_flt, mTestTeacherFragment) ;
+            ft.commit() ;
         }
 
     }

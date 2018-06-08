@@ -35,7 +35,6 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation project(':communicate_app')
-    implementation project(':communicate_app_client')
     implementation project(':communicate_app_hardware')
     //    compile(name: 'communicate_app-debug-1.1.0', ext: 'aar')
     //    compile(name: 'communicate_app_hardware-debug-1.1.0', ext: 'aar')
@@ -44,6 +43,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation project(':Aratek_BMApi_USB_Demo')
     implementation project(':UsbPrintMDemo')
-
-    implementation(name: 'UARTKit', ext: 'aar') // 讯飞AIUI硬盒麦
+    implementation(name: 'UARTKit', ext: 'aar')
+    // 讯飞AIUI硬盒麦
 }

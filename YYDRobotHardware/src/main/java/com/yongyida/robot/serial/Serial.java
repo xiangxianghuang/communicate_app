@@ -17,6 +17,7 @@ public final class Serial {
     public static final String TAG = Serial.class.getSimpleName() ;
 
     public static final String SERIAL_PORT = "/dev/ttyS2";  // 串口名称
+//    public static final String SERIAL_PORT = "/dev/ttyS4";  // 串口名称
 
 
     public static final int RESULT_SUCCESS                      = 0x00000000;   //操作成功

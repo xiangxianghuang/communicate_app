@@ -3,7 +3,6 @@ package com.yongyida.robot.breathled.utils;
 import android.graphics.Color;
 
 import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.communicate.app.hardware.led.data.LedControl;
 
 import java.util.HashSet;
 
@@ -90,111 +89,111 @@ public class BreathLedHelper {
         BreathLed.setFreq(position, freq) ;
     }
 
-    public static String getPosition(int position){
-
-        LogHelper.i(TAG , LogHelper.__TAG__() + ", position : " + position);
-
-        String positionString ;
-        if(position == LedControl.POSITION_ALL){//全部
-
-            positionString = BreathLedHelper.POSITION_ALL ;
-
-        }else if((position & LedControl.POSITION_CHEST)== LedControl.POSITION_CHEST){   // 胸部
-
-            if(((position & LedControl.POSITION_LEFT_EAR) == LedControl.POSITION_LEFT_EAR) || //左耳
-                    ((position & LedControl.POSITION_RIGHT_EAR) == LedControl.POSITION_RIGHT_EAR)){//右耳
-
-                positionString = BreathLedHelper.POSITION_ALL ;
-
-            }else {
-
-                positionString = BreathLedHelper.POSITION_CHEST ;
-            }
-
-        }else if(((position & LedControl.POSITION_LEFT_EAR) == LedControl.POSITION_LEFT_EAR) || //左耳
-                ((position & LedControl.POSITION_RIGHT_EAR) == LedControl.POSITION_RIGHT_EAR)){//右耳
-
-            positionString = BreathLedHelper.POSITION_EAR ; //耳朵
-
-        }else{
-
-            positionString = null ;
-        }
-
-        return positionString;
-    }
-
-    public static String getPower(LedControl.Power power){
-
-        if(power == null){
-
-            return null ;
-        }
-
-        return power == LedControl.Power.POWER_ON ? FUNCTION_ON : FUNCTION_OFF;
-
-    }
-
-    public static String getColor(LedControl.Color color){
-
-        if(color == null){
-
-            return null ;
-        }
-
-        int value = 0xFF000000 | color.getColor() ;
-        switch (value){
-            case Color.RED:
-                return COLOR_RED ;
-
-            case Color.GREEN:
-                return COLOR_GREEN ;
-
-            case Color.BLUE :
-                return COLOR_BLUE ;
-
-            case Color.CYAN:
-                return COLOR_GREEN_BLUE ;
-
-            case Color.MAGENTA:
-                return COLOR_RED_BLUE ;
-
-            case Color.YELLOW:
-                return COLOR_RED_GREEN ;
-
-            case Color.WHITE:
-                return COLOR_WHITE ;
-
-        }
-
-        return null ;
-    }
-
-
-    public static String getEffect(LedControl.Effect effect){
-
-        if(effect == null){
-
-            return null ;
-        }
-
-        switch (effect){
-
-            case NORMAL:
-
-                return FREQ_CONST ;
-
-            case BREATH_LOW:
-                return FREQ_LOW ;
-
-            case BREATH_MIDDLE :
-                return FREQ_MIDDLE ;
-
-            case BREATH_FAST:
-                return FREQ_HIGH ;
-        }
-
-        return null ;
-    }
+//    public static String getPosition(int position){
+//
+//        LogHelper.i(TAG , LogHelper.__TAG__() + ", position : " + position);
+//
+//        String positionString ;
+//        if(position == LedControl.POSITION_ALL){//全部
+//
+//            positionString = BreathLedHelper.POSITION_ALL ;
+//
+//        }else if((position & LedSendControl.POSITION_CHEST)== LedSendControl.POSITION_CHEST){   // 胸部
+//
+//            if(((position & LedSendControl.POSITION_LEFT_EAR) == LedSendControl.POSITION_LEFT_EAR) || //左耳
+//                    ((position & LedSendControl.POSITION_RIGHT_EAR) == LedSendControl.POSITION_RIGHT_EAR)){//右耳
+//
+//                positionString = BreathLedHelper.POSITION_ALL ;
+//
+//            }else {
+//
+//                positionString = BreathLedHelper.POSITION_CHEST ;
+//            }
+//
+//        }else if(((position & LedSendControl.POSITION_LEFT_EAR) == LedSendControl.POSITION_LEFT_EAR) || //左耳
+//                ((position & LedSendControl.POSITION_RIGHT_EAR) == LedSendControl.POSITION_RIGHT_EAR)){//右耳
+//
+//            positionString = BreathLedHelper.POSITION_EAR ; //耳朵
+//
+//        }else{
+//
+//            positionString = null ;
+//        }
+//
+//        return positionString;
+//    }
+//
+//    public static String getPower(LedControl.Power power){
+//
+//        if(power == null){
+//
+//            return null ;
+//        }
+//
+//        return power == LedControl.Power.POWER_ON ? FUNCTION_ON : FUNCTION_OFF;
+//
+//    }
+//
+//    public static String getColor(LedControl.Color color){
+//
+//        if(color == null){
+//
+//            return null ;
+//        }
+//
+//        int value = 0xFF000000 | color.getColor() ;
+//        switch (value){
+//            case Color.RED:
+//                return COLOR_RED ;
+//
+//            case Color.GREEN:
+//                return COLOR_GREEN ;
+//
+//            case Color.BLUE :
+//                return COLOR_BLUE ;
+//
+//            case Color.CYAN:
+//                return COLOR_GREEN_BLUE ;
+//
+//            case Color.MAGENTA:
+//                return COLOR_RED_BLUE ;
+//
+//            case Color.YELLOW:
+//                return COLOR_RED_GREEN ;
+//
+//            case Color.WHITE:
+//                return COLOR_WHITE ;
+//
+//        }
+//
+//        return null ;
+//    }
+//
+//
+//    public static String getEffect(LedControl.Effect effect){
+//
+//        if(effect == null){
+//
+//            return null ;
+//        }
+//
+//        switch (effect){
+//
+//            case NORMAL:
+//
+//                return FREQ_CONST ;
+//
+//            case BREATH_LOW:
+//                return FREQ_LOW ;
+//
+//            case BREATH_MIDDLE :
+//                return FREQ_MIDDLE ;
+//
+//            case BREATH_FAST:
+//                return FREQ_HIGH ;
+//        }
+//
+//        return null ;
+//    }
 
 }

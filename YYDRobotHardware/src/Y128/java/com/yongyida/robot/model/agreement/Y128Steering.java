@@ -478,6 +478,8 @@ public class Y128Steering {
     public static final byte FUNCTION_SEND_READ_FOOT_STATE  = 0x68;         //对底盘驱动器状态获取控制（0x68）
     public static final byte FUNCTION_SEND_STEER            = (byte) 0xdd;  //对舵机板控制控制（0xdd）
 
+    public static final byte FUNCTION_SEND_HORSE_LED        = (byte) 0xbb;  //跑马灯控制（0xbb）
+
 
     public static final byte FUNCTION_RECEIVE_TOUCH         = (byte) 0xdd;  //向上位机发送触摸信息（0xdd）
     public static final byte FUNCTION_RECEIVE_FAULT         = 0x20 ;        //向上位机上传故障码（0x20）
@@ -490,8 +492,6 @@ public class Y128Steering {
      * 底盘速度参数
      * */
     public static class FootSpeed extends SingleChip{
-
-
 
         @Override
         public byte getFunction() {
@@ -825,30 +825,68 @@ public class Y128Steering {
     }
 
 
-        public static class SteerLed2 extends SingleChip{
+    public static class SteerLed2 extends SingleChip{
 
-            @Override
-            public byte getFunction() {
+        @Override
+        public byte getFunction() {
 
-                content[1] = 0x04 ;
+            content[1] = 0x04 ;
 
-                return FUNCTION_SEND_STEER;
-            }
+            return FUNCTION_SEND_STEER;
+        }
 
-            public void setPosition(byte position){
+        public void setPosition(byte position){
 
-                content[2] = position ;
-            }
+            content[2] = position ;
+        }
 
-            public void setOn(boolean isOn){
+        public void setOn(boolean isOn){
 
-                content[3] = (byte) (isOn ? 0x01 : 0x00);
-            }
+            content[3] = (byte) (isOn ? 0x01 : 0x00);
+        }
 
-            public void setColor(byte color){
+        public void setColor(byte color){
 
-                content[4] = color ;
-            }
+            content[4] = color ;
+        }
+
+
+}
+
+
+    /**
+     * 跑马灯
+     * */
+    public static class SteerHorseLed extends SingleChip{
+
+
+        @Override
+        public byte getFunction() {
+
+            content[1] = 0x03 ;
+
+            return FUNCTION_SEND_HORSE_LED ;
+        }
+
+
+        public void setPosition(byte position){
+
+            content[2] = position ;
+        }
+
+
+        public void setMode(byte mode){
+
+            content[3] = mode ;
+        }
+
+        public void setSpeed(byte speed){
+
+            content[4] = speed ;
+        }
+
+
+
 
 
     }

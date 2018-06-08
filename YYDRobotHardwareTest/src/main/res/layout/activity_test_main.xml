@@ -18,18 +18,18 @@
         android:layout_gravity="center"
         />
 
-    <android.support.v7.widget.SwitchCompat
-        android:id="@+id/enable_sct"
+    <Switch
+        android:id="@+id/enable_sth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#A0ff0000"
         android:textSize="16dp"
         android:text="选择打开的，所有功能只能在工厂模式,外面的不能调用"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:paddingLeft="10dp"
-        android:visibility="gone"
         />
+        <!--android:visibility="gone"-->
 
     <GridView
         android:id="@+id/item_gvw"

@@ -227,12 +227,23 @@
 
         <activity android:name=".item.hand.TestHandActivity"
             android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/test_hand"
             >
             <intent-filter>
                 <action android:name="com.yongyida.robot.HARDWARE"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".item.led.TestLed2Activity"
+            android:screenOrientation="landscape"
+            android:label="@string/test_led2"
+            >
+            <intent-filter>
+                <action android:name="com.yongyida.robot.HARDWARE"/>
+            </intent-filter>
+        </activity>
+
 
     </application>
 

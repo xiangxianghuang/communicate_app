@@ -9,6 +9,7 @@
     >
 
     <RadioGroup
+        android:id="@+id/direction_rgp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -26,7 +27,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="左手"
-            android:checked="true"
             />
 
         <RadioButton
@@ -38,12 +38,12 @@
             />
 
         <RadioButton
-            android:id="@+id/direction_all_rbn"
+            android:id="@+id/direction_both_rbn"
             android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="双手"
-            android:visibility="gone"
+            android:checked="true"
             />
 
     </RadioGroup>
@@ -62,7 +62,7 @@
             />
 
         <CheckBox
-            android:id="@+id/arm_0_rbn"
+            android:id="@+id/arm_0_cbx"
             android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -71,7 +71,7 @@
             />
 
         <CheckBox
-            android:id="@+id/arm_1_rbn"
+            android:id="@+id/arm_1_cbx"
             android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -79,7 +79,7 @@
             />
 
         <CheckBox
-            android:id="@+id/arm_2_rbn"
+            android:id="@+id/arm_2_cbx"
             android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -87,7 +87,7 @@
             />
 
         <CheckBox
-            android:id="@+id/finger_3_rbn"
+            android:id="@+id/arm_3_cbx"
             android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -95,7 +95,7 @@
             />
 
         <CheckBox
-            android:id="@+id/arm_4_rbn"
+            android:id="@+id/arm_4_cbx"
             android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -103,7 +103,7 @@
             />
 
         <CheckBox
-            android:id="@+id/arm_5_rbn"
+            android:id="@+id/arm_5_cbx"
             android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -122,117 +122,104 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
-            <RadioGroup
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:text="转向"
-                    />
-
-                <RadioButton
-                    android:id="@+id/hand_open_rbn"
-                    android:layout_width="1dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="正向"
+                    android:text="转向" />
+
+                <Switch
+                    android:id="@+id/turn_to_sih"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
                     android:checked="true"
-                    />
+                    android:text="反转" />
 
-                <RadioButton
-                    android:id="@+id/hand_close_rbn"
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="反向"
-                    />
-            </RadioGroup>
-
+            </LinearLayout>
 
 
             <RadioGroup
+                android:id="@+id/type_rgp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:text="控制模式"
-                    />
+                    android:text="控制类型" />
+
+                <RadioButton
+                    android:id="@+id/type_by_rbn"
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="偏移量" />
 
                 <RadioButton
                     android:id="@+id/type_to_rbn"
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="偏移量"
-                    android:checked="true"
-                    />
-
-                <RadioButton
-                    android:id="@+id/type_at_rbn"
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="目标值"
-                    />
+                    android:text="目标值" />
             </RadioGroup>
 
 
             <RadioGroup
+                android:id="@+id/mode_rgp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:text="控制类型"
-                    />
+                    android:text="控制模式" />
 
                 <RadioButton
-                    android:id="@+id/type_stop_rbn"
-                    android:layout_width="1dp"
+                    android:id="@+id/mode_stop_rbn"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="停止"
-                    android:checked="true"
-                    />
+                    android:visibility="gone"
+                    android:text="停止" />
 
                 <RadioButton
-                    android:layout_width="1dp"
+                    android:id="@+id/mode_time_rbn"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="时间"
-                    />
-                <RadioButton
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="速度"
-                    />
+                    android:text="时间" />
 
                 <RadioButton
-                    android:layout_width="1dp"
+                    android:id="@+id/mode_speed_rbn"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="循环"
-                    />
+                    android:text="速度" />
+
+                <RadioButton
+                    android:id="@+id/mode_loop_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    android:text="循环" />
 
             </RadioGroup>
 
@@ -241,8 +228,7 @@
                 android:id="@+id/send_cmd_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="发送命令"
-                />
+                android:text="发送命令" />
 
         </LinearLayout>
 
@@ -251,8 +237,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="#00ff00"
-            />
+            android:background="#00ff00" />
 
 
         <LinearLayout
@@ -264,22 +249,21 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:text="距离"
                     android:gravity="right"
-                    />
+                    android:text="类型值" />
 
                 <EditText
-                    android:id="@+id/distance_npr"
+                    android:id="@+id/distance_ett"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    />
+                    android:layout_marginLeft="10dp"
+                    android:inputType="number" />
 
             </LinearLayout>
 
@@ -287,45 +271,42 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:text="参数"
                     android:gravity="right"
-                    />
+                    android:text="模式值" />
 
                 <EditText
-                    android:id="@+id/parameter_npr"
+                    android:id="@+id/parameter_ett"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    />
+                    android:layout_marginLeft="10dp"
+                    android:inputType="number" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:text="延迟"
                     android:gravity="right"
-                    />
+                    android:text="延迟" />
 
                 <EditText
                     android:id="@+id/delay_ett"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    />
+                    android:layout_marginLeft="10dp"
+                    android:inputType="number" />
 
             </LinearLayout>
 
