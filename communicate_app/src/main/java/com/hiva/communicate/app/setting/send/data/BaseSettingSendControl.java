@@ -1,5 +1,7 @@
 package com.hiva.communicate.app.setting.send.data;
 
+import android.app.Activity;
+
 import com.hiva.communicate.app.common.send.data.BaseSendControl;
 import com.hiva.communicate.app.setting.send.SettingSend;
 
@@ -44,3 +46,5 @@ public class BaseSettingSendControl extends BaseSendControl<SettingSend> {
 
 
 }
+
+

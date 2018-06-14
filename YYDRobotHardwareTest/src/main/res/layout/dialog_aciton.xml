@@ -28,6 +28,8 @@
             android:layout_marginStart="8dp"
             android:inputType="number"
             android:text="2000"
+            android:imeOptions="flagNoExtractUi|actionNext"
+            android:nextFocusForward="@id/delay_ett"
             />
 
     </LinearLayout>
@@ -54,6 +56,8 @@
             android:layout_marginStart="8dp"
             android:inputType="number"
             android:text="3000"
+            android:imeOptions="flagNoExtractUi|actionNext"
+            android:nextFocusForward="@id/left_finger_0"
             />
 
 

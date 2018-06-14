@@ -67,29 +67,43 @@ public class SendClient {
 
     /**
      * 发送控制命令（必须在子线程中使用，不可以在主线程中使用）
+     * @param context   主要用于声音唯一标记位，如果是Activity可以自动生成
+     * @param control   发送的类型
+     * @param response  回调函数 如果为空表示清空改回调函数
+     *
+     *
      * */
-    public SendResponse sendInNotMainThread(final BaseSendControl control, final SendResponseListener response) {
+    public SendResponse sendInNotMainThread(Context context, final BaseSendControl control, final SendResponseListener response) {
 
+        control.setTag(context);
         BaseSend send = control.getSend();
 
-        return mReceiver.send(send , response) ;
+        return mReceiver.send(context, send , response) ;
     }
 
 
     /**
      *
      * 发送控制命令（可以在主线程中使用）
+     * @param context   可以为空，Android 上下文（）
+     * @param control   不能为空，发送的类型
+     * @param response  可为空，回调函数
+     *
+     *      一般只是发送一个命令,如控制运动前进, context 为空;
+     *
+     *
      * */
-    public void send(final BaseSendControl control, final SendResponseListener response) {
+    public void send(final Context context, final BaseSendControl control, final SendResponseListener response) {
 
         new Thread(){
 
             @Override
             public void run() {
 
-                sendInNotMainThread(control , response) ;
+                sendInNotMainThread(context, control , response) ;
             }
         }.start();
     }
+
 
 }

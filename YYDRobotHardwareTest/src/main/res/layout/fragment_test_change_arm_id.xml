@@ -2,220 +2,228 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
-
-    <RadioGroup
-        android:id="@+id/src_rgp"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="60dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="源ID"
-            />
+            android:orientation="vertical">
 
-        <RadioButton
-            android:id="@+id/src_new_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="新设备" />
-        <RadioButton
-            android:id="@+id/src_left_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="左侧"
-            />
-        <RadioButton
-            android:id="@+id/src_right_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="右侧"
-            />
+            <RadioGroup
+                android:id="@+id/src_rgp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
 
-    </RadioGroup>
-    <RadioGroup
-        android:id="@+id/src_id_rgp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="源ID"
+                    />
 
-        <RadioButton
-            android:id="@+id/src_id_0_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="位置0" />
-        <RadioButton
-            android:id="@+id/src_id_1_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="位置1"
-            />
+                <RadioButton
+                    android:id="@+id/src_new_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="新设备" />
+                <RadioButton
+                    android:id="@+id/src_left_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="左侧"
+                    />
+                <RadioButton
+                    android:id="@+id/src_right_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="右侧"
+                    />
 
-        <RadioButton
-            android:id="@+id/src_id_2_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="位置2"
-            />
+            </RadioGroup>
+            <RadioGroup
+                android:id="@+id/src_id_rgp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
 
-        <RadioButton
-            android:id="@+id/src_id_3_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="位置3"
-            />
+                <RadioButton
+                    android:id="@+id/src_id_0_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="位置0" />
+                <RadioButton
+                    android:id="@+id/src_id_1_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="位置1"
+                    />
 
-        <RadioButton
-            android:id="@+id/src_id_4_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="位置4"
-            />
+                <RadioButton
+                    android:id="@+id/src_id_2_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="位置2"
+                    />
 
-        <RadioButton
-            android:id="@+id/src_id_5_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="位置5"
-            />
+                <RadioButton
+                    android:id="@+id/src_id_3_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="位置3"
+                    />
 
-    </RadioGroup>
+                <RadioButton
+                    android:id="@+id/src_id_4_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="位置4"
+                    />
 
+                <RadioButton
+                    android:id="@+id/src_id_5_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="位置5"
+                    />
 
-
-    <RadioGroup
-        android:id="@+id/dest_rgp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp"
-        >
-        <TextView
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:text="目标ID"
-            />
-
-        <RadioButton
-            android:id="@+id/dest_left_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="左侧" />
-        <RadioButton
-            android:id="@+id/dest_right_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="右侧"
-            />
-
-    </RadioGroup>
-    <RadioGroup
-        android:id="@+id/dest_id_rgp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-
-        <RadioButton
-            android:id="@+id/dest_id_0_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="位置0" />
-        <RadioButton
-            android:id="@+id/dest_id_1_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="位置1"
-            />
-
-        <RadioButton
-            android:id="@+id/dest_id_2_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="位置2"
-            />
-
-        <RadioButton
-            android:id="@+id/dest_id_3_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="位置3"
-            />
-
-        <RadioButton
-            android:id="@+id/dest_id_4_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="位置4"
-            />
-
-        <RadioButton
-            android:id="@+id/dest_id_5_rbn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="位置5"
-            />
-
-    </RadioGroup>
-
-    <Button
-        android:id="@+id/change_arm_id_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="更改ID"
-        />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-
-        <Button
-            android:id="@+id/positive_turn_btn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="目标ID正向转动"
-            />
-
-        <Button
-            android:id="@+id/negative_turn_btn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="目标ID反向转动"
-            />
-
-    </LinearLayout>
+            </RadioGroup>
 
 
 
+            <RadioGroup
+                android:id="@+id/dest_rgp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                >
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="目标ID"
+                    />
 
+                <RadioButton
+                    android:id="@+id/dest_left_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="左侧" />
+                <RadioButton
+                    android:id="@+id/dest_right_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="右侧"
+                    />
+
+            </RadioGroup>
+            <RadioGroup
+                android:id="@+id/dest_id_rgp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <RadioButton
+                    android:id="@+id/dest_id_0_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="位置0" />
+                <RadioButton
+                    android:id="@+id/dest_id_1_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="位置1"
+                    />
+
+                <RadioButton
+                    android:id="@+id/dest_id_2_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="位置2"
+                    />
+
+                <RadioButton
+                    android:id="@+id/dest_id_3_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="位置3"
+                    />
+
+                <RadioButton
+                    android:id="@+id/dest_id_4_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="位置4"
+                    />
+
+                <RadioButton
+                    android:id="@+id/dest_id_5_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="位置5"
+                    />
+
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/change_arm_id_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="更改ID"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <Button
+                    android:id="@+id/positive_turn_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="目标ID正向转动"
+                    />
+
+                <Button
+                    android:id="@+id/negative_turn_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="目标ID反向转动"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

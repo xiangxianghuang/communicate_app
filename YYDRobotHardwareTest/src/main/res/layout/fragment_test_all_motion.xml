@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <Button
+        android:id="@+id/execute_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="执行"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="舵机位置"
+                />
+            <com.yongyida.robot.hardware.test.view.HorizontalListView
+                android:id="@+id/position_hlv"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="运行方式"
+                />
+            <com.yongyida.robot.hardware.test.view.HorizontalListView
+                android:id="@+id/mode_hlv"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="距离"
+                />
+            <LinearLayout
+                android:id="@+id/distance_llt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="50dp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="单位"
+                    />
+                <com.yongyida.robot.hardware.test.view.HorizontalListView
+                    android:id="@+id/distance_unit_hlv"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="运动类型"
+                    />
+                <com.yongyida.robot.hardware.test.view.HorizontalListView
+                    android:id="@+id/distance_type_hlv"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="数据值"
+                    />
+
+                <EditText
+                    android:id="@+id/distance_value_ett"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="flagNoExtractUi|actionDone"
+                    android:inputType="number"
+                    android:text="0"
+                    />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="时间"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="50dp"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="单位"
+                    />
+                <com.yongyida.robot.hardware.test.view.HorizontalListView
+                    android:id="@+id/time_unit_hlv"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="数据值"
+                    />
+
+                <EditText
+                    android:id="@+id/time_value_ett"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="flagNoExtractUi|actionDone"
+                    android:inputType="number"
+                    android:text="0" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="速度"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="单位"
+                    />
+                <com.yongyida.robot.hardware.test.view.HorizontalListView
+                    android:id="@+id/speed_unit_hlv"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="数据值"
+                    />
+                <EditText
+                    android:id="@+id/speed_value_ett"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:inputType="number"
+                    android:imeOptions="flagNoExtractUi|actionDone"
+                    />
+
+
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/is_negative_sth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="是否反向转动"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="延迟执行时间（毫秒）"
+                />
+
+            <EditText
+                android:id="@+id/delay_ett"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:inputType="number"
+                android:imeOptions="flagNoExtractUi|actionDone"
+                />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

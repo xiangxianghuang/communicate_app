@@ -1,5 +1,7 @@
 package com.yongyida.robot.communicate.app.hardware.motion.send.data;
 
+import android.app.Activity;
+
 import com.hiva.communicate.app.common.send.data.BaseSendControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
 
@@ -41,7 +43,6 @@ import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
  * Create By HuangXiangXiang 2018/6/5
  */
 public abstract class BaseMotionSendControl extends BaseSendControl<MotionSend> {
-
 
 
 }

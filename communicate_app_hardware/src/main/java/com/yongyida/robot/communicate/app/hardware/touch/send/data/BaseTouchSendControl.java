@@ -1,5 +1,7 @@
 package com.yongyida.robot.communicate.app.hardware.touch.send.data;
 
+import android.app.Activity;
+
 import com.hiva.communicate.app.common.send.data.BaseSendControl;
 import com.yongyida.robot.communicate.app.hardware.touch.send.TouchSend;
 

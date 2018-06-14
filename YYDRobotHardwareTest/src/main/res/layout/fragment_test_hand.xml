@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/execute_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="执行"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <RadioGroup
+                android:id="@+id/direction_rgp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <RadioButton
+                    android:id="@+id/direction_left_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="左"
+                    />
+                <RadioButton
+                    android:id="@+id/direction_right_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="右"
+                    />
+                <RadioButton
+                    android:id="@+id/direction_same_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="两侧"
+                    />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="手势"
+                />
+            <com.yongyida.robot.hardware.test.view.HorizontalListView
+                android:id="@+id/action_hlv"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+
+
+
+            <LinearLayout
+                android:id="@+id/custom_llt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <Switch
+                        android:id="@+id/arm_sih"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="【手臂】 是否发送"
+                        />
+                    <com.yongyida.robot.hardware.test.view.HorizontalListView
+                        android:id="@+id/arm_action_hlv"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <Switch
+                        android:id="@+id/finger_sih"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="【手指】 是否发送"
+                        />
+                    <com.yongyida.robot.hardware.test.view.HorizontalListView
+                        android:id="@+id/finger_action_hlv"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

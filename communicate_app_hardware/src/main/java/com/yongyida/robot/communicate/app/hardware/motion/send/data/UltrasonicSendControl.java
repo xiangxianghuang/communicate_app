@@ -5,16 +5,17 @@ package com.yongyida.robot.communicate.app.hardware.motion.send.data;
  */
 public class UltrasonicSendControl extends BaseMotionSendControl {
 
+
     public enum Android{
 
-        DEFALUT,
+        DEFAULT,
         START,
         STOP
     }
 
     public enum Slamware {
 
-        DEFALUT,
+        DEFAULT,
         START,
         STOP
     }

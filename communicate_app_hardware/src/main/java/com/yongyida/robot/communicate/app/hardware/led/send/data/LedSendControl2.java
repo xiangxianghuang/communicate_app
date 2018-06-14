@@ -45,7 +45,6 @@ public class LedSendControl2 extends BaseLedSendControl {
 
     private byte speed = 6;
 
-
     /**
      * Create By HuangXiangXiang 2018/5/31
      * 方向位置

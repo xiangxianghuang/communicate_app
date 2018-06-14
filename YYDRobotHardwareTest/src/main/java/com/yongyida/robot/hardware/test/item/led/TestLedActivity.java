@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.hiva.communicate.app.common.response.BaseResponseControl;
 import com.hiva.communicate.app.common.send.SendResponseListener;
-import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.common.send.SendClient;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSendControl;
@@ -23,7 +22,7 @@ import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.data.ModelInfo;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
 import com.yongyida.robot.hardware.test.item.led.dialog.MoreColorDialog;
-import com.yongyida.robot.hardware.test.item.led.view.HorizontalListView;
+import com.yongyida.robot.hardware.test.view.HorizontalListView;
 
 /**
  * Created by HuangXiangXiang on 2018/3/2.
@@ -251,7 +250,7 @@ public class TestLedActivity extends TestBaseActivity implements View.OnClickLis
 
     public void  sendLedControl(){
 
-        SendClient.getInstance(this).send(ledControl,responseListener);
+        SendClient.getInstance(this).send(null, ledControl,responseListener);
     }
     private SendResponseListener responseListener = new SendResponseListener(){
 

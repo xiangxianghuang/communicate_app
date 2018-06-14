@@ -24,6 +24,10 @@ public class LedSendControl extends BaseLedSendControl {
     /**效果*/
     private Effect effect ;
 
+    /**
+     * 效果参数
+     * 如果是呼吸效果 参数表示多少毫秒闪烁一次
+     * */
     private int effectValue ;
 
 
@@ -109,7 +113,6 @@ public class LedSendControl extends BaseLedSendControl {
         CHEST(0x0D),            // 胸前
 
         PAUNCH(0x0E);           // 肚子
-
 
         public int value;
         Position(int value){
@@ -211,7 +214,7 @@ public class LedSendControl extends BaseLedSendControl {
 
     public enum Effect{
 
-//        LED_NORMAL ,            //常亮
+        LED_NORMAL ,            //常亮
         LED_ON ,            //常亮
         LED_OFF ,           //常灭
         BREATH ,            //呼吸灯

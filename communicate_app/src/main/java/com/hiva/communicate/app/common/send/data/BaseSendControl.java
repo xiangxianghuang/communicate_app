@@ -33,11 +33,15 @@ package com.hiva.communicate.app.common.send.data;
                     不见满街漂亮妹，哪个归得程序员？ 
 */
 
+import android.content.Context;
+
+import com.google.gson.Gson;
 import com.hiva.communicate.app.common.send.BaseSend;
 import com.hiva.communicate.app.utils.LogHelper;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * Create By HuangXiangXiang 2018/6/5
@@ -46,9 +50,15 @@ public abstract class BaseSendControl<T extends BaseSend> {
 
     private static final String TAG = BaseSendControl.class.getSimpleName() ;
 
-    public T baseSend ;
+    protected final static Gson GSON = new Gson() ;
 
-    public BaseSend getSend(){
+    private String tag ;
+
+    protected T baseSend ;
+
+    private boolean isControl = true ; //是否控制
+
+    public T getSend(){
 
         if(baseSend == null){
 
@@ -76,5 +86,55 @@ public abstract class BaseSendControl<T extends BaseSend> {
     }
 
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(Context context) {
+
+        if(context != null && tag == null){
+
+            tag = context.getPackageName() + "_" + context.toString() ;
+        }
+
+    }
+
+
+    public boolean isControl() {
+        return isControl;
+    }
+
+    public void setControl(boolean control) {
+        isControl = control;
+    }
+
+
+    public String toJson(){
+
+        T t = this.baseSend ;
+        this.baseSend = null ;
+
+        String json = GSON.toJson(this) ;
+
+        this.baseSend = t ;
+
+        return json ;
+    }
+
+
+    public static ArrayList<? extends BaseSendControl> getNeedSendControls(ArrayList<? extends BaseSendControl> steeringControls){
+
+        ArrayList controls = new ArrayList<>() ;
+
+        int size = steeringControls.size() ;
+        for (int i = 0 ; i < size ; i ++){
+
+            BaseSendControl control = steeringControls.get(i) ;
+            if(control.isControl()){
+                controls.add(control) ;
+            }
+        }
+        return controls ;
+    }
 
 }

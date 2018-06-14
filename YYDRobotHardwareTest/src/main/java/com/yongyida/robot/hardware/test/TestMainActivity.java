@@ -75,7 +75,7 @@ public class TestMainActivity extends Activity implements AdapterView.OnItemClic
         if(isOpen){
 
             mFactoryConfig.setFactory(true);
-            SendClient.getInstance(this).send(mFactoryConfig, null);
+            SendClient.getInstance(this).send(null, mFactoryConfig, null);
         }
 
         mEnableSth.setChecked(isOpen);
@@ -87,7 +87,7 @@ public class TestMainActivity extends Activity implements AdapterView.OnItemClic
                 SettingData.saveIsOpen(TestMainActivity.this,isOpen);
 
                 mFactoryConfig.setFactory(isChecked);
-                SendClient.getInstance(TestMainActivity.this).send(mFactoryConfig, null);
+                SendClient.getInstance(TestMainActivity.this).send(null, mFactoryConfig, null);
             }
         });
 
@@ -129,7 +129,7 @@ public class TestMainActivity extends Activity implements AdapterView.OnItemClic
         if(isOpen){
 
             mFactoryConfig.setFactory(false);
-            SendClient.getInstance(this).send(mFactoryConfig, null);
+            SendClient.getInstance(this).send(null, mFactoryConfig, null);
         }
 
     }

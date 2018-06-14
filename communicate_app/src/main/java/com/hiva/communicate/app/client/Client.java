@@ -50,17 +50,17 @@ public class Client {
         return receivers.getReceiver(packageName) ;
     }
 
-    public SendResponse send(Receiver receiver, BaseSend baseSend, SendResponseListener response){
-
-        return receiver.send(baseSend,response) ;
-    }
-
-    public SendResponse send(String packageName,String action, BaseSend baseSend, SendResponseListener response){
-
-        Receiver receiver = getReceiver(packageName, action) ;
-
-        return receiver.send(baseSend,response) ;
-    }
+//    public SendResponse send(Receiver receiver, BaseSend baseSend, SendResponseListener response){
+//
+//        return receiver.send(baseSend,response) ;
+//    }
+//
+//    public SendResponse send(String packageName,String action, BaseSend baseSend, SendResponseListener response){
+//
+//        Receiver receiver = getReceiver(packageName, action) ;
+//
+//        return receiver.send(baseSend,response) ;
+//    }
 
 
 

@@ -1,9 +1,6 @@
 package com.yongyida.robot.model.agreement;
 
-import com.yongyida.robot.communicate.app.hardware.hand.send.data.ArmSendControl;
-import com.yongyida.robot.communicate.app.hardware.hand.send.data.FingerSendControl;
-import com.yongyida.robot.communicate.app.hardware.hand.send.data.constant.Direction;
-import com.yongyida.robot.communicate.app.hardware.hand.send.data.constant.PreHandAction;
+
 
 import java.util.ArrayList;
 
@@ -210,35 +207,35 @@ public class Y138Steering {
 //
 //        }
 
-        /**
-         * 控制手臂多个舵机
-         * */
-        public void controlArms(byte direction, ArrayList<ArmSendControl.Joint> joints){
-
-            final int size = joints.size() ;
-            changeContent = setDataLength(size*8 + 5) ;
-            content = changeContent ;
-
-            content[2] = 0x03 ;
-            content[3] = direction ;
-            content[4] = (byte) size;
-
-            for (int i = 0 ; i < size ; i ++){
-
-                ArmSendControl.Joint joint = joints.get(i) ;
-
-                content[8*i+5] = (byte) joint.getId();
-                content[8*i+6] = (byte) ((joint.mode.value & 0x0F) | ((joint.negativeValue() & 0x01) << 4 ) | ((joint.type.value & 0x01) << 5 )) ;
-                content[8*i+7] = (byte) (joint.typeValue & 0xFF) ;
-                content[8*i+8] =  (byte) ((joint.typeValue >> 8) & 0xFF);
-                content[8*i+9] = (byte) (joint.modeValue & 0xFF);
-                content[8*i+10] = (byte) ((joint.modeValue >> 8) & 0xFF) ;
-                content[8*i+11] = (byte) (joint.delay & 0xFF) ;
-                content[8*i+12] = (byte) ((joint.delay >> 8) & 0xFF) ;
-
-            }
-
-        }
+//        /**
+//         * 控制手臂多个舵机
+//         * */
+//        public void controlArms(byte direction, ArrayList<ArmSendControl.Joint> joints){
+//
+//            final int size = joints.size() ;
+//            changeContent = setDataLength(size*8 + 5) ;
+//            content = changeContent ;
+//
+//            content[2] = 0x03 ;
+//            content[3] = direction ;
+//            content[4] = (byte) size;
+//
+//            for (int i = 0 ; i < size ; i ++){
+//
+//                ArmSendControl.Joint joint = joints.get(i) ;
+//
+//                content[8*i+5] = (byte) joint.getId();
+//                content[8*i+6] = (byte) ((joint.mode.value & 0x0F) | ((joint.negativeValue() & 0x01) << 4 ) | ((joint.type.value & 0x01) << 5 )) ;
+//                content[8*i+7] = (byte) (joint.typeValue & 0xFF) ;
+//                content[8*i+8] =  (byte) ((joint.typeValue >> 8) & 0xFF);
+//                content[8*i+9] = (byte) (joint.modeValue & 0xFF);
+//                content[8*i+10] = (byte) ((joint.modeValue >> 8) & 0xFF) ;
+//                content[8*i+11] = (byte) (joint.delay & 0xFF) ;
+//                content[8*i+12] = (byte) ((joint.delay >> 8) & 0xFF) ;
+//
+//            }
+//
+//        }
 
         /**
          * 硬件复位
@@ -537,50 +534,50 @@ public class Y138Steering {
             return FUNCTION_SEND_STEER;
         }
 
-        /**
-         * 手指控制
-         *
-         * @param direction 方向  3[4-5]  0 左手  1右手
-         *
-         * */
-        public void controlFingers(byte direction, ArrayList<FingerSendControl.Finger> fingers){
-
-            final int size = fingers.size() ;
-            changeContent = setDataLength(size*8 + 5) ;
-            content = changeContent ;
-
-            content[2] = 0x00 ;
-            content[3] = direction ;
-            content[4] = (byte) size;
-
-            for (int i = 0 ; i < size ; i++){
-
-                FingerSendControl.Finger finger = fingers.get(i) ;
-
-                content[8*i+5] = (byte) finger.id ;
-                content[8*i+6] = (byte) ((finger.mode.value & 0x0F) | ((finger.openValue() & 0x01) << 4 ) | ((finger.type.value & 0x01) << 5 )) ;
-                content[8*i+7] = (byte) (finger.typeValue & 0xFF) ;
-                content[8*i+8] =  (byte) ((finger.typeValue >> 8) & 0xFF);
-                content[8*i+9] = (byte) (finger.modeValue & 0xFF);
-                content[8*i+10] = (byte) ((finger.modeValue >> 8) & 0xFF) ;
-                content[8*i+11] = (byte) (finger.delay & 0xFF) ;
-                content[8*i+12] = (byte) ((finger.delay >> 8) & 0xFF) ;
-            }
-        }
-
-
-        /**
-         * 手掌控制(属于手指的组合)
-         * */
-        public void controlPalm(){
-
-            content[2] = 0x01 ;
-        }
-
-
-
-
-
+//        /**
+//         * 手指控制
+//         *
+//         * @param direction 方向  3[4-5]  0 左手  1右手
+//         *
+//         * */
+//        public void controlFingers(byte direction, ArrayList<FingerSendControl.Finger> fingers){
+//
+//            final int size = fingers.size() ;
+//            changeContent = setDataLength(size*8 + 5) ;
+//            content = changeContent ;
+//
+//            content[2] = 0x00 ;
+//            content[3] = direction ;
+//            content[4] = (byte) size;
+//
+//            for (int i = 0 ; i < size ; i++){
+//
+//                FingerSendControl.Finger finger = fingers.get(i) ;
+//
+//                content[8*i+5] = (byte) finger.id ;
+//                content[8*i+6] = (byte) ((finger.mode.value & 0x0F) | ((finger.openValue() & 0x01) << 4 ) | ((finger.type.value & 0x01) << 5 )) ;
+//                content[8*i+7] = (byte) (finger.typeValue & 0xFF) ;
+//                content[8*i+8] =  (byte) ((finger.typeValue >> 8) & 0xFF);
+//                content[8*i+9] = (byte) (finger.modeValue & 0xFF);
+//                content[8*i+10] = (byte) ((finger.modeValue >> 8) & 0xFF) ;
+//                content[8*i+11] = (byte) (finger.delay & 0xFF) ;
+//                content[8*i+12] = (byte) ((finger.delay >> 8) & 0xFF) ;
+//            }
+//        }
+//
+//
+//        /**
+//         * 手掌控制(属于手指的组合)
+//         * */
+//        public void controlPalm(){
+//
+//            content[2] = 0x01 ;
+//        }
+//
+//
+//
+//
+//
     }
 
 
@@ -600,11 +597,11 @@ public class Y138Steering {
         }
 
 
-        public void setData(PreHandAction preHandAction, Direction direction ){
-
-            content[2] = preHandAction.value;
-            content[3] = direction.value;
-        }
+//        public void setData(PreHandAction preHandAction, Direction direction ){
+//
+//            content[2] = preHandAction.value;
+//            content[3] = direction.value;
+//        }
 
     }
 

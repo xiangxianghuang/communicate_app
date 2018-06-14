@@ -5,26 +5,19 @@ import android.content.Context;
 import com.hiva.communicate.app.common.send.BaseSend;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.BaseHandler;
-import com.yongyida.robot.communicate.app.hardware.battery.send.BatterySend;
-import com.yongyida.robot.communicate.app.hardware.hand.HandHandler;
-import com.yongyida.robot.communicate.app.hardware.hand.send.HandSend;
 import com.yongyida.robot.communicate.app.hardware.led.LedHandler;
-import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
 import com.yongyida.robot.communicate.app.hardware.motion.MotionHandler;
-import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
-import com.yongyida.robot.communicate.app.hardware.pir.send.PirSend;
 import com.yongyida.robot.communicate.app.hardware.touch.TouchHandler;
-import com.yongyida.robot.communicate.app.hardware.touch.send.TouchSend;
 import com.yongyida.robot.model.y128.battery.Y128BatteryHandler;
 import com.yongyida.robot.model.y128.led.Y128LedHandler;
 import com.yongyida.robot.model.y128.motion.Y128MotionHandler;
 import com.yongyida.robot.model.y128.touch.Y128TouchHandler;
-import com.yongyida.robot.model.y138.hand.Y138HandHandler;
 import com.yongyida.robot.model.y138.led.Y138LedHandler;
 import com.yongyida.robot.model.y138.montrol.Y138MotionHandler;
 import com.yongyida.robot.model.y165.battery.Y165BatteryHandler;
 import com.yongyida.robot.model.y165.led.Y165LedHandler;
 import com.yongyida.robot.model.y165.pir.Y165PirHandler;
+import com.yongyida.robot.model.y20.battery.Y20BatteryHandler;
 
 import java.util.HashMap;
 
@@ -172,8 +165,10 @@ public final class HardwareConfig {
         MotionHandler motionControl = new Y138MotionHandler(mContext) ;
         addControl( motionControl) ;
 
-        HandHandler handHandler = new Y138HandHandler(mContext) ;
-        addControl( handHandler) ;
+//        HandHandler handHandler = new Y138HandHandler(mContext) ;
+//        addControl( handHandler) ;
+
+        addControl(new Y20BatteryHandler(mContext)) ;
 
     }
 

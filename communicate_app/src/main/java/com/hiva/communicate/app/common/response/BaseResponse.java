@@ -10,10 +10,17 @@ public final class BaseResponse{
 
     private static final String TAG = BaseSend.class.getSimpleName() ;
 
-    public static final int RESULT_NONE_DATA                    = -1 ;  //没有数据
-    public static final int RESULT_SUCCESS                      = 0x00 ; //执行成功
-    public static final int RESULT_CAN_NOT_HANDLE               = 0x01 ; //不能处理（没有对应处理方式）
-    public static final int RESULT_EXCEPTION                    = 0x02 ; //处理过程中发生异常
+    public static final int RESULT_SUCCESS                          = 0x00 ; // 执行成功
+
+    public static final int RESULT_NO_SERVICE                       = -1 ;   // 没有找到服务
+    public static final int RESULT_NONE_DATA                        = -1 ;   // 没有数据
+    public static final int RESULT_CAN_NOT_HANDLE                   = 0x01 ; // 不能处理（没有对应处理方式）
+    public static final int RESULT_EXCEPTION                        = 0x02 ; // 处理过程中发生异常
+    public static final int RESULT_DATA_EROOR                       = 0x03 ; // 数据格式输入有误
+    public static final int RESULT_MEthod_Override                  = 0x03 ; // 方法没有实现
+    public static final int RESULT_PARAMETER_UNREALIZED             = 0x03 ; // 输出参数没有实现
+
+
 
     private final static Gson GSON = new Gson() ;
 

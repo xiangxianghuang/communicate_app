@@ -1,5 +1,7 @@
 package com.yongyida.robot.communicate.app.hardware.pir.send.data;
 
+import android.app.Activity;
+
 import com.hiva.communicate.app.common.send.data.BaseSendControl;
 import com.yongyida.robot.communicate.app.hardware.pir.send.PirSend;
 
@@ -41,6 +43,5 @@ import com.yongyida.robot.communicate.app.hardware.pir.send.PirSend;
  * Create By HuangXiangXiang 2018/6/5
  */
 public abstract class BasePirSendControl extends BaseSendControl<PirSend> {
-
 
 }

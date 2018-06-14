@@ -212,7 +212,7 @@ public class TestTouchActivity extends TestBaseActivity {
                 };
 
                 QueryTouchInfo queryTouchInfo = new QueryTouchInfo() ;
-                SendResponse sendResponse = SendClient.getInstance(TestTouchActivity.this).sendInNotMainThread(queryTouchInfo, responseListener) ;
+                SendResponse sendResponse = SendClient.getInstance(TestTouchActivity.this).sendInNotMainThread(null,queryTouchInfo, responseListener) ;
                 if (sendResponse == null) {
 
                     // 发送不成功

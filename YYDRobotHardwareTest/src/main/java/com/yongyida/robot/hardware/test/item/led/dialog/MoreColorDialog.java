@@ -152,7 +152,7 @@ public class MoreColorDialog extends Dialog implements SeekBar.OnSeekBarChangeLi
             if(mLedControl != null){
 
                 mLedControl.getColor().setRed(progress);
-                SendClient.getInstance(getContext()).send(mLedControl, null);
+                SendClient.getInstance(getContext()).send(null, mLedControl, null);
             }
 
         }else if(seekBar == mGreenSbr){
@@ -163,7 +163,7 @@ public class MoreColorDialog extends Dialog implements SeekBar.OnSeekBarChangeLi
             if(mLedControl != null){
 
                 mLedControl.getColor().setGreen(progress);
-                SendClient.getInstance(getContext()).send(mLedControl, null);
+                SendClient.getInstance(getContext()).send(null, mLedControl, null);
             }
 
         }else if(seekBar == mBlueSbr){
@@ -174,7 +174,7 @@ public class MoreColorDialog extends Dialog implements SeekBar.OnSeekBarChangeLi
             if(mLedControl != null){
 
                 mLedControl.getColor().setBlue(progress);
-                SendClient.getInstance(getContext()).send(mLedControl, null);
+                SendClient.getInstance(getContext()).send(null, mLedControl, null);
             }
 
         }else if(seekBar == mBrightSbr){
@@ -183,7 +183,7 @@ public class MoreColorDialog extends Dialog implements SeekBar.OnSeekBarChangeLi
             if(mLedControl != null){
 
                 mLedControl.getBrightness().setValue(progress);
-                SendClient.getInstance(getContext()).send(mLedControl, null);
+                SendClient.getInstance(getContext()).send(null, mLedControl, null);
             }
 
         }

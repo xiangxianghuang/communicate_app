@@ -2,20 +2,11 @@ package com.yongyida.robot.model.y138.montrol;
 
 import android.content.Context;
 
-import com.hiva.communicate.app.common.send.SendResponseListener;
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.common.send.data.BaseSendControl;
 import com.hiva.communicate.app.server.IResponseListener;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.motion.MotionHandler;
-import com.yongyida.robot.communicate.app.hardware.hand.send.data.ArmSendControl;
-import com.yongyida.robot.communicate.app.hardware.hand.send.data.ChangeArmId;
-import com.yongyida.robot.communicate.app.hardware.hand.send.data.FingerSendControl;
-import com.yongyida.robot.communicate.app.hardware.hand.send.data.HandAction;
-import com.yongyida.robot.communicate.app.hardware.hand.response.data.HandAngle;
-import com.yongyida.robot.communicate.app.hardware.motion.send.data.MotionSendControl;
-import com.yongyida.robot.communicate.app.hardware.hand.send.data.QueryHandAngle;
-import com.yongyida.robot.communicate.app.hardware.hand.send.data.TeacherSendControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
 import com.yongyida.robot.model.agreement.Y138Steering;
 import com.yongyida.robot.model.y128.motion.SlamMotion;
@@ -61,204 +52,205 @@ public class Y138MotionHandler extends MotionHandler {
         BaseSendControl baseSendControl = send.getBaseControl() ;
         LogHelper.i(TAG , LogHelper.__TAG__() );
 
-        if(baseSendControl instanceof MotionSendControl){
-
-            MotionSendControl motionControl = (MotionSendControl) baseSendControl;
-
-            MotionSendControl.Action action = motionControl.getAction() ;
-            if(action != null){
-
-                switch (action) {
-
-                    case FOOT_FORWARD:
-
-                        MotionSendControl.Time time = motionControl.getTime();
-                        int value;
-                        if (time != null) {
-
-                            value = time.getValue();
-                        } else {
-                            value = 2000;
-                        }
-
-                        mSlamMotion.forward(value);
-
-                        break;
-                    case FOOT_BACK:
-
-                        time = motionControl.getTime();
-                        if (time != null) {
-
-                            value = time.getValue();
-                        } else {
-                            value = 2000;
-                        }
-
-                        mSlamMotion.back(value);
-
-                        break;
-                    case FOOT_LEFT:
-
-                        time = motionControl.getTime();
-                        if (time != null) {
-
-                            value = time.getValue();
-                        } else {
-                            value = 2000;
-                        }
-
-                        mSlamMotion.left(value);
-
-                        break;
-                    case FOOT_RIGHT:
-
-                        time = motionControl.getTime();
-                        if (time != null) {
-
-                            value = time.getValue();
-                        } else {
-                            value = 2000;
-                        }
-
-                        mSlamMotion.right(value);
-
-
-                        break;
-                    case FOOT_STOP:
-
-
-                        mSlamMotion.stop();
-
-
-                        break;
-
-                    case SOUND_LOCATION_LEFT:
-
-                        MotionSendControl.Distance distance = motionControl.getDistance();
-
-                        int d;
-                        if (distance != null) {
-                            d = distance.getValue();
-                        } else {
-                            d = 0;
-                        }
-
-                        break;
-
-                    case SOUND_LOCATION_RIGHT:
-
-                        distance = motionControl.getDistance();
-                        if (distance != null) {
-                            d = distance.getValue();
-                        } else {
-                            d = 0;
-                        }
-
-                        break;
-
-                    case SOUND_LOCATION://角度  从0 - 360(从右到左)
-
-                        distance = motionControl.getDistance();
-                        if (distance != null) {
-                            d = distance.getValue();
-                        } else {
-                            d = 90;
-                        }
-                        mSlamMotion.turnSoundAngle(d);
-                        break;
-
-
-                    case STOP:
-
-                        mSlamMotion.stop();
-                        break;
-
-
-
-                    case HEAD_LEFT:
-
-                        stopHeadLeftRightSharkThread() ;
-
-                        mSteerHeadLeftRight.turnLeft(-100);
-                        byte[] data = Y138Steering.getCmd(mSteerHeadLeftRight) ;
-                        mUART.writeData(data) ;
-
-                        break;
-
-                    case HEAD_RIGHT:
-
-                        stopHeadLeftRightSharkThread() ;
-
-                        mSteerHeadLeftRight.turnRight(100);
-                        data = Y138Steering.getCmd(mSteerHeadLeftRight) ;
-                        mUART.writeData(data) ;
-
-                        break;
-
-                    case HEAD_LEFT_RIGHT_RESET:
-
-                        mSteerHeadLeftRight.turnReset();
-                        data = Y138Steering.getCmd(mSteerHeadLeftRight) ;
-                        mUART.writeData(data) ;
-
-                        break;
-                    case HEAD_LEFT_RIGHT_SHAKE:
-
-//                        startHeadLeftRightSharkThread() ;
-
-                        mSteerHeadLeftRight.turnLoop();
-                        data = Y138Steering.getCmd(mSteerHeadLeftRight) ;
-                        mUART.writeData(data) ;
-
-
-
-                        break;
-
-                    case HEAD_UP:
-
-                        stopHeadUpDownShark() ;
-
-                        mSteerHeadUpDown.turnUp(-100);
-                        data = Y138Steering.getCmd(mSteerHeadUpDown) ;
-                        mUART.writeData(data) ;
-
-                        break;
-
-                    case HEAD_DOWN:
-
-                        stopHeadUpDownShark();
-
-                        mSteerHeadUpDown.turnDown(100);
-                        data = Y138Steering.getCmd(mSteerHeadUpDown) ;
-                        mUART.writeData(data) ;
-
-                        break;
-
-                    case HEAD_UP_DOWN_RESET:
-
-                        mSteerHeadUpDown.turnReset();
-                        data = Y138Steering.getCmd(mSteerHeadUpDown) ;
-                        mUART.writeData(data) ;
-
-                        break;
-
-                    case HEAD_UP_DOWN_SHAKE:
-
-//                        startHeadUpDownShark() ;
-
-                        mSteerHeadUpDown.turnLoop();
-                        data = Y138Steering.getCmd(mSteerHeadUpDown) ;
-                        mUART.writeData(data) ;
-
-
-                        break;
-
-                }
-            }
-
-            return null ;
-        }
-
+//        if(baseSendControl instanceof MotionSendControl){
+//
+//            MotionSendControl motionControl = (MotionSendControl) baseSendControl;
+//
+//            MotionSendControl.Action action = motionControl.getAction() ;
+//            if(action != null){
+//
+//                switch (action) {
+//
+//                    case FOOT_FORWARD:
+//
+//                        MotionSendControl.Time time = motionControl.getTime();
+//                        int value;
+//                        if (time != null) {
+//
+//                            value = time.getValue();
+//                        } else {
+//                            value = 2000;
+//                        }
+//
+//                        mSlamMotion.forward(value);
+//
+//                        break;
+//                    case FOOT_BACK:
+//
+//                        time = motionControl.getTime();
+//                        if (time != null) {
+//
+//                            value = time.getValue();
+//                        } else {
+//                            value = 2000;
+//                        }
+//
+//                        mSlamMotion.back(value);
+//
+//                        break;
+//                    case FOOT_LEFT:
+//
+//                        time = motionControl.getTime();
+//                        if (time != null) {
+//
+//                            value = time.getValue();
+//                        } else {
+//                            value = 2000;
+//                        }
+//
+//                        mSlamMotion.left(value);
+//
+//                        break;
+//                    case FOOT_RIGHT:
+//
+//                        time = motionControl.getTime();
+//                        if (time != null) {
+//
+//                            value = time.getValue();
+//                        } else {
+//                            value = 2000;
+//                        }
+//
+//                        mSlamMotion.right(value);
+//
+//
+//                        break;
+//                    case FOOT_STOP:
+//
+//
+//                        mSlamMotion.stop();
+//
+//
+//                        break;
+//
+////                    case SOUND_LOCATION_LEFT:
+////
+////                        MotionSendControl.Distance distance = motionControl.getDistance();
+////
+////                        int d;
+////                        if (distance != null) {
+////                            d = distance.getValue();
+////                        } else {
+////                            d = 0;
+////                        }
+////
+////                        break;
+////
+////                    case SOUND_LOCATION_RIGHT:
+////
+////                        distance = motionControl.getDistance();
+////                        if (distance != null) {
+////                            d = distance.getValue();
+////                        } else {
+////                            d = 0;
+////                        }
+////
+////                        break;
+//
+//                    case SOUND_LOCATION://角度  从0 - 360(从右到左)
+//
+//                        MotionSendControl.Distance distance = motionControl.getDistance();
+//                        int d;
+//                        if (distance != null) {
+//                            d = distance.getValue();
+//                        } else {
+//                            d = 90;
+//                        }
+//                        mSlamMotion.turnSoundAngle(d);
+//                        break;
+//
+//
+//                    case STOP:
+//
+//                        mSlamMotion.stop();
+//                        break;
+//
+//
+//
+//                    case HEAD_LEFT:
+//
+//                        stopHeadLeftRightSharkThread() ;
+//
+//                        mSteerHeadLeftRight.turnLeft(-100);
+//                        byte[] data = Y138Steering.getCmd(mSteerHeadLeftRight) ;
+//                        mUART.writeData(data) ;
+//
+//                        break;
+//
+//                    case HEAD_RIGHT:
+//
+//                        stopHeadLeftRightSharkThread() ;
+//
+//                        mSteerHeadLeftRight.turnRight(100);
+//                        data = Y138Steering.getCmd(mSteerHeadLeftRight) ;
+//                        mUART.writeData(data) ;
+//
+//                        break;
+//
+//                    case HEAD_LEFT_RIGHT_RESET:
+//
+//                        mSteerHeadLeftRight.turnReset();
+//                        data = Y138Steering.getCmd(mSteerHeadLeftRight) ;
+//                        mUART.writeData(data) ;
+//
+//                        break;
+//                    case HEAD_LEFT_RIGHT_LOOP:
+//
+////                        startHeadLeftRightSharkThread() ;
+//
+//                        mSteerHeadLeftRight.turnLoop();
+//                        data = Y138Steering.getCmd(mSteerHeadLeftRight) ;
+//                        mUART.writeData(data) ;
+//
+//
+//
+//                        break;
+//
+//                    case HEAD_UP:
+//
+//                        stopHeadUpDownShark() ;
+//
+//                        mSteerHeadUpDown.turnUp(-100);
+//                        data = Y138Steering.getCmd(mSteerHeadUpDown) ;
+//                        mUART.writeData(data) ;
+//
+//                        break;
+//
+//                    case HEAD_DOWN:
+//
+//                        stopHeadUpDownShark();
+//
+//                        mSteerHeadUpDown.turnDown(100);
+//                        data = Y138Steering.getCmd(mSteerHeadUpDown) ;
+//                        mUART.writeData(data) ;
+//
+//                        break;
+//
+//                    case HEAD_UP_DOWN_RESET:
+//
+//                        mSteerHeadUpDown.turnReset();
+//                        data = Y138Steering.getCmd(mSteerHeadUpDown) ;
+//                        mUART.writeData(data) ;
+//
+//                        break;
+//
+//                    case HEAD_UP_DOWN_LOOP:
+//
+////                        startHeadUpDownShark() ;
+//
+//                        mSteerHeadUpDown.turnLoop();
+//                        data = Y138Steering.getCmd(mSteerHeadUpDown) ;
+//                        mUART.writeData(data) ;
+//
+//
+//                        break;
+//
+//                }
+//            }
+//
+//            return null ;
+//        }
+//
 
 
         return null;

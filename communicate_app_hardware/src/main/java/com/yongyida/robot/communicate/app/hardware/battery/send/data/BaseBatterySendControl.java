@@ -34,6 +34,8 @@ package com.yongyida.robot.communicate.app.hardware.battery.send.data;
 */
 
 
+import android.app.Activity;
+
 import com.hiva.communicate.app.common.send.data.BaseSendControl;
 import com.yongyida.robot.communicate.app.hardware.battery.send.BatterySend;
 
@@ -41,6 +43,10 @@ import com.yongyida.robot.communicate.app.hardware.battery.send.BatterySend;
  * Create By HuangXiangXiang 2018/6/5
  */
 public class BaseBatterySendControl extends BaseSendControl<BatterySend> {
+
+
+
+
 
 
 }

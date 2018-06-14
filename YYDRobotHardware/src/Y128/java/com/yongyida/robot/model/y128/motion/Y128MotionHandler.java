@@ -4,17 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.SparseArray;
 
-import com.hiva.communicate.app.common.send.SendResponseListener;
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.common.send.data.BaseSendControl;
 import com.hiva.communicate.app.server.IResponseListener;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.motion.MotionHandler;
-import com.yongyida.robot.communicate.app.hardware.motion.send.data.MotionSendControl;
 import com.yongyida.robot.communicate.app.hardware.motion.response.data.MoveFault;
-import com.yongyida.robot.communicate.app.hardware.motion.send.data.QueryMoveFault;
-import com.yongyida.robot.communicate.app.hardware.motion.send.data.UltrasonicSendControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.QueryMoveFaultControl;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.UltrasonicSendControl;
 import com.yongyida.robot.model.agreement.Y128Receive;
 import com.yongyida.robot.model.agreement.Y128Steering;
 
@@ -73,7 +71,7 @@ public class Y128MotionHandler extends MotionHandler {
         BaseSendControl baseSendControl = send.getBaseControl() ;
         LogHelper.i(TAG , LogHelper.__TAG__() );
 
-        if(baseSendControl instanceof  QueryMoveFault){
+        if(baseSendControl instanceof QueryMoveFaultControl){
 
             return moveFault.getResponse() ;
         }
@@ -100,325 +98,326 @@ public class Y128MotionHandler extends MotionHandler {
         }
 
 
-        if(baseSendControl instanceof MotionSendControl){
-            MotionSendControl motionControl = (MotionSendControl) baseSendControl;
-
-            MotionSendControl.Action action = motionControl.getAction() ;
-            if(action != null){
-
-                switch (action){
-
-                    case HEAD_LEFT:
-
-                        MotionSendControl.Distance distance = motionControl.getDistance() ;
-                        int value  ;
-                        if(distance != null){
-                            value = distance.getValue() ;
-                        }else {
-
-                            value = 200 ;
-                        }
-                        mSerialSendHeadLeftRight.headLeft(value) ;
-
-                        break;
-                    case HEAD_RIGHT:
-
-                        distance = motionControl.getDistance() ;
-                        if(distance != null){
-
-                            value = distance.getValue() ;
-                        }else {
-                            value = 200 ;
-                        }
-                        mSerialSendHeadLeftRight.headRight(value) ;
-
-                        break;
-                    case HEAD_LEFT_RIGHT_RESET:
-
-                        mSerialSendHeadLeftRight.headLeftRightRest() ;
-                        break;
-
-                    case HEAD_LEFT_RIGHT_SHAKE:
-
-                        mSerialSendHeadLeftRight.headLeftRightShark() ;
-                        break;
-
-                    case HEAD_LEFT_RIGHT_STOP:
-
-                        mSerialSendHeadLeftRight.headLeftRightStop() ;
-                        break;
-                    case HEAD_UP:
-
-                        MotionSendControl.Time time = motionControl.getTime() ;
-                        if(time != null){
-
-                            value = time.getValue() ;
-                        }else{
-                            value = 100 ;
-                        }
-                        mSerialSendHeadUpDown.headUp(value) ;
-
-                        break;
-                    case HEAD_DOWN:
-
-                        time = motionControl.getTime() ;
-                        if(time != null){
-
-                            value = time.getValue() ;
-                        }else{
-                            value = 100 ;
-                        }
-                        mSerialSendHeadUpDown.headDown(value) ;
-
-                        break;
-                    case HEAD_UP_DOWN_RESET:
-
-                        mSerialSendHeadUpDown.headUpDownRest() ;
-                        break;
-
-                    case HEAD_UP_DOWN_SHAKE:
-
-                        mSerialSendHeadUpDown.headUpDownShark() ;
-                        break;
-
-                    case HEAD_UP_DOWN_STOP:
-
-                        mSerialSendHeadUpDown.headUpDownStop() ;
-                        break;
-                    case FOOT_FORWARD:
-
-                        time = motionControl.getTime() ;
-                        if(time != null){
-
-                            value = time.getValue() ;
-                        }else{
-                            value = 2000 ;
-                        }
-
-                        MotionSendControl.Type type = motionControl.getType();
-                        if(MotionSendControl.Type.SLAM == type) {
-                            mSlamMotion.forward(value);
-
-                        }else if(MotionSendControl.Type.SERIAL == type){
-                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
-                            if(speed != null){
-
-                                mSerialSendMove.setSpeed(speed.getValue());
-                            }
-                            mSerialSendMove.forward(value) ;
-
-
-                        }else{
-                            mSlamMotion.forward(value);
-
-                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
-                            if(speed != null){
-
-                                mSerialSendMove.setSpeed(speed.getValue());
-                            }
-
-                            mSerialSendMove.forward(value) ;
-                        }
-
-
-                        break;
-                    case FOOT_BACK:
-
-                        time = motionControl.getTime() ;
-                        if(time != null){
-
-                            value = time.getValue() ;
-                        }else{
-                            value = 2000 ;
-                        }
-
-                        type = motionControl.getType();
-                        if(MotionSendControl.Type.SLAM == type) {
-                            mSlamMotion.back(value);
-
-                        }else if(MotionSendControl.Type.SERIAL == type){
-                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
-                            if(speed != null){
-
-                                mSerialSendMove.setSpeed(speed.getValue());
-                            }
-                            mSerialSendMove.back(value);
-
-
-                        }else{
-                            mSlamMotion.back(value);
-
-                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
-                            if(speed != null){
-
-                                mSerialSendMove.setSpeed(speed.getValue());
-                            }
-                            mSerialSendMove.back(value);
-                        }
-
-                        break;
-                    case FOOT_LEFT:
-
-                        time = motionControl.getTime() ;
-                        if(time != null){
-
-                            value = time.getValue() ;
-                        }else{
-                            value = 2000 ;
-                        }
-                        type = motionControl.getType();
-                        if(MotionSendControl.Type.SLAM == type) {
-                            mSlamMotion.left(value);
-
-                        }else if(MotionSendControl.Type.SERIAL == type){
-
-                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
-                            if(speed != null){
-
-                                mSerialSendMove.setSpeed(speed.getValue());
-                            }
-                            mSerialSendMove.left(value);
-
-                        }else{
-                            mSlamMotion.left(value);
-
-                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
-                            if(speed != null){
-
-                                mSerialSendMove.setSpeed(speed.getValue());
-                            }
-                            mSerialSendMove.left(value);
-                        }
-
-                        break;
-                    case FOOT_RIGHT:
-
-                        time = motionControl.getTime() ;
-                        if(time != null){
-
-                            value = time.getValue() ;
-                        }else{
-                            value = 2000 ;
-                        }
-
-                        type = motionControl.getType();
-                        if(MotionSendControl.Type.SLAM == type) {
-                            mSlamMotion.right(value);
-
-                        }else if(MotionSendControl.Type.SERIAL == type){
-
-                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
-                            if(speed != null){
-
-                                mSerialSendMove.setSpeed(speed.getValue());
-                            }
-                            mSerialSendMove.right(value);
-
-                        }else{
-                            mSlamMotion.right(value);
-
-                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
-                            if(speed != null){
-
-                                mSerialSendMove.setSpeed(speed.getValue());
-                            }
-                            mSerialSendMove.right(value);
-                        }
-
-                        break;
-                    case FOOT_STOP:
-
-                        type = motionControl.getType();
-                        if(MotionSendControl.Type.SLAM == type) {
-                            mSlamMotion.stop();
-                        }else if(MotionSendControl.Type.SERIAL == type){
-                            mSerialSendMove.stop();
-
-                        }else{
-                            mSlamMotion.stop();
-
-                            mSerialSendMove.stop();
-                        }
-
-                        break;
-
-                    case SOUND_LOCATION_LEFT:
-
-                        distance = motionControl.getDistance() ;
-                        int d ;
-                        if(distance != null){
-                            d = distance.getValue() ;
-                        }else {
-                            d = 0 ;
-                        }
-
-                        mSerialSoundLocation.turnLeft(d);
-
-                        break;
-
-                    case SOUND_LOCATION_RIGHT:
-
-                        distance = motionControl.getDistance() ;
-                        if(distance != null){
-                            d = distance.getValue() ;
-                        }else {
-                            d = 0 ;
-                        }
-
-                        mSerialSoundLocation.turnRight(d);
-
-                        break;
-
-                    case SOUND_LOCATION://角度  从0 - 360(从右到左)
-
-                        distance = motionControl.getDistance() ;
-                        if(distance != null){
-                            d = distance.getValue() ;
-                        }else {
-                            d = 90 ;
-                        }
-
-                        type = motionControl.getType();
-                        if(MotionSendControl.Type.SLAM == type) {
-                            mSlamMotion.turnSoundAngle(d) ;
-
-                        }else if(MotionSendControl.Type.SERIAL == type){
-                            mSerialSoundLocation.soundLocation(d);
-
-                        }else{
-                            mSlamMotion.turnSoundAngle(d) ;
-
-                            mSerialSoundLocation.soundLocation(d);
-                        }
-                        break;
-
-
-                    case STOP:
-
-                        type = motionControl.getType();
-                        if(MotionSendControl.Type.SLAM == type) {
-
-                            mSlamMotion.stop();
-
-                        }else if(MotionSendControl.Type.SERIAL == type){
-
-                            mSerialSendHeadLeftRight.headLeftRightStop() ;
-                            mSerialSendHeadUpDown.headUpDownStop() ;
-                            mSerialSendMove.stop();
-
-                        }else{
-                            mSlamMotion.stop();
-
-                            mSerialSendHeadLeftRight.headLeftRightStop() ;
-                            mSerialSendHeadUpDown.headUpDownStop() ;
-                            mSerialSendMove.stop();
-                        }
-
-                        break;
-
-                }
-            }
-        }
+//        if(baseSendControl instanceof MotionSendControl){
+//            MotionSendControl motionControl = (MotionSendControl) baseSendControl;
+//
+//            MotionSendControl.Action action = motionControl.getAction() ;
+//            if(action != null){
+//
+//                switch (action){
+//
+//                    case HEAD_LEFT:
+//
+//                        MotionSendControl.Distance distance = motionControl.getDistance() ;
+//                        int value  ;
+//                        if(distance != null){
+//                            value = distance.getValue() ;
+//                        }else {
+//
+//                            value = 200 ;
+//                        }
+//                        mSerialSendHeadLeftRight.headLeft(value) ;
+//
+//                        break;
+//                    case HEAD_RIGHT:
+//
+//                        distance = motionControl.getDistance() ;
+//                        if(distance != null){
+//
+//                            value = distance.getValue() ;
+//                        }else {
+//                            value = 200 ;
+//                        }
+//                        mSerialSendHeadLeftRight.headRight(value) ;
+//
+//                        break;
+//                    case HEAD_LEFT_RIGHT_RESET:
+//
+//                        mSerialSendHeadLeftRight.headLeftRightRest() ;
+//                        break;
+//
+//                    case HEAD_LEFT_RIGHT_LOOP:
+//
+//                        mSerialSendHeadLeftRight.headLeftRightShark() ;
+//                        break;
+//
+//                    case HEAD_LEFT_RIGHT_STOP:
+//
+//                        mSerialSendHeadLeftRight.headLeftRightStop() ;
+//                        break;
+//                    case HEAD_UP:
+//
+//                        MotionSendControl.Time time = motionControl.getTime() ;
+//                        if(time != null){
+//
+//                            value = time.getValue() ;
+//                        }else{
+//                            value = 100 ;
+//                        }
+//                        mSerialSendHeadUpDown.headUp(value) ;
+//
+//                        break;
+//                    case HEAD_DOWN:
+//
+//                        time = motionControl.getTime() ;
+//                        if(time != null){
+//
+//                            value = time.getValue() ;
+//                        }else{
+//                            value = 100 ;
+//                        }
+//                        mSerialSendHeadUpDown.headDown(value) ;
+//
+//                        break;
+//                    case HEAD_UP_DOWN_RESET:
+//
+//                        mSerialSendHeadUpDown.headUpDownRest() ;
+//                        break;
+//
+//                    case HEAD_UP_DOWN_LOOP:
+//
+//                        mSerialSendHeadUpDown.headUpDownShark() ;
+//                        break;
+//
+//                    case HEAD_UP_DOWN_STOP:
+//
+//                        mSerialSendHeadUpDown.headUpDownStop() ;
+//                        break;
+//                    case FOOT_FORWARD:
+//
+//                        time = motionControl.getTime() ;
+//                        if(time != null){
+//
+//                            value = time.getValue() ;
+//                        }else{
+//                            value = 2000 ;
+//                        }
+//
+//                        MotionSendControl.Type type = motionControl.getType();
+//                        if(MotionSendControl.Type.SLAM == type) {
+//                            mSlamMotion.forward(value);
+//
+//                        }else if(MotionSendControl.Type.SERIAL == type){
+//                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
+//                            if(speed != null){
+//
+//                                mSerialSendMove.setSpeed(speed.getValue());
+//                            }
+//                            mSerialSendMove.forward(value) ;
+//
+//
+//                        }else{
+//                            mSlamMotion.forward(value);
+//
+//                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
+//                            if(speed != null){
+//
+//                                mSerialSendMove.setSpeed(speed.getValue());
+//                            }
+//
+//                            mSerialSendMove.forward(value) ;
+//                        }
+//
+//
+//                        break;
+//                    case FOOT_BACK:
+//
+//                        time = motionControl.getTime() ;
+//                        if(time != null){
+//
+//                            value = time.getValue() ;
+//                        }else{
+//                            value = 2000 ;
+//                        }
+//
+//                        type = motionControl.getType();
+//                        if(MotionSendControl.Type.SLAM == type) {
+//                            mSlamMotion.back(value);
+//
+//                        }else if(MotionSendControl.Type.SERIAL == type){
+//                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
+//                            if(speed != null){
+//
+//                                mSerialSendMove.setSpeed(speed.getValue());
+//                            }
+//                            mSerialSendMove.back(value);
+//
+//
+//                        }else{
+//                            mSlamMotion.back(value);
+//
+//                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
+//                            if(speed != null){
+//
+//                                mSerialSendMove.setSpeed(speed.getValue());
+//                            }
+//                            mSerialSendMove.back(value);
+//                        }
+//
+//                        break;
+//                    case FOOT_LEFT:
+//
+//                        time = motionControl.getTime() ;
+//                        if(time != null){
+//
+//                            value = time.getValue() ;
+//                        }else{
+//                            value = 2000 ;
+//                        }
+//                        type = motionControl.getType();
+//                        if(MotionSendControl.Type.SLAM == type) {
+//                            mSlamMotion.left(value);
+//
+//                        }else if(MotionSendControl.Type.SERIAL == type){
+//
+//                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
+//                            if(speed != null){
+//
+//                                mSerialSendMove.setSpeed(speed.getValue());
+//                            }
+//                            mSerialSendMove.left(value);
+//
+//                        }else{
+//                            mSlamMotion.left(value);
+//
+//                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
+//                            if(speed != null){
+//
+//                                mSerialSendMove.setSpeed(speed.getValue());
+//                            }
+//                            mSerialSendMove.left(value);
+//                        }
+//
+//                        break;
+//                    case FOOT_RIGHT:
+//
+//                        time = motionControl.getTime() ;
+//                        if(time != null){
+//
+//                            value = time.getValue() ;
+//                        }else{
+//                            value = 2000 ;
+//                        }
+//
+//                        type = motionControl.getType();
+//                        if(MotionSendControl.Type.SLAM == type) {
+//                            mSlamMotion.right(value);
+//
+//                        }else if(MotionSendControl.Type.SERIAL == type){
+//
+//                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
+//                            if(speed != null){
+//
+//                                mSerialSendMove.setSpeed(speed.getValue());
+//                            }
+//                            mSerialSendMove.right(value);
+//
+//                        }else{
+//                            mSlamMotion.right(value);
+//
+//                            MotionSendControl.Speed speed = motionControl.getSpeed() ;
+//                            if(speed != null){
+//
+//                                mSerialSendMove.setSpeed(speed.getValue());
+//                            }
+//                            mSerialSendMove.right(value);
+//                        }
+//
+//                        break;
+//                    case FOOT_STOP:
+//
+//                        type = motionControl.getType();
+//                        if(MotionSendControl.Type.SLAM == type) {
+//                            mSlamMotion.stop();
+//                        }else if(MotionSendControl.Type.SERIAL == type){
+//                            mSerialSendMove.stop();
+//
+//                        }else{
+//                            mSlamMotion.stop();
+//
+//                            mSerialSendMove.stop();
+//                        }
+//
+//                        break;
+//
+////                    case SOUND_LOCATION_LEFT:
+////
+////                        distance = motionControl.getDistance() ;
+////                        int d ;
+////                        if(distance != null){
+////                            d = distance.getValue() ;
+////                        }else {
+////                            d = 0 ;
+////                        }
+////
+////                        mSerialSoundLocation.turnLeft(d);
+////
+////                        break;
+////
+////                    case SOUND_LOCATION_RIGHT:
+////
+////                        distance = motionControl.getDistance() ;
+////                        if(distance != null){
+////                            d = distance.getValue() ;
+////                        }else {
+////                            d = 0 ;
+////                        }
+////
+////                        mSerialSoundLocation.turnRight(d);
+////
+////                        break;
+//
+//                    case SOUND_LOCATION://角度  从0 - 360(从右到左)
+//
+//                        distance = motionControl.getDistance() ;
+//                        int d;
+//                        if(distance != null){
+//                            d = distance.getValue() ;
+//                        }else {
+//                            d = 90 ;
+//                        }
+//
+//                        type = motionControl.getType();
+//                        if(MotionSendControl.Type.SLAM == type) {
+//                            mSlamMotion.turnSoundAngle(d) ;
+//
+//                        }else if(MotionSendControl.Type.SERIAL == type){
+//                            mSerialSoundLocation.soundLocation(d);
+//
+//                        }else{
+//                            mSlamMotion.turnSoundAngle(d) ;
+//
+//                            mSerialSoundLocation.soundLocation(d);
+//                        }
+//                        break;
+//
+//
+//                    case STOP:
+//
+//                        type = motionControl.getType();
+//                        if(MotionSendControl.Type.SLAM == type) {
+//
+//                            mSlamMotion.stop();
+//
+//                        }else if(MotionSendControl.Type.SERIAL == type){
+//
+//                            mSerialSendHeadLeftRight.headLeftRightStop() ;
+//                            mSerialSendHeadUpDown.headUpDownStop() ;
+//                            mSerialSendMove.stop();
+//
+//                        }else{
+//                            mSlamMotion.stop();
+//
+//                            mSerialSendHeadLeftRight.headLeftRightStop() ;
+//                            mSerialSendHeadUpDown.headUpDownStop() ;
+//                            mSerialSendMove.stop();
+//                        }
+//
+//                        break;
+//
+//                }
+//            }
+//        }
 
         return null;
     }

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     >
 
-    <com.yongyida.robot.hardware.test.item.led.view.HorizontalListView
+    <com.yongyida.robot.hardware.test.view.HorizontalListView
         android:id="@+id/led_position_gvw"
         android:layout_width="match_parent"
         android:layout_height="50dp"

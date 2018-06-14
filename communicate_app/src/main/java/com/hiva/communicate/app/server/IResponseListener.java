@@ -40,5 +40,10 @@ import com.hiva.communicate.app.common.response.BaseResponse;
  */
 public interface IResponseListener {
 
-    void onResponse(BaseResponse response) ;
+    /**
+     * 0 表示成功
+     * 1 表示通讯断开
+     *
+     * */
+    int onResponse(BaseResponse response) ;
 }

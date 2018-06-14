@@ -1,5 +1,7 @@
 package com.yongyida.robot.hardware.test.item.battery;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.hiva.communicate.app.common.send.SendResponseListener;
 import com.hiva.communicate.app.common.send.SendClient;
+import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.battery.response.data.BatteryInfo;
 import com.yongyida.robot.communicate.app.hardware.battery.send.data.QueryBattery;
 import com.yongyida.robot.hardware.test.R;
@@ -121,8 +124,9 @@ public class TestBatteryActivity extends TestBaseActivity {
         super.onCreate(savedInstanceState);
 
         myHandler = new MyHandler(this) ;
+        mQueryBattery = new QueryBattery() ;
 
-        registerReceiver() ;
+//        registerReceiver() ;
         queryBatteryInfo() ;
 
     }
@@ -131,7 +135,7 @@ public class TestBatteryActivity extends TestBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver() ;
+//        unregisterReceiver() ;
 
     }
 
@@ -141,8 +145,6 @@ public class TestBatteryActivity extends TestBaseActivity {
     public static final String KEY_IS_CHARGING      = "isCharging" ;
     public static final String KEY_LEVEL            = "level" ;
     public static final String KEY_STATE            = "state" ;
-
-
 
 
     private void registerReceiver(){
@@ -182,13 +184,12 @@ public class TestBatteryActivity extends TestBaseActivity {
     };
 
 
-    private void unregisterReceiver(){
+//    private void unregisterReceiver(){
+//
+//        unregisterReceiver(broadcastReceiver);
+//    }
 
-        unregisterReceiver(broadcastReceiver);
-    }
-
-    private QueryBattery mQueryBattery = new QueryBattery() ;
-
+    private QueryBattery mQueryBattery ;
 
 
     /**
@@ -201,62 +202,20 @@ public class TestBatteryActivity extends TestBaseActivity {
             @Override
             public void onSuccess(BatteryInfo batteryInfo) {
 
+                LogHelper.i(TAG, LogHelper.__TAG__() + batteryInfo);
+
             }
 
             @Override
             public void onFail(int result, String message) {
 
+                LogHelper.e(TAG, LogHelper.__TAG__() + ",result : " + result + "message : " + message);
             }
         };
 
-        SendClient.getInstance(this).send(mQueryBattery, iResponseListener);
+        SendClient.getInstance(this).send(this,mQueryBattery, iResponseListener);
 
 
-//        new Thread(){
-//
-//            @Override
-//            public void run() {
-//
-//
-//                SendResponseListener responseListener = new SendResponseListener() {
-//                    @Override
-//                    public void onResponse(BaseResponse response) {
-//
-//                        LogHelper.i(TAG, LogHelper.__TAG__() + ", response : " + response );
-//
-//                        BaseResponseControl baseResponseControl = response.getBaseResponseControl();
-//                        if(baseResponseControl instanceof BatteryInfo){
-//
-//                            BatteryInfo batteryInfo = (BatteryInfo) baseResponseControl;
-//
-//                            Message message = myHandler.obtainMessage(MyHandler.BATTERY_INFO) ;
-//                            message.obj = batteryInfo ;
-//                            myHandler.sendMessage(message) ;
-//                        }
-//
-//                    }
-//                };
-//
-//                QueryBattery queryBattery = new QueryBattery() ;
-//                SendResponse sendResponse = SendClient.getInstance(TestBatteryActivity.this).sendInNotMainThread(queryBattery, responseListener) ;
-//                if (sendResponse == null) {
-//
-//                    // 发送不成功
-//                    LogHelper.i(TAG, LogHelper.__TAG__());
-////                    Toast.makeText(TestBatteryActivity.this, "发送失败，返回为空！", Toast.LENGTH_LONG).show();
-//
-//                }else{
-//
-//                    int result = sendResponse.getResult() ;
-//                    if(result != SendResponse.RESULT_SUCCESS)
-//
-//                        // 发送不成功
-//                        LogHelper.i(TAG, LogHelper.__TAG__() + ", result : " + result);
-////                        Toast.makeText(TestBatteryActivity.this,"发送失败，返回为:" + result , Toast.LENGTH_LONG).show(); ;
-//                    }
-//
-//            }
-//        }.start();
 
     }
 

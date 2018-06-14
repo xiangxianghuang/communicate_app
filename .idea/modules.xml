@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/YYDRobotBreathLed/YYDRobotBreathLed.iml" filepath="$PROJECT_DIR$/YYDRobotBreathLed/YYDRobotBreathLed.iml" />
       <module fileurl="file://$PROJECT_DIR$/YYDRobotHardware/YYDRobotHardware.iml" filepath="$PROJECT_DIR$/YYDRobotHardware/YYDRobotHardware.iml" />
       <module fileurl="file://$PROJECT_DIR$/YYDRobotHardwareTest/YYDRobotHardwareTest.iml" filepath="$PROJECT_DIR$/YYDRobotHardwareTest/YYDRobotHardwareTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/YYDRobotHardwareTest/YYDRobotHardwareTest.iml" filepath="$PROJECT_DIR$/YYDRobotHardwareTest/YYDRobotHardwareTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/communicate_app/communicate_app.iml" filepath="$PROJECT_DIR$/communicate_app/communicate_app.iml" />
       <module fileurl="file://$PROJECT_DIR$/communicate_app_hardware/communicate_app_hardware.iml" filepath="$PROJECT_DIR$/communicate_app_hardware/communicate_app_hardware.iml" />
       <module fileurl="file://$PROJECT_DIR$/hardware.iml" filepath="$PROJECT_DIR$/hardware.iml" />

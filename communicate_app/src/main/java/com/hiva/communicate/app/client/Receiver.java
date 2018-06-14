@@ -1,5 +1,7 @@
 package com.hiva.communicate.app.client;
 
+import android.app.Activity;
+import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +18,7 @@ import com.hiva.communicate.app.common.SendResponse;
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.common.response.BaseResponseControl;
 import com.hiva.communicate.app.common.send.BaseSend;
+import com.hiva.communicate.app.common.send.data.BaseSendControl;
 import com.hiva.communicate.app.utils.AppUtils;
 import com.hiva.communicate.app.utils.LogHelper;
 
@@ -125,14 +128,34 @@ public class Receiver {
         return Looper.getMainLooper().getThread() == Thread.currentThread();
     }
 
-    public SendResponse send(BaseSend send , final SendResponseListener response) {
-
+    /**
+     * 发送控制命令（必须在子线程中使用，不可以在主线程中使用）
+     * @param context   如果不为空并且是Activity的子类，不需要关闭
+     * @param send      发送的类型
+     * @param response  回调函数
+     *
+     *
+     *
+     * */
+    public SendResponse send(final Context context ,final BaseSend send , final SendResponseListener response) {
         ResponseListener responseListener = null;
         if(response != null){
 
             responseListener = new ResponseListener.Stub() {
                 @Override
                 public void response(String content) throws RemoteException {
+
+                    boolean isDestroyed = isDestroyed(context) ;
+                    if(isDestroyed){
+                        BaseSendControl baseSendControl = send.getBaseControl() ;
+
+                        // 如果已经销毁了发送一个销毁信息
+                        LogHelper.i(TAG , LogHelper.__TAG__() + " activity 已经销毁") ;
+
+                        send(null,baseSendControl.getSend(),null) ;
+
+                        return ;
+                    }
 
                     LogHelper.i(TAG , LogHelper.__TAG__() + ",response : " + response);
                     Container container = Container.fromJson(content) ;
@@ -147,8 +170,7 @@ public class Receiver {
                         String data = container.getData().toString() ;
                         LogHelper.i(TAG , LogHelper.__TAG__() + ",data : " + data);
 
-//                        baseResponse = (BaseResponse) container.getData(clazz);
-                        baseResponse = Container.fromJson(data, BaseResponse.class);
+                        baseResponse = (BaseResponse) container.getData(clazz);
 
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
@@ -190,7 +212,7 @@ public class Receiver {
             return new SendResponse(SendResponse.RESULT_NO_SERVICE) ;
         }
 
-        Container sendContainer = new Container(context, send) ;
+        Container sendContainer = new Container(this.context, send) ;
 
         String sendResponseString ;
         try {
@@ -214,6 +236,30 @@ public class Receiver {
         }
 
     }
+
+
+    /**
+     *
+     * 判断当前是否销毁 暂时Activity可以通过判断
+     *
+     * */
+    private boolean isDestroyed(Context context){
+
+        if(context instanceof Activity){
+            Activity activity = (Activity) context;
+
+            boolean isDestroyed = activity.isDestroyed() ;
+            boolean isFinishing = activity.isFinishing() ;
+
+            LogHelper.i(TAG , LogHelper.__TAG__() + ",isDestroyed : " + isDestroyed + ",isFinishing : " + isFinishing);
+
+
+            return isDestroyed ;
+        }
+
+        return false ;
+    }
+
 
 
 }

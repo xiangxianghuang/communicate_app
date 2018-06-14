@@ -157,7 +157,7 @@ public class TestLed2Activity extends TestBaseActivity implements SeekBar.OnSeek
 
         mLedControl2.setEffect(LedSendControl2.Effect.values()[position]);
 
-        SendClient.getInstance(this).send(mLedControl2, null);
+        SendClient.getInstance(this).send(null, mLedControl2, null);
 
     }
 

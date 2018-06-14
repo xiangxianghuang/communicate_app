@@ -33,6 +33,8 @@ package com.hiva.communicate.app.setting.send.data;
                     不见满街漂亮妹，哪个归得程序员？ 
 */
 
+import android.app.Activity;
+
 /**
  * Create By HuangXiangXiang 2018/6/7
  */

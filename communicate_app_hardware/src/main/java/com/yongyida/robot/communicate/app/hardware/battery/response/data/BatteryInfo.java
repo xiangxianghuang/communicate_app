@@ -35,4 +35,11 @@ public class BatteryInfo extends BaseResponseControl{
     public void setState(int state) {
         this.state = state;
     }
+
+
+    @Override
+    public String toString() {
+
+        return String.format("isCharging : %s, level : %d, state : %d",isCharging, level, state );
+    }
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="buttonPaddingLeft">10dp</dimen>
+    <dimen name="buttonPaddingRight">10dp</dimen>
+    <dimen name="buttonPaddingTop">5dp</dimen>
+    <dimen name="buttonPaddingBottom">5dp</dimen>
+
+
+</resources>

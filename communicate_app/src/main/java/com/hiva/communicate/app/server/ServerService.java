@@ -121,28 +121,43 @@ public abstract class  ServerService extends Service {
         // 新开一个
         new Thread(){
 
+
             @Override
             public void run() {
 
                 IResponseListener iResponseListener = null ;
                 if(responseListener != null){
 
+                    final IBinder iBinder = responseListener.asBinder() ;
                     iResponseListener = new IResponseListener(){
 
                         @Override
-                        public void onResponse(BaseResponse response) {
+                        public int onResponse(BaseResponse response) {
 
 
                             if(isCanCommunicate(packageName)){
 
                                 Container responseContainer = new Container(ServerService.this,response) ;
                                 String responseString = responseContainer.toString() ;
-                                try {
-                                    responseListener.response(responseString);
-                                } catch (RemoteException e) {
-                                    e.printStackTrace();
+
+                                if(!iBinder.isBinderAlive()){
+
+                                    return 1 ;
+
+                                }else {
+
+                                    try {
+                                        responseListener.response(responseString);
+
+                                        return 0 ;
+                                    } catch (RemoteException e) {
+                                        e.printStackTrace();
+                                    }
+
                                 }
                             }
+
+                            return -1 ;
                         }
                     };
                 }

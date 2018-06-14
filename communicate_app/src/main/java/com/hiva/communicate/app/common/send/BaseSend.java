@@ -1,5 +1,8 @@
 package com.hiva.communicate.app.common.send;
 
+import android.app.Activity;
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.hiva.communicate.app.common.send.data.BaseSendControl;
 
@@ -21,10 +24,13 @@ public class BaseSend <T extends BaseSendControl> {
         this.className = baseControl.getClass().getName() ;
 
         // 转换前将send 排除
-        Object o = baseControl.baseSend ;
-        baseControl.baseSend = null ;
-        this.baseControl = GSON.toJson(baseControl) ;
-        baseControl.baseSend = (BaseSend) o;
+//        Object o = baseControl.baseSend ;
+//        baseControl.baseSend = null ;
+//
+//        this.baseControl = GSON.toJson(baseControl) ;
+//        baseControl.baseSend = (BaseSend) o;
+
+        this.baseControl = baseControl.toJson() ;
     }
 
     public T getBaseControl() {

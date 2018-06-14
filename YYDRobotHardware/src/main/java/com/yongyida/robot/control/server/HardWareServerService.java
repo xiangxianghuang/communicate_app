@@ -3,7 +3,6 @@ package com.yongyida.robot.control.server;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 
 import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.common.send.BaseSend;
@@ -11,7 +10,6 @@ import com.hiva.communicate.app.server.IResponseListener;
 import com.hiva.communicate.app.server.ServerService;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.BaseHandler;
-import com.yongyida.robot.communicate.app.hardware.motion.send.data.MotionSendControl;
 import com.yongyida.robot.control.model.HardwareConfig;
 
 /**
@@ -20,7 +18,6 @@ import com.yongyida.robot.control.model.HardwareConfig;
 public class HardWareServerService extends ServerService {
 
     private static final String TAG = HardWareServerService.class.getSimpleName() ;
-
 
     /**
      * 启动服务
@@ -92,7 +89,6 @@ public class HardWareServerService extends ServerService {
     public static final String KEY_ACTION = "action" ;
     public static final String KEY_TIME = "time" ;
 
-
     private BroadcastReceiver receiver = new BroadcastReceiver(){
 
         @Override
@@ -103,15 +99,15 @@ public class HardWareServerService extends ServerService {
 
                 try{
 
-                    String motionAction = intent.getStringExtra(KEY_ACTION) ;
-                    int time = intent.getIntExtra(KEY_TIME, 1000) ;
-
-                    LogHelper.i(TAG, LogHelper.__TAG__() + " motionAction : " + motionAction + ", time : "+ time);
-                    MotionSendControl.Action action1 = MotionSendControl.Action.valueOf(motionAction);
-                    motionControl.setAction(action1);
-                    motionControl.getTime().setValue(time);
-
-                    onReceiver(motionControl.getSend(), null) ;
+//                    String motionAction = intent.getStringExtra(KEY_ACTION) ;
+//                    int time = intent.getIntExtra(KEY_TIME, 1000) ;
+//
+//                    LogHelper.i(TAG, LogHelper.__TAG__() + " motionAction : " + motionAction + ", time : "+ time);
+//                    MotionSendControl.Action action1 = MotionSendControl.Action.valueOf(motionAction);
+//                    motionControl.setAction(action1);
+//                    motionControl.getTime().setValue(time);
+//
+//                    onReceiver(motionControl.getSend(), null) ;
 
                 }catch (Exception e){
                     LogHelper.e(TAG, LogHelper.__TAG__() + "Exception " + e );
@@ -123,15 +119,15 @@ public class HardWareServerService extends ServerService {
 
 
 
-    private MotionSendControl motionControl = new MotionSendControl() ;
+//    private MotionSendControl motionControl = new MotionSendControl() ;
     private void registerReceiver(){
 
-        motionControl.setTime(new MotionSendControl.Time());
-
-        IntentFilter filter = new IntentFilter() ;
-        filter.addAction(ACTION_MOVE);
-
-        registerReceiver(receiver, filter) ;
+//        motionControl.setTime(new MotionSendControl.Time());
+//
+//        IntentFilter filter = new IntentFilter() ;
+//        filter.addAction(ACTION_MOVE);
+//
+//        registerReceiver(receiver, filter) ;
     }
 
 
