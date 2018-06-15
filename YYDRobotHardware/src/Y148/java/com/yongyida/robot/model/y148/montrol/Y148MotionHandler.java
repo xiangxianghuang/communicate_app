@@ -1,8 +1,8 @@
-package com.yongyida.robot.model.y138.montrol;
+package com.yongyida.robot.model.y148.montrol;
 
 import android.content.Context;
 
-import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.SendResponse;
 import com.hiva.communicate.app.common.send.data.BaseSendControl;
 import com.hiva.communicate.app.server.IResponseListener;
 import com.hiva.communicate.app.utils.LogHelper;
@@ -10,15 +10,15 @@ import com.yongyida.robot.communicate.app.hardware.motion.MotionHandler;
 import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
 import com.yongyida.robot.model.agreement.Y138Steering;
 import com.yongyida.robot.model.y128.motion.SlamMotion;
-import com.yongyida.robot.model.y138.led.Y138LedHandler;
+import com.yongyida.robot.model.y148.led.Y148LedHandler;
 import com.yongyida.robot.usb_uart.UART;
 
 /**
  * Created by HuangXiangXiang on 2018/4/20.
  */
-public class Y138MotionHandler extends MotionHandler {
+public class Y148MotionHandler extends MotionHandler {
 
-    private static final String TAG = Y138LedHandler.class.getSimpleName() ;
+    private static final String TAG = Y148LedHandler.class.getSimpleName() ;
 
     private UART mUART ;
     private Y138Steering.SteerAction mSteerAction ;
@@ -30,7 +30,7 @@ public class Y138MotionHandler extends MotionHandler {
 
     private SlamMotion mSlamMotion ;
 
-    public Y138MotionHandler(Context context) {
+    public Y148MotionHandler(Context context) {
         super(context);
 
         mSlamMotion = SlamMotion.getInstance(context);
@@ -47,7 +47,7 @@ public class Y138MotionHandler extends MotionHandler {
     }
 
     @Override
-    public BaseResponse onHandler(final MotionSend send, final IResponseListener responseListener) {
+    public SendResponse onHandler(final MotionSend send, final IResponseListener responseListener) {
 
         BaseSendControl baseSendControl = send.getBaseControl() ;
         LogHelper.i(TAG , LogHelper.__TAG__() );

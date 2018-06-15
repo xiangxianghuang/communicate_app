@@ -2,8 +2,7 @@ package com.yongyida.robot.model.y128.touch;
 
 import android.content.Context;
 
-import com.hiva.communicate.app.common.send.SendResponseListener;
-import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.SendResponse;
 import com.hiva.communicate.app.common.send.data.BaseSendControl;
 import com.hiva.communicate.app.server.IResponseListener;
 import com.yongyida.robot.communicate.app.hardware.touch.TouchHandler;
@@ -98,7 +97,7 @@ public class Y128TouchHandler extends TouchHandler {
 
 
     @Override
-    public BaseResponse onHandler(TouchSend send, IResponseListener responseListener) {
+    public SendResponse onHandler(TouchSend send, IResponseListener responseListener) {
 
         BaseSendControl baseControl = send.getBaseControl() ;
 

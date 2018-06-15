@@ -3,8 +3,7 @@ package com.yongyida.robot.model.y20.led;
 
 import android.content.Context;
 
-import com.hiva.communicate.app.common.send.SendResponseListener;
-import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.SendResponse;
 import com.hiva.communicate.app.server.IResponseListener;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.led.LedHandler;
@@ -23,7 +22,7 @@ public class Y20LedHandler extends LedHandler {
 
 
     @Override
-    public BaseResponse onHandler(LedSend ledSend, IResponseListener responseListener) {
+    public SendResponse onHandler(LedSend ledSend, IResponseListener responseListener) {
 
 //         LedScene ledScene = ledSend.getLedScene() ;
 //        if(ledScene != null){

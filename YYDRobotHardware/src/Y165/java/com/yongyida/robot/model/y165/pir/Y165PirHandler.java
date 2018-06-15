@@ -2,8 +2,7 @@ package com.yongyida.robot.model.y165.pir;
 
 import android.content.Context;
 
-import com.hiva.communicate.app.common.send.SendResponseListener;
-import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.SendResponse;
 import com.hiva.communicate.app.server.IResponseListener;
 import com.yongyida.robot.communicate.app.hardware.pir.PirHandler;
 import com.yongyida.robot.communicate.app.hardware.pir.send.PirSend;
@@ -22,7 +21,7 @@ public class Y165PirHandler extends PirHandler {
     }
 
     @Override
-    public BaseResponse onHandler(PirSend send, IResponseListener responseListener) {
+    public SendResponse onHandler(PirSend send, IResponseListener responseListener) {
         return null;
     }
 

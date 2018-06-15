@@ -1,29 +1,26 @@
 package com.hiva.communicate.app.client;
 
 import android.app.Activity;
-import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.RemoteException;
 
 import com.hiva.communicate.app.ResponseListener;
 import com.hiva.communicate.app.SendManager;
 import com.hiva.communicate.app.common.Container;
+import com.hiva.communicate.app.common.response.SendResponse;
 import com.hiva.communicate.app.common.send.SendResponseListener;
-import com.hiva.communicate.app.common.SendResponse;
-import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.common.response.BaseResponseControl;
 import com.hiva.communicate.app.common.send.BaseSend;
 import com.hiva.communicate.app.common.send.data.BaseSendControl;
 import com.hiva.communicate.app.utils.AppUtils;
 import com.hiva.communicate.app.utils.LogHelper;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by HuangXiangXiang on 2017/11/29.
@@ -32,17 +29,15 @@ public class Receiver {
 
     private static final String TAG = Receiver.class.getSimpleName() ;
 
-    private Context context ;
+    private Context mContext ;
     private String packageName ;
     private String action ;
 
     private SendManager sendManager ;
 
-    private CountDownLatch countDownLatch ;
-
     Receiver(Context context, String packageName, String action){
 
-        this.context = context ;
+        this.mContext = context ;
         this.packageName = packageName ;
         this.action = action ;
     }
@@ -50,7 +45,7 @@ public class Receiver {
 
     private boolean isExist(){
 
-        HashSet<String> packageNames = AppUtils.getPackageNameByServiceAction(context,action) ;
+        HashSet<String> packageNames = AppUtils.getPackageNameByServiceAction(mContext,action) ;
 
         return packageNames.contains(packageName) ;
     }
@@ -59,14 +54,18 @@ public class Receiver {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
 
-            LogHelper.e(TAG , LogHelper.__TAG__());
+            LogHelper.i(TAG , LogHelper.__TAG__());
             sendManager = SendManager.Stub.asInterface(service) ;
 
-            LogHelper.e(TAG , LogHelper.__TAG__());
-            if(countDownLatch != null){
 
-                LogHelper.e(TAG , LogHelper.__TAG__());
-                countDownLatch.countDown();
+            synchronized (mBindServiceListeners){
+
+                final int size = mBindServiceListeners.size() ;
+                for (int i = 0 ; i < size ; i++){
+
+                    mBindServiceListeners.get(i).onBindSuccess();
+                }
+                mBindServiceListeners.clear();
             }
 
         }
@@ -84,66 +83,64 @@ public class Receiver {
         Intent intent = new Intent();
         intent.setPackage(packageName) ;
         intent.setAction(action) ;
-        context.bindService(intent,connection, Context.BIND_AUTO_CREATE) ;
+        mContext.bindService(intent,connection, Context.BIND_AUTO_CREATE) ;
     }
 
-    /**
-     *
-     * */
-    public SendManager getSendManager(){
 
-        LogHelper.e(TAG , LogHelper.__TAG__());
+    private final ArrayList<BindServiceListener> mBindServiceListeners = new ArrayList<>() ;
+    private interface BindServiceListener{
+
+        void onBindSuccess();
+
+    }
+    private void bindService(BindServiceListener bindServiceListener){
+
+        mBindServiceListeners.add(bindServiceListener) ;
+        bindService();
+    }
+
+
+    public void send(final Context context ,final BaseSend send , final SendResponseListener response) {
+
+        // 判断通讯是否能走通
         if(sendManager == null){
-            LogHelper.e(TAG , LogHelper.__TAG__());
-            if(isExist()){
+            // 服务未连接
+            if(isExist()){// 判断时候有该主服务
 
-                //必须不能再主线程
-                if(isMainThread()){
+                BindServiceListener bindServiceListener = new BindServiceListener() {
+                    @Override
+                    public void onBindSuccess() {
 
-                    throw new RuntimeException("不能在主线程执行该方法") ;
+                        sendToService(context, send, response);
+                    }
+                };
+                bindService(bindServiceListener);
+
+            }else {
+
+                if(response != null){
+
+                    response.onFail(SendResponse.RESULT_CLIENT_NO_SERVICE,null);
                 }
-
-                LogHelper.e(TAG , LogHelper.__TAG__());
-                bindService();
-
-                LogHelper.e(TAG , LogHelper.__TAG__());
-                countDownLatch = new CountDownLatch(1) ;
-                try {
-                    LogHelper.e(TAG , LogHelper.__TAG__());
-                    countDownLatch.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                LogHelper.e(TAG , LogHelper.__TAG__());
-
             }
+        }else {
+
+            // 服务已经连接 直接发送
+            sendToService(context, send, response);
         }
-        LogHelper.e(TAG , LogHelper.__TAG__());
-        return sendManager ;
     }
 
 
-    private static boolean isMainThread() {
+    private void sendToService(final Context context ,final BaseSend send , final SendResponseListener response){
 
-        return Looper.getMainLooper().getThread() == Thread.currentThread();
-    }
+        ResponseListener responseListener = null  ;
+        if(response != null ){
 
-    /**
-     * 发送控制命令（必须在子线程中使用，不可以在主线程中使用）
-     * @param context   如果不为空并且是Activity的子类，不需要关闭
-     * @param send      发送的类型
-     * @param response  回调函数
-     *
-     *
-     *
-     * */
-    public SendResponse send(final Context context ,final BaseSend send , final SendResponseListener response) {
-        ResponseListener responseListener = null;
-        if(response != null){
-
+            //转换回调函数
             responseListener = new ResponseListener.Stub() {
                 @Override
                 public void response(String content) throws RemoteException {
+
 
                     boolean isDestroyed = isDestroyed(context) ;
                     if(isDestroyed){
@@ -161,7 +158,7 @@ public class Receiver {
                     Container container = Container.fromJson(content) ;
                     LogHelper.i(TAG , LogHelper.__TAG__() + ",container : " + container);
 
-                    BaseResponse baseResponse = null ;
+                    SendResponse sendResponse = null ;
 
                     try {
                         Class clazz = Class.forName(container.getClassName()) ;
@@ -170,7 +167,7 @@ public class Receiver {
                         String data = container.getData().toString() ;
                         LogHelper.i(TAG , LogHelper.__TAG__() + ",data : " + data);
 
-                        baseResponse = (BaseResponse) container.getData(clazz);
+                        sendResponse = (SendResponse) container.getData(clazz);
 
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
@@ -180,62 +177,43 @@ public class Receiver {
                         LogHelper.e(TAG , LogHelper.__TAG__() + ", Exception : " + e);
                     }
 
-                    LogHelper.i(TAG , LogHelper.__TAG__() + ",baseResponse : " + baseResponse);
+                    LogHelper.i(TAG , LogHelper.__TAG__() + ",sendResponse : " + sendResponse);
 
-                    if(baseResponse == null){
+                    if(sendResponse == null){
 
-                        response.onFail(BaseResponse.RESULT_NONE_DATA, null);
+                        response.onFail(SendResponse.RESULT_CLIENT_NONE_DATA, null);
 
                     }else {
 
-                        int result = baseResponse.getResult() ;
-                        if(result == BaseResponse.RESULT_SUCCESS){
+                        int result = sendResponse.getResult() ;
+                        if(result == SendResponse.RESULT_SUCCESS){
 
-                            BaseResponseControl baseResponseControl = baseResponse.getBaseResponseControl() ;
+                            BaseResponseControl baseResponseControl = sendResponse.getBaseResponseControl() ;
 
                             response.onSuccess(baseResponseControl);
 
                         }else {
 
-                            response.onFail(result, baseResponse.getMessage());
+                            response.onFail(result, sendResponse.getMessage());
                         }
                     }
-
-
                 }
             };
         }
 
-        SendManager sendManager = getSendManager() ;
-        if(sendManager == null){
-
-            return new SendResponse(SendResponse.RESULT_NO_SERVICE) ;
-        }
-
-        Container sendContainer = new Container(this.context, send) ;
-
-        String sendResponseString ;
+        Container sendContainer = new Container(this.mContext, send) ;
         try {
+            sendManager.send(sendContainer.toJson(), responseListener) ;
+        } catch (RemoteException e) {
+            e.printStackTrace();
 
-            sendResponseString = sendManager.send(sendContainer.toString(), responseListener) ;
-
-        } catch (Exception e) {
-
-            LogHelper.e(TAG , LogHelper.__TAG__() + ",e : " + e.getMessage());
-
-            return new SendResponse(SendResponse.RESULT_SEND_EXCEPTION,e.getMessage()) ;
+            LogHelper.e(TAG, LogHelper.__TAG__() + "RemoteException : " + e);
         }
-
-        try{
-            Container sendResponseContainer = Container.fromJson(sendResponseString) ;
-            return sendResponseContainer.getData(SendResponse.class) ;
-
-        }catch (Exception e){
-
-            return new SendResponse(SendResponse.RESULT_JSON_EXCEPTION,e.getMessage()) ;
-        }
-
     }
+
+
+
+
 
 
     /**

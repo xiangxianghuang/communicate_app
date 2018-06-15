@@ -2,10 +2,6 @@ package com.hiva.communicate.app.client;
 
 import android.content.Context;
 
-import com.hiva.communicate.app.common.send.SendResponseListener;
-import com.hiva.communicate.app.common.SendResponse;
-import com.hiva.communicate.app.common.send.BaseSend;
-
 import java.util.HashMap;
 
 /**

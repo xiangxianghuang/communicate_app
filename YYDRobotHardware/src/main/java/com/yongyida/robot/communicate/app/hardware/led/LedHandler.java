@@ -2,7 +2,6 @@ package com.yongyida.robot.communicate.app.hardware.led;
 
 import android.content.Context;
 
-import com.hiva.communicate.app.common.response.BaseResponse;
 import com.yongyida.robot.communicate.app.hardware.BaseHandler;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
 

@@ -1,4 +1,4 @@
-package com.yongyida.robot.model.y138.led;
+package com.yongyida.robot.model.y148.led;
 
 
 /* 
@@ -33,7 +33,7 @@ package com.yongyida.robot.model.y138.led;
                     不见满街漂亮妹，哪个归得程序员？ 
 */
 
-import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSendControl2;
+import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSend2Control;
 import com.yongyida.robot.model.agreement.Y128Send;
 import com.yongyida.robot.model.agreement.Y128Steering;
 
@@ -46,7 +46,7 @@ public class SerialLed {
     private Y128Steering.SteerHorseLed mSteerHorseLed = new Y128Steering.SteerHorseLed() ;
 
 
-    public void controlLed(LedSendControl2 ledControl2){
+    public void controlLed(LedSend2Control ledControl2){
 
         // 灯带控制
 

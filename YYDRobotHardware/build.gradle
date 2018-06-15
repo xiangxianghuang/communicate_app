@@ -48,7 +48,7 @@ android {
 
     sourceSets.main {
 
-        java.srcDirs += [ "src/CARO/java","src/Y20/java","src/Y20D/java","src/Y50/java","src/Y128/java","src/Y138/java","src/Y165/java"]
+        java.srcDirs += [ "src/CARO/java","src/Y20/java","src/Y20D/java","src/Y50/java","src/Y128/java","src/Y148/java","src/Y165/java"]
         jniLibs.srcDirs +=  ["src/CARO/jniLibs","src/Y20/jniLibs","src/Y20D/jniLibs", "src/Y128/jniLibs","src/Y165/jniLibs"]
         aidl.srcDirs +=  ["src/Y128/aidl"]
 //        aidl.srcDirs "/src/Y128/aidl"

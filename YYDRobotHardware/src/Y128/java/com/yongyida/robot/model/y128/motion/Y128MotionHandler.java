@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.SparseArray;
 
-import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.SendResponse;
 import com.hiva.communicate.app.common.send.data.BaseSendControl;
 import com.hiva.communicate.app.server.IResponseListener;
 import com.hiva.communicate.app.utils.LogHelper;
@@ -66,7 +66,7 @@ public class Y128MotionHandler extends MotionHandler {
     }
 
     @Override
-    public BaseResponse onHandler(MotionSend send, IResponseListener responseListener) {
+    public SendResponse onHandler(MotionSend send, IResponseListener responseListener) {
 
         BaseSendControl baseSendControl = send.getBaseControl() ;
         LogHelper.i(TAG , LogHelper.__TAG__() );

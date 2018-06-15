@@ -1,4 +1,12 @@
-package com.hiva.communicate.app.common.send;
+package com.yongyida.robot.model.y148.battery;
+
+import android.content.Context;
+
+import com.hiva.communicate.app.common.response.SendResponse;
+import com.hiva.communicate.app.server.IResponseListener;
+import com.yongyida.robot.communicate.app.hardware.battery.BatteryHandler;
+import com.yongyida.robot.communicate.app.hardware.battery.send.BatterySend;
+
 
 
 /* 
@@ -33,56 +41,17 @@ package com.hiva.communicate.app.common.send;
                     不见满街漂亮妹，哪个归得程序员？ 
 */
 
-import android.content.Context;
-
-import com.hiva.communicate.app.client.Receiver;
-import com.hiva.communicate.app.common.send.data.BaseSendControl;
-
 /**
- * Create By HuangXiangXiang 2018/6/5
+ * Create By HuangXiangXiang 2018/6/8
  */
-public class SendClient {
+public class Y148BatteryHandler extends BatteryHandler {
 
-    private static SendClient mSendClient ;
-    public static SendClient getInstance(Context context){
-
-        if(mSendClient == null){
-
-            mSendClient = new SendClient(context.getApplicationContext()) ;
-        }
-        return mSendClient ;
+    public Y148BatteryHandler(Context context) {
+        super(context);
     }
 
-    private HardwareClient mHardwareClient ;
-    private Receiver mReceiver ;
-
-
-    private SendClient(Context context){
-
-        mHardwareClient = HardwareClient.getInstance(context) ;
-        mReceiver = mHardwareClient.getHardwareReceiver() ;
+    @Override
+    public SendResponse onHandler(BatterySend send, IResponseListener responseListener) {
+        return null;
     }
-
-
-    /**
-     *
-     * 发送控制命令（可以在主线程中使用）
-     * @param context   可以为空，Android 上下文（）
-     * @param control   不能为空，发送的类型
-     * @param response  可为空，回调函数
-     *
-     *      一般只是发送一个命令,如控制运动前进, context 为空;
-     *
-     *
-     * */
-    public void send(final Context context, final BaseSendControl control, final SendResponseListener response) {
-
-        control.setTag(context);
-        BaseSend send = control.getSend();
-
-        mReceiver.send(context, send , response) ;
-
-    }
-
-
 }

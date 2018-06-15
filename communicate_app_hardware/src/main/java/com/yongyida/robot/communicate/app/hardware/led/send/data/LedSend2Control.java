@@ -37,7 +37,7 @@ package com.yongyida.robot.communicate.app.hardware.led.send.data;
  * Create By HuangXiangXiang 2018/6/1
  * 灯带控制效果
  */
-public class LedSendControl2 extends BaseLedSendControl {
+public class LedSend2Control extends BaseLedSendControl {
 
     private Direction direction = Direction.BOTH;
 

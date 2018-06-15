@@ -2,8 +2,7 @@ package com.yongyida.robot.model.caro.led;
 
 import android.content.Context;
 
-import com.hiva.communicate.app.common.send.SendResponseListener;
-import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.SendResponse;
 import com.hiva.communicate.app.server.IResponseListener;
 import com.yongyida.robot.communicate.app.hardware.led.LedHandler;
 import com.yongyida.robot.communicate.app.hardware.led.send.LedSend;
@@ -21,7 +20,7 @@ public class CaroLedHandler extends LedHandler {
     }
 
     @Override
-    public BaseResponse onHandler(LedSend send, IResponseListener responseListener) {
+    public SendResponse onHandler(LedSend send, IResponseListener responseListener) {
         return null;
     }
 

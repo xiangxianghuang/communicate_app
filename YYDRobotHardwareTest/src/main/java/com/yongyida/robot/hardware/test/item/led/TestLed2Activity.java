@@ -10,7 +10,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.hiva.communicate.app.common.send.SendClient;
-import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSendControl2;
+import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSend2Control;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
 
@@ -68,7 +68,7 @@ public class TestLed2Activity extends TestBaseActivity implements SeekBar.OnSeek
                                     "七彩跑圈",
                                     "关灯",
                                     } ;
-    private LedSendControl2 mLedControl2 = new LedSendControl2();
+    private LedSend2Control mLedControl2 = new LedSend2Control();
 
     @Override
     protected View initContentView() {
@@ -117,7 +117,7 @@ public class TestLed2Activity extends TestBaseActivity implements SeekBar.OnSeek
         @Override
         public int getCount() {
 
-            return LedSendControl2.Effect.values().length;
+            return LedSend2Control.Effect.values().length;
         }
 
         @Override
@@ -155,7 +155,7 @@ public class TestLed2Activity extends TestBaseActivity implements SeekBar.OnSeek
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        mLedControl2.setEffect(LedSendControl2.Effect.values()[position]);
+        mLedControl2.setEffect(LedSend2Control.Effect.values()[position]);
 
         SendClient.getInstance(this).send(null, mLedControl2, null);
 
@@ -166,15 +166,15 @@ public class TestLed2Activity extends TestBaseActivity implements SeekBar.OnSeek
 
         if(checkedId == R.id.direction_left_rbn){
 
-            mLedControl2.setDirection(LedSendControl2.Direction.LEFT);
+            mLedControl2.setDirection(LedSend2Control.Direction.LEFT);
 
         }else  if(checkedId == R.id.direction_right_rbn){
 
-            mLedControl2.setDirection(LedSendControl2.Direction.RIGHT);
+            mLedControl2.setDirection(LedSend2Control.Direction.RIGHT);
 
         }else  if(checkedId == R.id.direction_both_rbn){
 
-            mLedControl2.setDirection(LedSendControl2.Direction.BOTH);
+            mLedControl2.setDirection(LedSend2Control.Direction.BOTH);
         }
 
     }

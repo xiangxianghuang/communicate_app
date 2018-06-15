@@ -483,7 +483,7 @@ public class TestGroupFrameFragment extends BaseFragment implements
      * */
     private void executeRecordArmAngle(OneFrameScript recordArmAngle){
 
-        SendClient.getInstance(getActivity()).sendInNotMainThread(null, recordArmAngle, null);
+        SendClient.getInstance(getActivity()).send(null, recordArmAngle, null);
     }
 
 

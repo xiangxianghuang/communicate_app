@@ -12,8 +12,8 @@ import com.yongyida.robot.model.y128.battery.Y128BatteryHandler;
 import com.yongyida.robot.model.y128.led.Y128LedHandler;
 import com.yongyida.robot.model.y128.motion.Y128MotionHandler;
 import com.yongyida.robot.model.y128.touch.Y128TouchHandler;
-import com.yongyida.robot.model.y138.led.Y138LedHandler;
-import com.yongyida.robot.model.y138.montrol.Y138MotionHandler;
+import com.yongyida.robot.model.y148.led.Y148LedHandler;
+import com.yongyida.robot.model.y148.montrol.Y148MotionHandler;
 import com.yongyida.robot.model.y165.battery.Y165BatteryHandler;
 import com.yongyida.robot.model.y165.led.Y165LedHandler;
 import com.yongyida.robot.model.y165.pir.Y165PirHandler;
@@ -159,10 +159,10 @@ public final class HardwareConfig {
 //        TouchHandler touchControl = new Y128TouchHandler(mContext) ;
 //        addControl(TouchSend.class, touchControl) ;
 //
-        LedHandler ledControl = new Y138LedHandler(mContext) ;
+        LedHandler ledControl = new Y148LedHandler(mContext) ;
         addControl(ledControl) ;
 
-        MotionHandler motionControl = new Y138MotionHandler(mContext) ;
+        MotionHandler motionControl = new Y148MotionHandler(mContext) ;
         addControl( motionControl) ;
 
 //        HandHandler handHandler = new Y138HandHandler(mContext) ;

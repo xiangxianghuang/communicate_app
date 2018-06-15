@@ -1,4 +1,4 @@
-package com.hiva.communicate.app.common.send;
+package com.yongyida.robot.model.y148.led.control;
 
 
 /* 
@@ -33,56 +33,61 @@ package com.hiva.communicate.app.common.send;
                     不见满街漂亮妹，哪个归得程序员？ 
 */
 
-import android.content.Context;
-
-import com.hiva.communicate.app.client.Receiver;
-import com.hiva.communicate.app.common.send.data.BaseSendControl;
+import com.hiva.communicate.app.server.IResponseListener;
+import com.yongyida.robot.communicate.app.hardware.led.response.data.LedStatus;
+import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSend2Control;
+import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSendControl;
+import com.yongyida.robot.model.y148.led.AndroidLed;
+import com.yongyida.robot.model.y148.led.SerialLed;
+import com.yongyida.robot.model.y148.led.UsbLed;
 
 /**
- * Create By HuangXiangXiang 2018/6/5
+ * Create By HuangXiangXiang 2018/6/14
  */
-public class SendClient {
+public class Y148LedSend extends BaseControlHandler<LedSendControl>{
 
-    private static SendClient mSendClient ;
-    public static SendClient getInstance(Context context){
 
-        if(mSendClient == null){
+    private final SerialLed mSerialLed ;
+    private final AndroidLed mAndroidLed ;
+    private final UsbLed mUsbLed ;
 
-            mSendClient = new SendClient(context.getApplicationContext()) ;
+
+    private Y148LedSend(SerialLed serialLed, AndroidLed androidLed, UsbLed usbLed ){
+
+        this.mSerialLed = serialLed ;
+        this.mAndroidLed = androidLed ;
+        this.mUsbLed = usbLed ;
+    }
+
+
+    @Override
+    public void onHandler(LedSendControl ledControl, IResponseListener responseListener) {
+
+        LedSendControl.Position position = ledControl.getPosition() ;
+
+        switch (position){
+
+            case EAR:
+
+                mAndroidLed.controlLed(ledControl);
+                break;
+
+            case CHEST:
+
+                mUsbLed.controlLed(ledControl);
+
+                break;
+
+            case LEFT_ARM:
+
+                break;
+
+            case RIGHT_ARM:
+                break;
+            case ARM:
+                break;
+
         }
-        return mSendClient ;
-    }
-
-    private HardwareClient mHardwareClient ;
-    private Receiver mReceiver ;
-
-
-    private SendClient(Context context){
-
-        mHardwareClient = HardwareClient.getInstance(context) ;
-        mReceiver = mHardwareClient.getHardwareReceiver() ;
-    }
-
-
-    /**
-     *
-     * 发送控制命令（可以在主线程中使用）
-     * @param context   可以为空，Android 上下文（）
-     * @param control   不能为空，发送的类型
-     * @param response  可为空，回调函数
-     *
-     *      一般只是发送一个命令,如控制运动前进, context 为空;
-     *
-     *
-     * */
-    public void send(final Context context, final BaseSendControl control, final SendResponseListener response) {
-
-        control.setTag(context);
-        BaseSend send = control.getSend();
-
-        mReceiver.send(context, send , response) ;
 
     }
-
-
 }

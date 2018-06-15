@@ -9,8 +9,7 @@ import android.support.annotation.Nullable;
 import com.hiva.communicate.app.ResponseListener;
 import com.hiva.communicate.app.SendManager;
 import com.hiva.communicate.app.common.Container;
-import com.hiva.communicate.app.common.SendResponse;
-import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.SendResponse;
 import com.hiva.communicate.app.common.send.BaseSend;
 import com.hiva.communicate.app.setting.send.SettingSend;
 import com.hiva.communicate.app.setting.send.data.BaseSettingSendControl;
@@ -22,7 +21,7 @@ import com.hiva.communicate.app.utils.LogHelper;
  */
 public abstract class  ServerService extends Service {
 
-    private static final String TAG = ServerService.class.getSimpleName() ;
+    private static final String TAG = ServerService.class.getSimpleName();
 
     @Nullable
     @Override
@@ -32,163 +31,157 @@ public abstract class  ServerService extends Service {
         return mSendManager;
     }
 
-    private SendManager.Stub mSendManager = new SendManager.Stub(){
+    private SendManager.Stub mSendManager = new SendManager.Stub() {
 
         @Override
-        public String setResponseListener(String content, ResponseListener responseListener) throws RemoteException {
-            LogHelper.i(TAG, LogHelper.__TAG__());
-
-            return null;
-        }
-
-        @Override
-        public String send(final String content, final ResponseListener responseListener) throws RemoteException {
+        public void send(final String content, final ResponseListener responseListener) throws RemoteException {
 
             LogHelper.i(TAG, LogHelper.__TAG__());
 
-            Container container = Container.fromJson(content) ;
+            Container container = Container.fromJson(content);
             LogHelper.i(TAG, LogHelper.__TAG__() + ", container : " + container);
-            String className = container.getClassName() ;
+            String className = container.getClassName();
             LogHelper.i(TAG, LogHelper.__TAG__() + ", className : " + className);
-            String packageName = container.getPackageName() ;
+            final String packageName = container.getPackageName();
             LogHelper.i(TAG, LogHelper.__TAG__() + ", packageName : " + packageName);
 
-            SendResponse sendResponse ;
+            SendResponse sendResponse;
+
             try {
-                Class clazz = Class.forName(className) ;
+                Class clazz = Class.forName(className);
                 final BaseSend baseSend = (BaseSend) container.getData(clazz);
 
-                if(baseSend instanceof SettingSend){
+                if (baseSend instanceof SettingSend) {
 
                     SettingSend settingSend = (SettingSend) baseSend;
-                    sendResponse = controlFirstSend(packageName, settingSend) ;
+                    sendResponse = controlSettingSend(packageName, settingSend);
 
-                }else {
+                } else {
 
-                    sendResponse = controlSecondSend(packageName, baseSend, responseListener) ;
+                    if (!isCanCommunicate(packageName)) {
+
+                        sendResponse = new SendResponse(SendResponse.RESULT_SERVER_TEST_MODE);
+
+                    } else {
+
+                        new Thread() {
+
+                            @Override
+                            public void run() {
+
+                                controlOtherSend(packageName, baseSend, responseListener);
+                            }
+                        }.start();
+
+                        return;
+                    }
                 }
 
             } catch (ClassNotFoundException e) {
 
-                sendResponse = new SendResponse(SendResponse.RESULT_NO_SEND) ;
+                sendResponse = new SendResponse(SendResponse.RESULT_SERVER_NO_SEND);
             }
 
-            // 返回发送结果
-            return new Container(ServerService.this, sendResponse).toString();
+            LogHelper.i(TAG, LogHelper.__TAG__() + " sendResponse : " + sendResponse);
+            if (responseListener != null) {
+
+                Container sendContainer = new Container(ServerService.this, sendResponse);
+                responseListener.response(sendContainer.toJson());
+            }
+
         }
-    } ;
+    };
 
     //判断是否进入工程模式
-    private boolean isFactory = false ;
+    private boolean isFactory = false;
+
     /**
-     * 处理第一类
-     *
-     * */
-    private SendResponse controlFirstSend(String packageName, SettingSend settingSend){
+     * 处理设置一些信息类
+     */
+    private SendResponse controlSettingSend(String packageName, SettingSend settingSend) {
 
-        BaseSettingSendControl baseSendControl = settingSend.getBaseControl() ;
-        if(baseSendControl instanceof FactoryConfig){
+        BaseSettingSendControl baseSendControl = settingSend.getBaseControl();
+        if (baseSendControl instanceof FactoryConfig) {
 
-            if(isAllowSettingPackageName(packageName)){
+            if (isAllowSettingPackageName(packageName)) {
 
                 FactoryConfig factoryConfig = (FactoryConfig) baseSendControl;
-                this.isFactory = factoryConfig.isFactory() ;
+                this.isFactory = factoryConfig.isFactory();
 
-                return new SendResponse(SendResponse.RESULT_SUCCESS) ;
+                return new SendResponse(SendResponse.RESULT_SUCCESS);
 
-            }else {
-                return new SendResponse(SendResponse.RESULT_NO_SETTING_PERMISSION) ;
+            } else {
+                return new SendResponse(SendResponse.RESULT_SERVER_NO_SETTING_PERMISSION);
             }
 
         }
 
-        return new SendResponse(SendResponse.RESULT_NO_METHOD) ;
+        return new SendResponse(SendResponse.RESULT_SERVER_NO_CONTROL);
     }
 
 
-
     /**
-     * 处理第二类
-     * */
-    private SendResponse controlSecondSend(final String packageName, final BaseSend baseSend, final ResponseListener responseListener){
+     * 由于下面操作时间不确定，已经会造成一些异常错误
+     * 为了不造成主线程阻塞，和崩溃 新建一个线程 不会对主线程造成影响
+     */
+    private void controlOtherSend(final String packageName, final BaseSend baseSend, final ResponseListener responseListener) {
 
-        if (!isCanCommunicate(packageName)){
+        IResponseListener iResponseListener = null;
+        if (responseListener != null) {
 
-            return new SendResponse(SendResponse.RESULT_FACTORY_MODE) ;
-        }
+            final IBinder iBinder = responseListener.asBinder();
+            iResponseListener = new IResponseListener() {
 
+                @Override
+                public int onResponse(SendResponse response) {
 
-        // 新开一个
-        new Thread(){
+                    if (isCanCommunicate(packageName)) {
 
+                        Container responseContainer = new Container(ServerService.this, response);
+                        String responseString = responseContainer.toString();
 
-            @Override
-            public void run() {
+                        if (!iBinder.isBinderAlive()) {
 
-                IResponseListener iResponseListener = null ;
-                if(responseListener != null){
+                            return 1;
 
-                    final IBinder iBinder = responseListener.asBinder() ;
-                    iResponseListener = new IResponseListener(){
+                        } else {
 
-                        @Override
-                        public int onResponse(BaseResponse response) {
+                            try {
+                                responseListener.response(responseString);
 
-
-                            if(isCanCommunicate(packageName)){
-
-                                Container responseContainer = new Container(ServerService.this,response) ;
-                                String responseString = responseContainer.toString() ;
-
-                                if(!iBinder.isBinderAlive()){
-
-                                    return 1 ;
-
-                                }else {
-
-                                    try {
-                                        responseListener.response(responseString);
-
-                                        return 0 ;
-                                    } catch (RemoteException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                }
+                                return 0;
+                            } catch (RemoteException e) {
+                                e.printStackTrace();
                             }
-
-                            return -1 ;
-                        }
-                    };
-                }
-
-                try{
-
-                    onReceiver(baseSend,iResponseListener) ;
-
-                }catch (Exception e){
-
-                    LogHelper.e(TAG, LogHelper.__TAG__() + " , Exception : " + e.getMessage());
-
-                    if(iResponseListener != null){
-
-                        BaseResponse baseResponse = new BaseResponse(BaseResponse.RESULT_EXCEPTION , e.getMessage()) ;
-
-                        Container responseContainer = new Container(ServerService.this,baseResponse) ;
-                        String responseString = responseContainer.toString() ;
-                        try {
-                            responseListener.response(responseString);
-                        } catch (RemoteException e1) {
-                            e.printStackTrace();
-                            LogHelper.e(TAG, LogHelper.__TAG__() + " , Exception : " + e.getMessage());
                         }
                     }
+                    return -1;
+                }
+            };
+        }
 
+        try {
+
+            onReceiver(baseSend, iResponseListener);
+
+        } catch (Exception e) {
+
+            LogHelper.e(TAG, LogHelper.__TAG__() + " , Exception : " + e.getMessage());
+
+            if (iResponseListener != null) {
+
+                SendResponse sendResponse = new SendResponse(SendResponse.RESULT_SERVER_EXCEPTION, e.getMessage());
+
+                Container responseContainer = new Container(ServerService.this, sendResponse);
+                String responseString = responseContainer.toString();
+                try {
+                    responseListener.response(responseString);
+                } catch (RemoteException e1) {
+                    e.printStackTrace();
+                    LogHelper.e(TAG, LogHelper.__TAG__() + " , Exception : " + e.getMessage());
                 }
             }
-        }.start();
-
-        return new SendResponse(SendResponse.RESULT_SUCCESS) ;
+        }
     }
 
 

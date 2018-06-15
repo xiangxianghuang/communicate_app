@@ -38,7 +38,7 @@ package com.yongyida.robot.communicate.app.hardware.led.send.data;
  * Led灯库
  *
  */
-public class LedLibrary {
+public class LedLibraryControl {
 
 
     /**状态*/

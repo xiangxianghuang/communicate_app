@@ -12,7 +12,7 @@ public class LedStatueControl {
 
     private LedHelper mLedHelper = LedHelper.getInstance();
 
-//    public BaseResponse onControl(LedControl ledControl){
+//    public SendResponse onControl(LedControl ledControl){
 //
 //        /**位置*/
 ////        int position = ledControl.getPosition() ;

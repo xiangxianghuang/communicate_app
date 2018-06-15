@@ -1,12 +1,4 @@
-package com.yongyida.robot.model.y138.battery;
-
-import android.content.Context;
-
-import com.hiva.communicate.app.common.response.BaseResponse;
-import com.hiva.communicate.app.server.IResponseListener;
-import com.yongyida.robot.communicate.app.hardware.battery.BatteryHandler;
-import com.yongyida.robot.communicate.app.hardware.battery.send.BatterySend;
-
+package com.yongyida.robot.model.y148.led.control;
 
 
 /* 
@@ -41,17 +33,16 @@ import com.yongyida.robot.communicate.app.hardware.battery.send.BatterySend;
                     不见满街漂亮妹，哪个归得程序员？ 
 */
 
+import com.hiva.communicate.app.common.send.data.BaseSendControl;
+import com.hiva.communicate.app.server.IResponseListener;
+
 /**
- * Create By HuangXiangXiang 2018/6/8
+ * Create By HuangXiangXiang 2018/6/14
  */
-public class Y138BatteryHandler extends BatteryHandler {
+public abstract class BaseControlHandler<T extends BaseSendControl> {
 
-    public Y138BatteryHandler(Context context) {
-        super(context);
-    }
+    protected T baseSendControl ;
 
-    @Override
-    public BaseResponse onHandler(BatterySend send, IResponseListener responseListener) {
-        return null;
-    }
+    public abstract void onHandler(T baseSendControl, IResponseListener responseListener);
+
 }

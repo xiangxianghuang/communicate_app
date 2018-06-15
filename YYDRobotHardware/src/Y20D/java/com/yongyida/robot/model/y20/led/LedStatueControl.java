@@ -9,7 +9,7 @@ public class LedStatueControl {
 
     private final static String TAG = LogHelper.__FILE__() ;
 
-//    public BaseResponse onControl(LedControl ledControl){
+//    public SendResponse onControl(LedControl ledControl){
 //
 //        /**位置*/
 //        int position = ledControl.getPosition() ;

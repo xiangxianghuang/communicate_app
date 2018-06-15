@@ -2,7 +2,7 @@ package com.yongyida.robot.model.y20.battery;
 
 import android.content.Context;
 
-import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.SendResponse;
 import com.hiva.communicate.app.common.send.data.BaseSendControl;
 import com.hiva.communicate.app.server.IResponseListener;
 import com.hiva.communicate.app.utils.LogHelper;
@@ -117,7 +117,7 @@ public class Y20BatteryHandler extends BatteryHandler {
     }
 
     @Override
-    public BaseResponse onHandler(final BatterySend send, final IResponseListener responseListener) {
+    public SendResponse onHandler(final BatterySend send, final IResponseListener responseListener) {
 
         BaseSendControl baseSendControl = send.getBaseControl() ;
         if(baseSendControl instanceof QueryBattery){

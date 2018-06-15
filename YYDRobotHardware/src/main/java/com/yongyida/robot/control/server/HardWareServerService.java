@@ -4,8 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.SendResponse;
 import com.hiva.communicate.app.common.send.BaseSend;
+import com.hiva.communicate.app.common.send.data.BaseSendControl;
 import com.hiva.communicate.app.server.IResponseListener;
 import com.hiva.communicate.app.server.ServerService;
 import com.hiva.communicate.app.utils.LogHelper;
@@ -57,15 +58,27 @@ public class HardWareServerService extends ServerService {
 
         LogHelper.i(TAG, LogHelper.__TAG__() + "，BaseSend : " + send);
 
-        BaseResponse baseResponse = null;
+        SendResponse sendResponse = null;
 
         BaseHandler baseHandler = mHardwareConfig.getControl(send.getClass()) ;
         if(baseHandler != null){
 
             try{
 
-                baseResponse = baseHandler.onHandler(send ,responseListener) ;
-                LogHelper.i(TAG, LogHelper.__TAG__() + "，baseResponse : " + baseResponse);
+                BaseSendControl baseSendControl = send.getBaseControl();
+
+
+
+
+
+
+                sendResponse = baseHandler.onHandler(send ,responseListener) ;
+
+
+
+
+
+                LogHelper.i(TAG, LogHelper.__TAG__() + "，sendResponse : " + sendResponse);
             }catch (Exception e){
 
                 LogHelper.e(TAG, LogHelper.__TAG__() + "，Exception : " + e );
@@ -74,16 +87,16 @@ public class HardWareServerService extends ServerService {
         }else{
 
             LogHelper.e(TAG, LogHelper.__TAG__() + "，无对应的处理方式!" );
-            baseResponse = new BaseResponse(BaseResponse.RESULT_CAN_NOT_HANDLE,null) ;
+            sendResponse = new SendResponse(SendResponse.RESULT_SERVER_NO_HANDLE,null) ;
         }
-        LogHelper.i(TAG, LogHelper.__TAG__() + "，baseResponse : " + baseResponse);
-        if(responseListener != null && baseResponse != null){
 
-            responseListener.onResponse(baseResponse);
+        LogHelper.i(TAG, LogHelper.__TAG__() + "，sendResponse : " + sendResponse);
+        if(responseListener != null && sendResponse != null){
+
+            responseListener.onResponse(sendResponse);
         }
 
     }
-
 
     public static final String ACTION_MOVE = "com.yongyida.robot.MOVE" ;
     public static final String KEY_ACTION = "action" ;

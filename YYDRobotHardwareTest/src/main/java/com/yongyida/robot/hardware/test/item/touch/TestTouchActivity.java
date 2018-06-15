@@ -16,9 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hiva.communicate.app.common.send.SendResponseListener;
-import com.hiva.communicate.app.common.SendResponse;
-import com.hiva.communicate.app.common.response.BaseResponse;
-import com.hiva.communicate.app.common.response.BaseResponseControl;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.touch.send.data.QueryTouchInfo;
 import com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchInfo;
@@ -187,50 +184,25 @@ public class TestTouchActivity extends TestBaseActivity {
      * */
     private void queryTouchInfo(){
 
-        new Thread(){
+        SendResponseListener responseListener = new SendResponseListener<TouchInfo>() {
 
             @Override
-            public void run() {
+            public void onSuccess(TouchInfo touchInfo) {
 
+                Message message = mTouchHandler.obtainMessage(TouchHandler.TOUCH_INFO) ;
+                message.obj = touchInfo ;
+                mTouchHandler.sendMessage(message) ;
+            }
 
-
-                SendResponseListener responseListener = new SendResponseListener<TouchInfo>() {
-
-                    @Override
-                    public void onSuccess(TouchInfo touchInfo) {
-
-                        Message message = mTouchHandler.obtainMessage(TouchHandler.TOUCH_INFO) ;
-                        message.obj = touchInfo ;
-                        mTouchHandler.sendMessage(message) ;
-                    }
-
-                    @Override
-                    public void onFail(int result, String message) {
-
-                    }
-
-                };
-
-                QueryTouchInfo queryTouchInfo = new QueryTouchInfo() ;
-                SendResponse sendResponse = SendClient.getInstance(TestTouchActivity.this).sendInNotMainThread(null,queryTouchInfo, responseListener) ;
-                if (sendResponse == null) {
-
-                    // 发送不成功
-                    LogHelper.i(TAG, LogHelper.__TAG__());
-//                    Toast.makeText(TestBatteryActivity.this, "发送失败，返回为空！", Toast.LENGTH_LONG).show();
-
-                }else{
-
-                    int result = sendResponse.getResult() ;
-                    if(result != SendResponse.RESULT_SUCCESS)
-
-                        // 发送不成功
-                        LogHelper.i(TAG, LogHelper.__TAG__() + ", result : " + result);
-//                        Toast.makeText(TestBatteryActivity.this,"发送失败，返回为:" + result , Toast.LENGTH_LONG).show(); ;
-                }
+            @Override
+            public void onFail(int result, String message) {
 
             }
-        }.start();
+
+        };
+
+        QueryTouchInfo queryTouchInfo = new QueryTouchInfo() ;
+        SendClient.getInstance(TestTouchActivity.this).send(null,queryTouchInfo, responseListener) ;
 
     }
 

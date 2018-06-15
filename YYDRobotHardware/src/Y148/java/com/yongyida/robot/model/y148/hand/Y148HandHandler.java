@@ -3,7 +3,7 @@
 //import android.content.Context;
 //
 //import com.hiva.communicate.app.common.send.SendResponseListener;
-//import com.hiva.communicate.app.common.response.BaseResponse;
+//import com.hiva.communicate.app.common.response.SendResponse;
 //import com.hiva.communicate.app.common.send.data.BaseSendControl;
 //import com.hiva.communicate.app.server.IResponseListener;
 //import com.hiva.communicate.app.utils.LogHelper;
@@ -17,7 +17,7 @@
 //import com.yongyida.robot.communicate.app.hardware.hand.send.data.QueryHandAngle;
 //import com.yongyida.robot.communicate.app.hardware.hand.send.data.TeacherSendControl;
 //import com.yongyida.robot.model.agreement.Y138Steering;
-//import com.yongyida.robot.model.y138.led.Y138LedHandler;
+//import com.yongyida.robot.model.y138.led.Y148LedHandler;
 //import com.yongyida.robot.usb_uart.UART;
 //
 //
@@ -82,7 +82,7 @@
 //    }
 //
 //    @Override
-//    public BaseResponse onHandler(HandSend send, final IResponseListener responseListener) {
+//    public SendResponse onHandler(HandSend send, final IResponseListener responseListener) {
 //
 //        BaseSendControl baseSendControl = send.getBaseControl() ;
 //        LogHelper.i(TAG , LogHelper.__TAG__() );

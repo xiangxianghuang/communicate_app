@@ -33,7 +33,7 @@ package com.hiva.communicate.app.server;
                     不见满街漂亮妹，哪个归得程序员？ 
 */
 
-import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.SendResponse;
 
 /**
  * Create By HuangXiangXiang 2018/6/7
@@ -45,5 +45,5 @@ public interface IResponseListener {
      * 1 表示通讯断开
      *
      * */
-    int onResponse(BaseResponse response) ;
+    int onResponse(SendResponse response) ;
 }

@@ -2,10 +2,9 @@ package com.yongyida.robot.communicate.app.hardware;
 
 import android.content.Context;
 
-import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.SendResponse;
 import com.hiva.communicate.app.common.send.BaseSend;
 import com.hiva.communicate.app.server.IResponseListener;
-import com.hiva.communicate.app.server.ServerService;
 import com.hiva.communicate.app.utils.LogHelper;
 
 import java.lang.reflect.ParameterizedType;
@@ -27,7 +26,7 @@ public abstract class BaseHandler<T extends BaseSend> {
         this.mContext = context ;
     }
 
-    public abstract BaseResponse onHandler(T send, IResponseListener responseListener) ;
+    public abstract SendResponse onHandler(T send, IResponseListener responseListener) ;
 
 
     public Class<T> getSendClass(){

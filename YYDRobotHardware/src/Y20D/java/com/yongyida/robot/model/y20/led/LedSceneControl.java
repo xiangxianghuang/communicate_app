@@ -1,6 +1,5 @@
 package com.yongyida.robot.model.y20.led;
 
-import com.hiva.communicate.app.common.response.BaseResponse;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.led.ear.ChestLedHelper;
 import com.yongyida.robot.led.ear.EarLedHelper;
@@ -15,7 +14,7 @@ public class LedSceneControl {
 
     private final static String TAG = LogHelper.__FILE__() ;
 
-//    public BaseResponse onControl(LedScene ledScene){
+//    public SendResponse onControl(LedScene ledScene){
 //
 //        LogHelper.i(TAG , LogHelper.__TAG__() + ledScene.name());
 //

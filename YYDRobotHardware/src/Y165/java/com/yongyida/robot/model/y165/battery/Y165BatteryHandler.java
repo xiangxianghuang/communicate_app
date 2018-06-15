@@ -2,7 +2,7 @@ package com.yongyida.robot.model.y165.battery;
 
 import android.content.Context;
 
-import com.hiva.communicate.app.common.response.BaseResponse;
+import com.hiva.communicate.app.common.response.SendResponse;
 import com.hiva.communicate.app.server.IResponseListener;
 import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.hardware.battery.BatteryHandler;
@@ -25,7 +25,7 @@ public class Y165BatteryHandler extends BatteryHandler {
 
 
     @Override
-    public BaseResponse onHandler(BatterySend send, IResponseListener responseListener) {
+    public SendResponse onHandler(BatterySend send, IResponseListener responseListener) {
 
         LogHelper.i(TAG, LogHelper.__TAG__());
 

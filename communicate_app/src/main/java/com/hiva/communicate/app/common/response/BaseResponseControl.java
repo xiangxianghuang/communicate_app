@@ -42,18 +42,18 @@ public abstract class BaseResponseControl {
 
     private static final String TAG = BaseSendControl.class.getSimpleName() ;
 
-    public BaseResponse baseResponse ;
+    public SendResponse sendResponse;
 
-    public BaseResponse getResponse(){
+    public SendResponse getResponse(){
 
-        if(baseResponse == null){
+        if(sendResponse == null){
 
-            baseResponse = new BaseResponse() ;
+            sendResponse = new SendResponse() ;
         }
 
         // 每次发送前执行
-        baseResponse.setBaseControl(this);
-        return baseResponse ;
+        sendResponse.setBaseControl(this);
+        return sendResponse;
     }
 
 

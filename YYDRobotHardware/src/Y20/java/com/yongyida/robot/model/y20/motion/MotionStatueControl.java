@@ -12,7 +12,7 @@ public class MotionStatueControl {
 //        motionHelper = new MotionHelper(serialPort);
 //    }
 //
-//    protected BaseResponse onControl(ArrayList<MotionSendControl> motionControls) {
+//    protected SendResponse onControl(ArrayList<MotionSendControl> motionControls) {
 //
 ////        motionHelper.open();
 ////
