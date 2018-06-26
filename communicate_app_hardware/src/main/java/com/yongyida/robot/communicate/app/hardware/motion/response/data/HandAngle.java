@@ -33,7 +33,7 @@ package com.yongyida.robot.communicate.app.hardware.motion.response.data;
                     不见满街漂亮妹，哪个归得程序员？ 
 */
 
-import com.hiva.communicate.app.common.response.BaseResponseControl;
+import com.yongyida.robot.communicate.app.common.response.BaseResponseControl;
 
 /**
  * Create By HuangXiangXiang 2018/6/12

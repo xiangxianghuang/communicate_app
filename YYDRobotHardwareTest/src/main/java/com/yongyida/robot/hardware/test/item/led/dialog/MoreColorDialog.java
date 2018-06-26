@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.hiva.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.common.send.SendClient;
 import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSendControl;
 import com.yongyida.robot.hardware.test.R;
 

@@ -10,7 +10,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
-import com.hiva.communicate.app.utils.LogHelper;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
 

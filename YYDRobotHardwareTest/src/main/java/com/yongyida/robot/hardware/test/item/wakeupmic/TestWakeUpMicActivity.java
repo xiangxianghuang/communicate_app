@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.hiva.communicate.app.utils.LogHelper;
 import com.iflytek.aiui.uartkit.UARTAgent;
 import com.iflytek.aiui.uartkit.constant.UARTConstant;
 import com.iflytek.aiui.uartkit.entity.AIUIPacket;
@@ -14,9 +13,9 @@ import com.iflytek.aiui.uartkit.entity.CustomPacket;
 import com.iflytek.aiui.uartkit.entity.MsgPacket;
 import com.iflytek.aiui.uartkit.listener.EventListener;
 import com.iflytek.aiui.uartkit.listener.UARTEvent;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
-import com.yongyida.robot.hardware.test.item.wakeupmic.data.AIUIPacketData;
 
 import org.json.JSONException;
 import org.json.JSONObject;

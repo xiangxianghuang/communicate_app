@@ -4,13 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.hiva.communicate.app.common.response.SendResponse;
-import com.hiva.communicate.app.common.send.BaseSend;
-import com.hiva.communicate.app.common.send.data.BaseSendControl;
-import com.hiva.communicate.app.server.IResponseListener;
-import com.hiva.communicate.app.server.ServerService;
-import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.communicate.app.hardware.BaseHandler;
+import com.yongyida.robot.communicate.app.common.response.SendResponse;
+import com.yongyida.robot.communicate.app.common.send.BaseSend;
+import com.yongyida.robot.communicate.app.hardware.BaseSendHandlers;
+import com.yongyida.robot.communicate.app.server.IResponseListener;
+import com.yongyida.robot.communicate.app.server.ServerService;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.control.model.HardwareConfig;
 
 /**
@@ -60,23 +59,12 @@ public class HardWareServerService extends ServerService {
 
         SendResponse sendResponse = null;
 
-        BaseHandler baseHandler = mHardwareConfig.getControl(send.getClass()) ;
-        if(baseHandler != null){
+        BaseSendHandlers baseSendHandlers = mHardwareConfig.getControl(send.getClass()) ;
+        if(baseSendHandlers != null){
 
             try{
 
-                BaseSendControl baseSendControl = send.getBaseControl();
-
-
-
-
-
-
-                sendResponse = baseHandler.onHandler(send ,responseListener) ;
-
-
-
-
+                sendResponse = baseSendHandlers.onHandler(send ,responseListener) ;
 
                 LogHelper.i(TAG, LogHelper.__TAG__() + "，sendResponse : " + sendResponse);
             }catch (Exception e){

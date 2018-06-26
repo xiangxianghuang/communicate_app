@@ -13,11 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.hiva.communicate.app.common.response.BaseResponseControl;
-import com.hiva.communicate.app.common.send.SendResponseListener;
-import com.hiva.communicate.app.common.send.SendClient;
-import com.hiva.communicate.app.utils.LogHelper;
+
+import com.yongyida.robot.communicate.app.common.response.BaseResponseControl;
+import com.yongyida.robot.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.common.send.SendResponseListener;
 import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSendControl;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.data.ModelInfo;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
@@ -175,6 +176,11 @@ public class TestLedActivity extends TestBaseActivity implements View.OnClickLis
         mLedPositionGvw.setAdapter(mLedPositionAdapter);
         mEffectGvw.setAdapter(mEffectAdapter);
 
+
+
+        ledControl.setPosition(LedSendControl.Position.CHEST);
+        ledControl.setEffect(LedSendControl.Effect.NORMAL);
+        ledControl.setColor(0xFF0000);
     }
 
 

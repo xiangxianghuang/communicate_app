@@ -32,15 +32,15 @@ public class UART {
 
     private static final String ACTION_USB_PERMISSION = "com.yongyida.robot.USB_PERMISSION";
 
-    private static UART mUART ;
+    private static UART mInstance ;
     public static UART getInstance(Context context){
 
-        if(mUART == null){
+        if(mInstance == null){
 
-            mUART = new UART(context.getApplicationContext()) ;
+            mInstance = new UART(context.getApplicationContext()) ;
         }
 
-        return mUART ;
+        return mInstance ;
     }
 
     private Context mContext ;

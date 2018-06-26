@@ -39,10 +39,10 @@ package com.yongyida.robot.communicate.app.hardware.motion.send.data.constant;
  */
 public enum Direction {
 
-    LEFT(1),
-    RIGHT(0),
-    BOTH(2),
-    SAME;
+    LEFT(1),        // 左
+    RIGHT(0),       // 右
+    SAME(2),        // 相同
+    BOTH;           // 同时
 
     public int value ;
     Direction(){

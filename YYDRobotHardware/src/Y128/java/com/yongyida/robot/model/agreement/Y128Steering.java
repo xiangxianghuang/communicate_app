@@ -39,7 +39,7 @@ public class Y128Steering {
     public static final byte HEAD_1         = (byte) 0X55;
 
 
-    public static byte[] getCmd(SingleChip singleChip){
+    private static byte[] getCmd(SingleChip singleChip){
 
         return getCmd(singleChip.getContent()) ;
     }
@@ -60,32 +60,17 @@ public class Y128Steering {
         return cmd ;
     }
 
-//    private static byte getCheck(){
-//
-//        int check = 0 ;
-//
-//        int length = BYTE_CMD.length - 1 ;
-//        for (int i =0 ; i < length ; i++){
-//
-//            check += (0xff&BYTE_CMD[i]) ;
-//        }
-//
-//        check = -check ;
-//        return (byte) check;
-//    }
+    private static byte getCheck(byte[] data){
 
-    public static byte getCheck(byte[] data){
-
-        int check = 0 ;
+        byte check = 0 ;
 
         int length = data.length - 1 ;
         for (int i =0 ; i < length ; i++){
 
-            check += (0xff&data[i]) ;
+            check += data[i] ;
         }
 
-//        check = -check ;
-        return (byte) check;
+        return check;
     }
 
     /*****************************以下是据地的的类型***********************************************/
@@ -99,11 +84,16 @@ public class Y128Steering {
             content[0] = getFunction();
         }
 
-        public abstract byte getFunction();  // 功能码
+        protected abstract byte getFunction();  // 功能码
 
-        public byte[] getContent() {
+        protected byte[] getContent() {
 
             return content ;
+        }
+
+        public byte[] getCmd() {
+
+            return Y128Steering.getCmd(this) ;
         }
     }
 
@@ -175,7 +165,7 @@ public class Y128Steering {
 //
 //
 //    /**左右舵机*/
-//    public static class HeadLeftRight extends SingleChip{
+//    public static class Head extends SingleChip{
 //
 //        public static final byte RESET               = 0x00 ;
 //        public static final byte LEFT                = 0x01 ; //500 - 1500
@@ -653,13 +643,13 @@ public class Y128Steering {
      * */
     public static class Ultrasonic extends SingleChip{
 
-        public static final byte MODE_NO_SEND_ANDROID       = 0x00 ;
-        public static final byte MODE_START_SEND_ANDROID    = 0x01 ;
-        public static final byte MODE_STOP_SEND_ANDROID     = 0x02 ;
+        public static final byte MODE_ANDROID_DEFAULT           = 0x00 ;
+        public static final byte MODE_ANDROID_SEND              = 0x01 ;
+        public static final byte MODE_ANDROID_NO_SEND           = 0x02 ;
 
-        public static final byte MODE_SEND_SLAMWARE         = 0x00 ;
-        public static final byte MODE_START_SEND_SLAMWARE    = 0x01 ;
-        public static final byte MODE_STOP_SEND_SLAMWARE     = 0x02 ;
+        public static final byte MODE_SLAM_DEFAULT              = 0x00 ;
+        public static final byte MODE_SLAM_SEND                 = 0x01 ;
+        public static final byte MODE_SLAM_NO_SEND              = 0x02 ;
 
 
         @Override
@@ -825,6 +815,10 @@ public class Y128Steering {
     }
 
 
+    /**
+     * LED 常亮
+     *
+     * */
     public static class SteerLed2 extends SingleChip{
 
         @Override
@@ -927,9 +921,28 @@ public class Y128Steering {
         public static final int FAULT_CODE_20 = 0x20 ;   //0x20 传感器板启动不成功或主板与传感器板连接异常
         public static final int FAULT_CODE_21 = 0x21 ;   //0x21 传感器板启动后断开连接
         public static final int FAULT_CODE_22 = 0x22 ;   //0x22 传感器数据帧接收出错
-        public static final int FAULT_CODE_40 = 0x40 ;   //0x40  slamware core启动不成功
-        public static final int FAULT_CODE_41 = 0x41 ;   //0x41  slamware core内部出错
+        public static final int FAULT_CODE_40 = 0x40 ;   //0x40 slamware core启动不成功
+        public static final int FAULT_CODE_41 = 0x41 ;   //0x41 slamware core内部出错
         public static final int FAULT_CODE_50 = 0x50 ;   //0x50 电量计初始化不成功
+
+
+        private static final SparseArray<String> FAULT_MESSAGES = new SparseArray<>() ;
+        static {
+
+            FAULT_MESSAGES.put(Y128Steering.ReceiveFault.FAULT_CODE_10, "步科底盘启动不成功" );
+            FAULT_MESSAGES.put(Y128Steering.ReceiveFault.FAULT_CODE_20, "传感器板启动不成功或主板与传感器板连接异常" );
+            FAULT_MESSAGES.put(Y128Steering.ReceiveFault.FAULT_CODE_21, "传感器板启动后断开连接" );
+            FAULT_MESSAGES.put(Y128Steering.ReceiveFault.FAULT_CODE_22, "传感器数据帧接收出错" );
+            FAULT_MESSAGES.put(Y128Steering.ReceiveFault.FAULT_CODE_40, "slamware core启动不成功" );
+            FAULT_MESSAGES.put(Y128Steering.ReceiveFault.FAULT_CODE_41, "slamware core内部出错" );
+            FAULT_MESSAGES.put(Y128Steering.ReceiveFault.FAULT_CODE_50, "电量计初始化不成功" );
+        }
+
+        public static String getFaultMessages(int code){
+
+            return FAULT_MESSAGES.get(code) ;
+        }
+
 
 
         @Override
@@ -982,7 +995,6 @@ public class Y128Steering {
     /**
      *  OBD数据包
      */
-
     public static class OBDData extends Receive{
 
         public static SparseArray<String> driverStatusInfos = new SparseArray<>() ;
@@ -1194,6 +1206,12 @@ public class Y128Steering {
         public byte getChargeState() {
             return chargeState;
         }
+
+        public boolean isCharging(){
+
+            return chargeState == CHARGE_IS_CHARGING || chargeState == CHARGE_WIRE_CHARGING || chargeState == CHARGE_FULL ;
+        }
+
 
         public byte getKincoState() {
             return kincoState;

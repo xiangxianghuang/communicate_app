@@ -25,8 +25,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hiva.communicate.app.common.send.SendClient;
-import com.hiva.communicate.app.setting.send.data.FactoryConfig;
+import com.yongyida.robot.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.setting.send.data.FactoryConfig;
 import com.yongyida.robot.hardware.test.data.ModelInfo;
 import com.yongyida.robot.hardware.test.data.SettingData;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;

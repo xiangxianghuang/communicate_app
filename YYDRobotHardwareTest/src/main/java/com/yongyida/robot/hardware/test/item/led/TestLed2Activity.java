@@ -9,7 +9,8 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.hiva.communicate.app.common.send.SendClient;
+
+import com.yongyida.robot.communicate.app.common.send.SendClient;
 import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSend2Control;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;

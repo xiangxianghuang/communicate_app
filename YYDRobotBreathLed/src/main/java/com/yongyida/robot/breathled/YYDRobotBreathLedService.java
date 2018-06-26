@@ -8,9 +8,8 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.hiva.communicate.app.utils.LogHelper;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 
-//import com.yongyida.robot.communicate.app.hardware.led.data.LedControl;
 
 /**
  * Created by HuangXiangXiang on 2018/4/2.

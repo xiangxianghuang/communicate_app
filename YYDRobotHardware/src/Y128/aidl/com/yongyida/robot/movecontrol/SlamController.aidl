@@ -19,7 +19,7 @@ interface SlamController {
     int right() ;
 
     //定点
-    int point(int position); 
+    int touchPosition(int position);
     
 	// 介绍完成
 	int introduceEnd(int position);  

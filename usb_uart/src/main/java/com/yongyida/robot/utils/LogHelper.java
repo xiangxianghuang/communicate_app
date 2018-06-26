@@ -34,7 +34,6 @@ public class LogHelper {
     public static void i(String tag, String info) {
         if (debug) {
 			Log.i(tag, info);
-//            Log.i("hxx",tag + info);
         }
         saveSdcardFile("i", tag, info) ;
     }

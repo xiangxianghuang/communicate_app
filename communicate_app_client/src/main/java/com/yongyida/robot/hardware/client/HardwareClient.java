@@ -2,8 +2,8 @@ package com.yongyida.robot.hardware.client;
 
 import android.content.Context;
 
-import com.hiva.communicate.app.client.Client;
-import com.hiva.communicate.app.client.Receiver;
+import com.robot.communicate.app.client.Client;
+import com.robot.communicate.app.client.Receiver;
 
 /**
  * Created by HuangXiangXiang on 2017/12/5.

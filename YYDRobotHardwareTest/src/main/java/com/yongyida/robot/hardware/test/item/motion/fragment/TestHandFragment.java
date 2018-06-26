@@ -45,7 +45,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 
-import com.hiva.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.common.send.SendClient;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.ArmControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.FingerControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.HandControl;
@@ -198,9 +198,9 @@ public class TestHandFragment extends BaseFragment implements View.OnClickListen
 
                 mHandControl.setDirection(Direction.LEFT);
 
-            }else if(checkedId == R.id.direction_left_rbn){
+            }else if(checkedId == R.id.direction_right_rbn){
 
-                mHandControl.setDirection(Direction.LEFT);
+                mHandControl.setDirection(Direction.RIGHT);
 
             }else if(checkedId == R.id.direction_same_rbn){
 

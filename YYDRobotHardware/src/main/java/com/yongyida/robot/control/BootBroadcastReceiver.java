@@ -4,9 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.breathled.YYDRobotBreathLedService;
-import com.yongyida.robot.control.server.HardWareServerService;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 
 /**
  * Created by HuangXiangXiang on 2018/3/1.

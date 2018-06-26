@@ -9,10 +9,11 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.hiva.communicate.app.common.send.SendClient;
-import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.communicate.app.hardware.motion.send.data.ChangeArmIdControl;
+
+import com.yongyida.robot.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.ArmChangeIdControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.SteeringControl;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.hardware.test.R;
 
 /**
@@ -283,7 +284,7 @@ public class TestChangeArmIdFragment extends BaseFragment implements View.OnClic
 
     }
 
-    private ChangeArmIdControl mChangeArmId = new ChangeArmIdControl();
+    private ArmChangeIdControl mChangeArmId = new ArmChangeIdControl();
     // 控制手臂
     private SteeringControl mArmControl = new SteeringControl(null) ;
 

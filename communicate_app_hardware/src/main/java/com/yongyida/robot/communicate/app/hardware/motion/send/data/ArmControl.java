@@ -99,7 +99,6 @@ public class ArmControl extends BaseMotionSendControl {
         armRights.add(armRight5);
     }
 
-
     public Direction getDirection() {
         return direction;
     }
@@ -118,6 +117,15 @@ public class ArmControl extends BaseMotionSendControl {
     public void setAction(Action action) {
 
         this.action = action;
+    }
+
+
+    public ArrayList<SteeringControl> getArmLefts() {
+        return armLefts;
+    }
+
+    public ArrayList<SteeringControl> getArmRights() {
+        return armRights;
     }
 
     public SteeringControl getArm(SteeringControl.Position position) {

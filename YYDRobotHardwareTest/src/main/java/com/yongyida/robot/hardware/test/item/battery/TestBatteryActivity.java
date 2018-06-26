@@ -1,7 +1,5 @@
 package com.yongyida.robot.hardware.test.item.battery;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,11 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.hiva.communicate.app.common.send.SendResponseListener;
-import com.hiva.communicate.app.common.send.SendClient;
-import com.hiva.communicate.app.utils.LogHelper;
+import com.yongyida.robot.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.common.send.SendResponseListener;
 import com.yongyida.robot.communicate.app.hardware.battery.response.data.BatteryInfo;
 import com.yongyida.robot.communicate.app.hardware.battery.send.data.QueryBattery;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
 
@@ -200,9 +198,17 @@ public class TestBatteryActivity extends TestBaseActivity {
         SendResponseListener iResponseListener = new SendResponseListener<BatteryInfo>() {
 
             @Override
-            public void onSuccess(BatteryInfo batteryInfo) {
+            public void onSuccess(final BatteryInfo batteryInfo) {
 
                 LogHelper.i(TAG, LogHelper.__TAG__() + batteryInfo);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        refreshBatteryInfo(batteryInfo);
+                    }
+                });
 
             }
 

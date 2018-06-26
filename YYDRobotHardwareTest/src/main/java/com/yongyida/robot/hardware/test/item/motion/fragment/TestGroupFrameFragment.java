@@ -21,13 +21,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hiva.communicate.app.common.send.SendClient;
-import com.hiva.communicate.app.common.send.SendResponseListener;
-import com.hiva.communicate.app.utils.LogHelper;
+
+import com.yongyida.robot.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.common.send.SendResponseListener;
 import com.yongyida.robot.communicate.app.hardware.motion.response.data.HandAngle;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.OneFrameScript;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.QueryHandAngleControl;
-import com.yongyida.robot.communicate.app.hardware.motion.send.data.TeacherSendControl;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.ArmTeacherModeControl;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.item.motion.adapter.AngleAdapter;
 import com.yongyida.robot.hardware.test.item.motion.dialog.ReadDanceDialog;
@@ -88,7 +89,7 @@ public class TestGroupFrameFragment extends BaseFragment implements
     private Switch mTeacherSih;
     private Button mResetBtn;
 
-    private TeacherSendControl mTeacherControl = new TeacherSendControl();
+    private ArmTeacherModeControl mTeacherControl = new ArmTeacherModeControl();
     private QueryHandAngleControl mQueryHandAngle = new QueryHandAngleControl();;
     private GridView mAngleGvw;
     /**

@@ -1,6 +1,6 @@
 package com.yongyida.robot.communicate.app.hardware.touch.send;
 
-import com.hiva.communicate.app.common.send.BaseSend;
+import com.yongyida.robot.communicate.app.common.send.BaseSend;
 import com.yongyida.robot.communicate.app.hardware.touch.send.data.BaseTouchSendControl;
 
 /**

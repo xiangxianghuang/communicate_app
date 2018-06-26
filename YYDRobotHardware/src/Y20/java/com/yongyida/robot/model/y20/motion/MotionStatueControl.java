@@ -16,13 +16,13 @@ public class MotionStatueControl {
 //
 ////        motionHelper.open();
 ////
-////        MotionHandler leftFoot = null ;
-////        MotionHandler rightFoot = null ;
+////        MotionSendHandlers leftFoot = null ;
+////        MotionSendHandlers rightFoot = null ;
 ////
 ////        int size = motionControls.size() ;
 ////        for (int i = 0 ; i < size ; i++){
 ////
-////            MotionHandler motionData = motionControls.get(i) ;
+////            MotionSendHandlers motionData = motionControls.get(i) ;
 ////            switch (motionData.getPosition()){
 ////
 ////                case HEAD_LEFT_RIGHT:
@@ -67,7 +67,7 @@ public class MotionStatueControl {
 ////                argType = MotionHelper.DRVTYPE_BY_TIME;
 ////                argValue = motionData.getTime().getValue() ;
 ////
-////                MotionHandler.Speed headSpeed = motionData.getSpeed() ;
+////                MotionSendHandlers.Speed headSpeed = motionData.getSpeed() ;
 ////                if(headSpeed == null){
 ////
 ////                    motorSpeed = 0 ;
@@ -143,7 +143,7 @@ public class MotionStatueControl {
 ////                            argType = MotionHelper.DRVTYPE_BY_TIME;
 ////                            argValue = leftFoot.getTime().getValue();
 ////
-////                            MotionHandler.Speed lSpeed = leftFoot.getSpeed() ;
+////                            MotionSendHandlers.Speed lSpeed = leftFoot.getSpeed() ;
 ////                            if(lSpeed == null){
 ////
 ////                                leftSpeed = 0 ;
@@ -157,7 +157,7 @@ public class MotionStatueControl {
 ////                                leftSpeed = lSpeed.getValue() ;
 ////                            }
 ////
-////                            MotionHandler.Speed rSpeed = rightFoot.getSpeed() ;
+////                            MotionSendHandlers.Speed rSpeed = rightFoot.getSpeed() ;
 ////                            if(rSpeed == null){
 ////
 ////                                rightSpeed = 0 ;
@@ -236,7 +236,7 @@ public class MotionStatueControl {
 ////                        argType = MotionHelper.DRVTYPE_BY_TIME;
 ////                        argValue = leftFoot.getTime().getValue();
 ////
-////                        MotionHandler.Speed lSpeed = leftFoot.getSpeed() ;
+////                        MotionSendHandlers.Speed lSpeed = leftFoot.getSpeed() ;
 ////                        if(lSpeed == null){
 ////
 ////                            leftSpeed = 0 ;
@@ -305,7 +305,7 @@ public class MotionStatueControl {
 ////                        argType = MotionHelper.DRVTYPE_BY_TIME;
 ////                        argValue = rightFoot.getTime().getValue();
 ////
-////                        MotionHandler.Speed rSpeed = rightFoot.getSpeed() ;
+////                        MotionSendHandlers.Speed rSpeed = rightFoot.getSpeed() ;
 ////                        if(rSpeed == null){
 ////
 ////                            rightSpeed = 0 ;

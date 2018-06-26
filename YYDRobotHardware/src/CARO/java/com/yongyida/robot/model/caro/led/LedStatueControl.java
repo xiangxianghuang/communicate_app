@@ -1,6 +1,5 @@
 package com.yongyida.robot.model.caro.led;
 
-import com.hiva.communicate.app.utils.LogHelper;
 import com.yongyida.robot.breathled.LedHelper;
 
 /**
@@ -8,7 +7,7 @@ import com.yongyida.robot.breathled.LedHelper;
  */
 public class LedStatueControl {
 
-    private final static String TAG = LogHelper.__FILE__() ;
+    private final static String TAG = LedStatueControl.class.getSimpleName() ;
 
     private LedHelper mLedHelper = LedHelper.getInstance();
 

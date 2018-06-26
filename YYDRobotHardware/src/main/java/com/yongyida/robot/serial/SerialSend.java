@@ -1,7 +1,6 @@
 package com.yongyida.robot.serial;
 
-import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.model.agreement.Y128Steering;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
@@ -67,13 +66,6 @@ public final class SerialSend{
 
         return mFileOutputStream ;
     }
-
-
-    public int sendData(Y128Steering.SingleChip singleChip) {
-
-        return sendData(Y128Steering.getCmd(singleChip)) ;
-    }
-
 
     public int sendData(byte[] data) {
 

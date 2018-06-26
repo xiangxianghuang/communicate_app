@@ -28,9 +28,9 @@
 //import com.hiva.communicate.app.common.send.SendClient;
 //import com.hiva.communicate.app.utils.LogHelper;
 //import com.yongyida.robot.communicate.app.hardware.motion.send.data.MotionSendControl;
-//import com.yongyida.robot.communicate.app.hardware.motion.response.data.MoveFault;
-//import com.yongyida.robot.communicate.app.hardware.motion.send.data.QueryMoveFaultControl;
-//import com.yongyida.robot.communicate.app.hardware.motion.send.data.UltrasonicSendControl;
+//import com.yongyida.robot.communicate.app.hardware.motion.response.data.MotionSystem;
+//import com.yongyida.robot.communicate.app.hardware.motion.send.data.QueryMotionSystemControl;
+//import com.yongyida.robot.communicate.app.hardware.motion.send.data.QueryUltrasonicControl;
 //import com.yongyida.robot.hardware.test.R;
 //import com.yongyida.robot.hardware.test.TestMainActivity;
 //import com.yongyida.robot.hardware.test.data.ModelInfo;
@@ -137,7 +137,7 @@
 //
 //                    case MOVE_FAULT:
 //
-//                        MoveFault moveFault = (MoveFault) msg.obj;
+//                        MotionSystem moveFault = (MotionSystem) msg.obj;
 //                        String message = moveFault != null ? moveFault.getMessage() : null ;
 //                        activity.refreshMoveFault(message);
 //
@@ -163,10 +163,10 @@
 //            @Override
 //            public void run() {
 //
-//                QueryMoveFaultControl queryMoveFaultControl = new QueryMoveFaultControl() ;
-//                SendResponseListener responseListener = new SendResponseListener<MoveFault>() {
+//                QueryMotionSystemControl queryMoveFaultControl = new QueryMotionSystemControl() ;
+//                SendResponseListener responseListener = new SendResponseListener<MotionSystem>() {
 //                    @Override
-//                    public void onSuccess(MoveFault moveFault) {
+//                    public void onSuccess(MotionSystem moveFault) {
 //
 //                        Message message = motionHandler.obtainMessage(MotionHandler.MOVE_FAULT) ;
 //                        message.obj = moveFault ;
@@ -287,7 +287,7 @@
 //            @Override
 //            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 //
-//                UltrasonicSendControl ultrasonicControl = new UltrasonicSendControl() ;
+//                QueryUltrasonicControl ultrasonicControl = new QueryUltrasonicControl() ;
 //                ultrasonicControl.setShowAndroid(isChecked);
 //
 //                SendClient.getInstance(TestMotionFragment.this).send(null, ultrasonicControl,null);
@@ -337,7 +337,7 @@
 //
 ////   private void setAllShow(){
 ////
-////        UltrasonicSendControl ultrasonicControl = new UltrasonicSendControl() ;
+////        QueryUltrasonicControl ultrasonicControl = new QueryUltrasonicControl() ;
 ////        ultrasonicControl.setShowSlamware(false);
 ////        ultrasonicControl.setShowAndroid(true);
 ////
@@ -351,7 +351,7 @@
 //
 //        if(mUltrasonicAndroidSct.isChecked()){
 //
-//            UltrasonicSendControl ultrasonicControl = new UltrasonicSendControl() ;
+//            QueryUltrasonicControl ultrasonicControl = new QueryUltrasonicControl() ;
 //            ultrasonicControl.setShowAndroid(false);
 //
 //            SendClient.getInstance(TestMotionFragment.this).send(null, ultrasonicControl, null);
@@ -360,7 +360,7 @@
 //
 //    private void setShowSlamware(boolean isChecked){
 //
-//        UltrasonicSendControl ultrasonicControl = new UltrasonicSendControl() ;
+//        QueryUltrasonicControl ultrasonicControl = new QueryUltrasonicControl() ;
 //        ultrasonicControl.setShowSlamware(isChecked);
 //
 //
@@ -370,7 +370,7 @@
 //
 //    private void setShowAndroid(boolean isChecked){
 //
-//        UltrasonicSendControl ultrasonicControl = new UltrasonicSendControl() ;
+//        QueryUltrasonicControl ultrasonicControl = new QueryUltrasonicControl() ;
 //        ultrasonicControl.setShowAndroid(isChecked);
 //
 //        SendClient.getInstance(TestMotionFragment.this).send(null, ultrasonicControl, null);

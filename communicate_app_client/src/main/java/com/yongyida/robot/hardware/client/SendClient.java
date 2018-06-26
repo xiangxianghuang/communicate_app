@@ -35,11 +35,11 @@ package com.yongyida.robot.hardware.client;
 
 import android.content.Context;
 
-import com.hiva.communicate.app.client.Receiver;
-import com.hiva.communicate.app.common.IResponseListener;
-import com.hiva.communicate.app.common.SendResponse;
-import com.hiva.communicate.app.common.send.BaseControl;
-import com.hiva.communicate.app.common.send.BaseSend;
+import com.robot.communicate.app.client.Receiver;
+import com.robot.communicate.app.common.IResponseListener;
+import com.robot.communicate.app.common.SendResponse;
+import com.robot.communicate.app.common.send.BaseControl;
+import com.robot.communicate.app.common.send.BaseSend;
 
 /**
  * Create By HuangXiangXiang 2018/6/5

@@ -1,8 +1,6 @@
 package com.yongyida.robot.communicate.app.hardware.motion.send.data;
 
-import android.app.Activity;
-
-import com.hiva.communicate.app.common.send.data.BaseSendControl;
+import com.yongyida.robot.communicate.app.common.send.data.BaseSendControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
 
 

@@ -2,26 +2,20 @@ package com.yongyida.robot.hardware.test.item.motion.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.hiva.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.common.send.SendClient;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.SteeringControl;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.item.motion.adapter.NameAdapter;
 import com.yongyida.robot.hardware.test.view.HorizontalListView;
-
-import org.w3c.dom.Text;
 
 
 
@@ -96,12 +90,12 @@ public class TestAllMotionFragment extends BaseFragment implements View.OnClickL
 
     private final String[] modes = {"停止", "归中", "循环", "距离 时间", "距离 速度", "时间 速度"} ;
 
-    private final String[] distanceUnits = {"百分比", "毫米", "厘米", "角度值"} ;
+    private final String[] distanceUnits = {"真实值","百分比", "毫米", "厘米", "角度值"} ;
     private final String[] distanceTypes = {"偏移量", "目标值"} ;
 
     private final String[] timeUnits = {"毫秒", "秒"} ;
 
-    private final String[] speedUnits = {"真实数值", "百分比", "根据距离的单位"} ;
+    private final String[] speedUnits = {"真实值", "百分比", "根据距离的单位"} ;
 
     @Override
     public String getName() {

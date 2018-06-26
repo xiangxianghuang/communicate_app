@@ -41,7 +41,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.NumberPicker;
 
-import com.hiva.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.common.send.SendClient;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.SoundLocationControl;
 import com.yongyida.robot.hardware.test.R;
 

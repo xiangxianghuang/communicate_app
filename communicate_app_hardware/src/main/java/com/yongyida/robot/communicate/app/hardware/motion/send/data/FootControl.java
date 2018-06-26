@@ -52,6 +52,7 @@ public class FootControl extends BaseMotionSendControl {
     }
 
 
+    /**运行方式*/
     public enum Type{
 
         SERIAL, //串口
@@ -59,7 +60,9 @@ public class FootControl extends BaseMotionSendControl {
     }
 
     private Action action = Action.FORWARD ;
-    private Type type = Type.SERIAL ;
+
+    private Type type ;
+
     private SteeringControl foot = new SteeringControl(null) ;
 
     public Action getAction() {
@@ -74,6 +77,7 @@ public class FootControl extends BaseMotionSendControl {
         return type;
     }
 
+    /***/
     public void setType(Type type) {
         this.type = type;
     }

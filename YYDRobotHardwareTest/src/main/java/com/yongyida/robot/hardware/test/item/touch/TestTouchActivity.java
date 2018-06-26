@@ -15,12 +15,13 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hiva.communicate.app.common.send.SendResponseListener;
-import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.communicate.app.hardware.touch.send.data.QueryTouchInfo;
-import com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchInfo;
-import com.hiva.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.common.send.SendResponseListener;
+import com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchPosition;
+import com.yongyida.robot.communicate.app.hardware.touch.send.data.QueryTouchPositionControl;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.hardware.test.R;
+import com.yongyida.robot.hardware.test.data.ModelInfo;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
 
 import java.lang.ref.WeakReference;
@@ -29,6 +30,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import static com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchPosition.Position.BACK_HEAD;
+import static com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchPosition.Position.FORE_HEAD;
+import static com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchPosition.Position.LEFT_ARM;
+import static com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchPosition.Position.LEFT_SHOULDER;
+import static com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchPosition.Position.RIGHT_ARM;
+import static com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchPosition.Position.RIGHT_SHOULDER;
+
 /**
  * Created by HuangXiangXiang on 2018/3/1.
  */
@@ -36,67 +44,33 @@ public class TestTouchActivity extends TestBaseActivity {
 
     private static final String TAG = TestTouchActivity.class.getSimpleName() ;
 
+    private static String[] POSITION_NAMES;
+    private static TouchPosition.Position[] POSITIONS;
+    static{
+
+        if(ModelInfo.getInstance().getModel().contains("YQ110")){
+
+            POSITION_NAMES = new String[]{"前脑","后脑","左肩","右肩",} ;
+            POSITIONS = new TouchPosition.Position[]{FORE_HEAD, BACK_HEAD, LEFT_SHOULDER, RIGHT_SHOULDER} ;
+
+        }else {
+
+            POSITION_NAMES = new String[]{"前脑","后脑","左肩","左手臂", "右肩","右手臂"} ;
+            POSITIONS = new TouchPosition.Position[]{FORE_HEAD, BACK_HEAD, LEFT_SHOULDER, LEFT_ARM, RIGHT_SHOULDER, RIGHT_ARM} ;
+        }
+    }
+
 
     private LayoutInflater mLayoutInflater;
 
     private ListView mTouchLvw ;
 
-    private TouchHandler mTouchHandler ;
-    private static class TouchHandler extends Handler{
 
-        private static final int TOUCH_INFO = 0x01 ; //获取数据值
-
-        private final WeakReference<TestTouchActivity> mWeakReference ;
-        private TouchHandler(TestTouchActivity activity){
-            mWeakReference = new WeakReference<>(activity) ;
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-
-            TestTouchActivity activity = mWeakReference.get() ;
-            if(activity != null){
-
-                switch (msg.what){
-
-                    case TOUCH_INFO:
-
-                        TouchInfo touchInfo = (TouchInfo) msg.obj;
-                        activity.mPositions = null ;
-                        if(touchInfo != null){
-
-                            activity.mPositions = touchInfo.getPositions() ;
-                        }
-                        activity.refreshTouchInfo();
-
-                        break;
-
-                    default:
-                        break;
-
-
-                }
-
-            }
-
-        }
-    }
-
-
-    private ArrayList<TouchInfo.Position> mPositions ;
-    /**
-     * 刷新触摸点信息
-     * */
-    private void refreshTouchInfo(){
-
-        mBaseAdapter.notifyDataSetChanged();
-    }
-
-    private HashMap<TouchInfo.Point,String> touchInfos = new HashMap<>() ;
-    private void refreshTouchInfo(TouchInfo.Point point){
+    private HashMap<TouchPosition.Position,String> touchInfos = new HashMap<>() ;
+    private void refreshTouchInfo(TouchPosition.Position position){
 
         String info = df.format(new Date()) + getString(R.string.touch_single) ;
-        touchInfos.put(point, info) ;
+        touchInfos.put(position, info) ;
 
         mBaseAdapter.notifyDataSetChanged();
     }
@@ -124,9 +98,6 @@ public class TestTouchActivity extends TestBaseActivity {
         super.onCreate(savedInstanceState);
 
         mLayoutInflater = LayoutInflater.from(this);
-        mTouchHandler = new TouchHandler(this) ;
-
-        startTest() ;
 
         queryTouchInfo() ;
 
@@ -138,7 +109,6 @@ public class TestTouchActivity extends TestBaseActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        stopTest();
         unRegisterReceiver() ;
     }
 
@@ -167,7 +137,7 @@ public class TestTouchActivity extends TestBaseActivity {
 
                 LogHelper.i(TAG, LogHelper.__TAG__() + ",touchPoint : " + touchPoint);
 
-                TouchInfo.Point point = TouchInfo.Point.valueOf(touchPoint) ;
+                TouchPosition.Position point = TouchPosition.Position.valueOf(touchPoint) ;
 
                 refreshTouchInfo(point);
             }
@@ -184,49 +154,36 @@ public class TestTouchActivity extends TestBaseActivity {
      * */
     private void queryTouchInfo(){
 
-        SendResponseListener responseListener = new SendResponseListener<TouchInfo>() {
+        SendResponseListener responseListener = new SendResponseListener<TouchPosition>() {
 
             @Override
-            public void onSuccess(TouchInfo touchInfo) {
+            public void onSuccess(final TouchPosition touchInfo) {
 
-                Message message = mTouchHandler.obtainMessage(TouchHandler.TOUCH_INFO) ;
-                message.obj = touchInfo ;
-                mTouchHandler.sendMessage(message) ;
+                LogHelper.i(TAG , LogHelper.__TAG__());
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        TouchPosition.Position position = touchInfo.getPosition() ;
+                        refreshTouchInfo(position);
+                    }
+                });
+
             }
 
             @Override
             public void onFail(int result, String message) {
 
+                LogHelper.e(TAG , LogHelper.__TAG__());
             }
 
         };
 
-        QueryTouchInfo queryTouchInfo = new QueryTouchInfo() ;
-        SendClient.getInstance(TestTouchActivity.this).send(null,queryTouchInfo, responseListener) ;
-
+        QueryTouchPositionControl queryTouchPositionControl = new QueryTouchPositionControl() ;
+        SendClient.getInstance(TestTouchActivity.this).send(this, queryTouchPositionControl, responseListener) ;
     }
 
-
-    private void startTest(){
-
-//        TestData testData = new TestData() ;
-//        testData.setTest(true);
-//        TouchSend touchSend = new TouchSend() ;
-//        touchSend.setTestData(testData);
-//
-//        TouchClient.getInstance(TestTouchActivity.this).sendInMainThread(touchSend, null);
-
-    }
-
-    private void stopTest(){
-
-//        TestData testData = new TestData() ;
-//        testData.setTest(false);
-//        TouchSend touchSend = new TouchSend() ;
-//        touchSend.setTestData(testData);
-//
-//        TouchClient.getInstance(TestTouchActivity.this).sendInMainThread(touchSend, null);
-    }
 
 
     private BaseAdapter mBaseAdapter = new BaseAdapter() {
@@ -234,7 +191,7 @@ public class TestTouchActivity extends TestBaseActivity {
 
         @Override
         public int getCount() {
-            return mPositions == null ? 0 : mPositions.size();
+            return POSITIONS.length;
         }
 
         @Override
@@ -262,14 +219,9 @@ public class TestTouchActivity extends TestBaseActivity {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-
-            holder.setPosition(mPositions.get(position)) ;
-
+            holder.setPosition(position) ;
             return convertView;
         }
-
-
-
 
         class ViewHolder {
             View view;
@@ -282,10 +234,10 @@ public class TestTouchActivity extends TestBaseActivity {
                 this.mTouchInfoTvw = (TextView) view.findViewById(R.id.touch_info_tvw);
             }
 
-            public void setPosition(TouchInfo.Position position) {
+            public void setPosition(int position) {
 
-                mPositionTvw.setText(position.getName());
-                mTouchInfoTvw.setText(touchInfos.get(position.getPoint()));
+                mPositionTvw.setText(POSITION_NAMES[position]);
+                mTouchInfoTvw.setText(touchInfos.get(POSITIONS[position]));
             }
         }
 

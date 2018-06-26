@@ -1,6 +1,6 @@
 package com.yongyida.robot.led.ear;
 
-import com.hiva.communicate.app.utils.LogHelper;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 
 /**
  * Created by HuangXiangXiang on 2017/12/14.

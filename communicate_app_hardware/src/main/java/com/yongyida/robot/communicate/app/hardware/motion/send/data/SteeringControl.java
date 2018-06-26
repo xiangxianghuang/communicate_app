@@ -71,7 +71,7 @@ public class SteeringControl extends BaseMotionSendControl {
         FINGER_RIGHT_3,
         FINGER_RIGHT_4,
         FOOT_LEFT,
-        FOOT_RIGHT,
+        FOOT_RIGHT;
 
     }
 
@@ -80,21 +80,12 @@ public class SteeringControl extends BaseMotionSendControl {
      * */
     public enum Mode{
 
-        STOP(0),                // 停止
-        RESET(4),               // 归中
-        LOOP(3),                // 循环
-        DISTANCE_TIME(1) ,      // 距离 时间
-        DISTANCE_SPEED(2) ,     // 距离 速度
-        TIME_SPEED ;            // 时间 速度
-
-        public int value ;
-        Mode(){
-
-        }
-        Mode(int value){
-
-            this.value = value ;
-        }
+        STOP,                // 停止
+        RESET,               // 重置
+        LOOP,                // 循环
+        DISTANCE_TIME ,      // 距离 时间
+        DISTANCE_SPEED ,     // 距离 速度
+        TIME_SPEED           // 时间 速度
 
     }
 
@@ -116,6 +107,7 @@ public class SteeringControl extends BaseMotionSendControl {
          * */
         public enum Unit{
 
+            ORIGINAL,       // 真实值
             PERCENT,        // 百分比
             MM,             // 毫米
             CM,             // 厘米
@@ -125,14 +117,8 @@ public class SteeringControl extends BaseMotionSendControl {
         /**运动类型*/
         public enum Type {
 
-            BY(0),        //偏移量
-            TO(1);        //目标值
-
-            public int value ;
-            Type(int value){
-
-                this.value = value ;
-            }
+            BY,        //偏移量
+            TO         //目标值
         }
 
         private Unit unit = Unit.CM ;
@@ -237,10 +223,8 @@ public class SteeringControl extends BaseMotionSendControl {
             ACCORDING_DISTANCE      // 根据距离的单位，如果单位是角度，实际是每秒一度；如果单位是cm ，实际是每秒1cm
         }
 
-
-        private int value ;
-
         private Unit unit = Unit.PERCENT ;
+        private int value ;
 
         public int getValue() {
             return value;

@@ -1,6 +1,6 @@
 package com.yongyida.robot.model.y20.led;
 
-import com.hiva.communicate.app.utils.LogHelper;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 
 /**
  * Created by HuangXiangXiang on 2017/12/16.

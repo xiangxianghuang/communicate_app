@@ -3,7 +3,8 @@ package com.yongyida.robot.hardware.test.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.hiva.communicate.app.utils.LogHelper;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
+
 
 /**
  * Created by HuangXiangXiang on 2018/2/7.

@@ -1,7 +1,7 @@
 package com.yongyida.robot.serial;
 
 
-import com.hiva.communicate.app.utils.LogHelper;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;

@@ -12,7 +12,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.hiva.communicate.app.utils.LogHelper;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
 import com.yongyida.robot.hardware.test.item.motion.fragment.BaseFragment;
@@ -24,6 +24,7 @@ import com.yongyida.robot.hardware.test.item.motion.fragment.TestHandFragment;
 import com.yongyida.robot.hardware.test.item.motion.fragment.TestHeadFragment;
 import com.yongyida.robot.hardware.test.item.motion.fragment.TestMotionSystemFragment;
 import com.yongyida.robot.hardware.test.item.motion.fragment.TestSoundLocationFragment;
+import com.yongyida.robot.hardware.test.item.motion.fragment.TestUltrasonicFragment;
 import com.yongyida.robot.hardware.test.view.HorizontalListView;
 
 import java.util.ArrayList;
@@ -84,6 +85,7 @@ public class TestMotionActivity extends TestBaseActivity implements AdapterView.
         baseFragments.add(new TestChangeArmIdFragment()) ;
         baseFragments.add(new TestSoundLocationFragment()) ;
         baseFragments.add(new TestGroupFrameFragment()) ;
+        baseFragments.add(new TestUltrasonicFragment()) ;
         baseFragments.add(new TestMotionSystemFragment()) ;
 
     }
@@ -101,6 +103,7 @@ public class TestMotionActivity extends TestBaseActivity implements AdapterView.
 
         mFragmentNameHlv = (HorizontalListView) view.findViewById(R.id.fragment_name_hlv);
         mFragmentVpr = (ViewPager) view.findViewById(R.id.fragment_vpr);
+
 
         mFragmentNameHlv.setAdapter(mFragmentNameAdapter);
         mFragmentVpr.setAdapter(mFragmentAdapter);

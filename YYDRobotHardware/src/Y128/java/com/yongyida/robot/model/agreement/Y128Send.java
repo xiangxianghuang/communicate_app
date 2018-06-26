@@ -27,12 +27,6 @@ public class Y128Send {
         SerialReceive.getInstance().startReceive() ;
     }
 
-    public int sendData(Y128Steering.SingleChip singleChip) {
-
-        return serialSend.sendData(singleChip);
-    }
-
-
     public int sendData(byte[] data) {
 
         return serialSend.sendData(data);

@@ -42,7 +42,8 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.hiva.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.HeadControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.SteeringControl;
 import com.yongyida.robot.hardware.test.R;
 
@@ -51,8 +52,11 @@ import com.yongyida.robot.hardware.test.R;
  */
 public class TestHeadFragment extends BaseFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
-    private SteeringControl mHeadLeftRight = new SteeringControl(SteeringControl.Position.HEAD_LEFT_RIGHT);
-    private SteeringControl mHeadUpDown = new SteeringControl(SteeringControl.Position.HEAD_UP_DOWN);
+
+    private HeadControl mHeadControl = new HeadControl() ;
+    private SteeringControl mHeadLeftRight = mHeadControl.getHeadLeftRightControl();
+    private SteeringControl mHeadUpDown = mHeadControl.getHeadUpDownControl() ;
+
     private View view;
     private SeekBar mHeadLeftRightSpeedSbr;
     /**
@@ -195,108 +199,122 @@ public class TestHeadFragment extends BaseFragment implements View.OnClickListen
         int i = v.getId();
         if (i == R.id.head_right_end_btn) {
 
+            mHeadControl.setAction(HeadControl.Action.LEFT_RIGHT);
             mHeadLeftRight.setMode(SteeringControl.Mode.DISTANCE_SPEED);
             mHeadLeftRight.getDistance().setType(SteeringControl.Distance.Type.TO);
             mHeadLeftRight.getDistance().setValue(100);
 
-            SendClient.getInstance(getActivity()).send(null, mHeadLeftRight, null );
+            SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
         } else if (i == R.id.head_right_one_btn) {
 
+            mHeadControl.setAction(HeadControl.Action.LEFT_RIGHT);
             mHeadLeftRight.setMode(SteeringControl.Mode.DISTANCE_SPEED);
             mHeadLeftRight.getDistance().setType(SteeringControl.Distance.Type.BY);
             mHeadLeftRight.getDistance().setValue(10);
 
-            SendClient.getInstance(getActivity()).send(null, mHeadLeftRight, null );
+            SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
 
         } else if (i == R.id.head_left_right_reset_btn) {
 
+            mHeadControl.setAction(HeadControl.Action.LEFT_RIGHT);
             mHeadLeftRight.setMode(SteeringControl.Mode.RESET);
 
-            SendClient.getInstance(getActivity()).send(null, mHeadLeftRight, null );
+            SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
         } else if (i == R.id.head_left_one_btn) {
 
+            mHeadControl.setAction(HeadControl.Action.LEFT_RIGHT);
             mHeadLeftRight.setMode(SteeringControl.Mode.DISTANCE_SPEED);
             mHeadLeftRight.getDistance().setType(SteeringControl.Distance.Type.BY);
             mHeadLeftRight.getDistance().setValue(-10);
 
-            SendClient.getInstance(getActivity()).send(null, mHeadLeftRight, null );
+            SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
         } else if (i == R.id.head_left_end_btn) {
 
+            mHeadControl.setAction(HeadControl.Action.LEFT_RIGHT);
             mHeadLeftRight.setMode(SteeringControl.Mode.DISTANCE_SPEED);
             mHeadLeftRight.getDistance().setType(SteeringControl.Distance.Type.TO);
             mHeadLeftRight.getDistance().setValue(-100);
 
-            SendClient.getInstance(getActivity()).send(null, mHeadLeftRight, null );
+            SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
         } else if (i == R.id.head_left_right_loop_btn) {
 
 
+            mHeadControl.setAction(HeadControl.Action.LEFT_RIGHT);
             mHeadLeftRight.setMode(SteeringControl.Mode.LOOP);
 
-            SendClient.getInstance(getActivity()).send(null, mHeadLeftRight, null );
+            SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
 
         } else if (i == R.id.head_left_right_stop_btn) {
 
+            mHeadControl.setAction(HeadControl.Action.LEFT_RIGHT);
             mHeadLeftRight.setMode(SteeringControl.Mode.STOP);
 
-            SendClient.getInstance(getActivity()).send(null, mHeadLeftRight, null );
+            SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
         } else if (i == R.id.head_up_end_btn) {
 
+            mHeadControl.setAction(HeadControl.Action.UP_DOWN);
             mHeadUpDown.setMode(SteeringControl.Mode.DISTANCE_SPEED);
             mHeadUpDown.getDistance().setType(SteeringControl.Distance.Type.TO);
             mHeadUpDown.getDistance().setValue(-100);
 
-            SendClient.getInstance(getActivity()).send(null, mHeadUpDown, null );
+            SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
         } else if (i == R.id.head_up_one_btn) {
 
+            mHeadControl.setAction(HeadControl.Action.UP_DOWN);
             mHeadUpDown.setMode(SteeringControl.Mode.DISTANCE_SPEED);
             mHeadUpDown.getDistance().setType(SteeringControl.Distance.Type.BY);
             mHeadUpDown.getDistance().setValue(-10);
 
-            SendClient.getInstance(getActivity()).send(null, mHeadUpDown, null );
+            SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
         } else if (i == R.id.head_up_down_reset_btn) {
 
+            mHeadControl.setAction(HeadControl.Action.UP_DOWN);
             mHeadUpDown.setMode(SteeringControl.Mode.RESET);
 
-            SendClient.getInstance(getActivity()).send(null, mHeadUpDown, null );
+            SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
         } else if (i == R.id.head_down_one_btn) {
 
+            mHeadControl.setAction(HeadControl.Action.UP_DOWN);
             mHeadUpDown.setMode(SteeringControl.Mode.DISTANCE_SPEED);
             mHeadUpDown.getDistance().setType(SteeringControl.Distance.Type.BY);
             mHeadUpDown.getDistance().setValue(10);
 
-            SendClient.getInstance(getActivity()).send(null, mHeadUpDown, null );
+            SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
 
         } else if (i == R.id.head_down_end_btn) {
 
+            mHeadControl.setAction(HeadControl.Action.UP_DOWN);
             mHeadUpDown.setMode(SteeringControl.Mode.DISTANCE_SPEED);
             mHeadUpDown.getDistance().setType(SteeringControl.Distance.Type.TO);
             mHeadUpDown.getDistance().setValue(100);
 
-            SendClient.getInstance(getActivity()).send(null, mHeadUpDown, null );
+            SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
         } else if (i == R.id.head_up_down_loop_btn) {
 
+            mHeadControl.setAction(HeadControl.Action.UP_DOWN);
             mHeadUpDown.setMode(SteeringControl.Mode.LOOP);
 
-            SendClient.getInstance(getActivity()).send(null, mHeadUpDown, null );
+            SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
 
         } else if (i == R.id.head_up_down_stop_btn) {
 
+            mHeadControl.setAction(HeadControl.Action.UP_DOWN);
             mHeadUpDown.setMode(SteeringControl.Mode.STOP);
 
-            SendClient.getInstance(getActivity()).send(null, mHeadUpDown, null );
+            SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
         }
     }

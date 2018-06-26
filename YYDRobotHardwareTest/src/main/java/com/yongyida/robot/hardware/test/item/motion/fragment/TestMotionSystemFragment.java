@@ -33,14 +33,136 @@ package com.yongyida.robot.hardware.test.item.motion.fragment;
                     不见满街漂亮妹，哪个归得程序员？ 
 */
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.yongyida.robot.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.common.send.SendResponseListener;
+import com.yongyida.robot.communicate.app.hardware.motion.response.data.MotionSystem;
+import com.yongyida.robot.communicate.app.hardware.motion.response.data.Ultrasonic;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.QueryMotionSystemControl;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
+import com.yongyida.robot.hardware.test.R;
+
+import java.util.ArrayList;
+
 /**
  * Create By HuangXiangXiang 2018/6/13
  */
 public class TestMotionSystemFragment extends BaseFragment {
+
+    private static final String TAG = TestMotionSystemFragment.class.getSimpleName() ;
+
+    private QueryMotionSystemControl mQueryMotionSystemControl = new QueryMotionSystemControl();
+    private LayoutInflater mInflater;
+    private ListView mMotionSystemLvw;
 
     @Override
     public String getName() {
 
         return "马达系统信息";
     }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+
+        SendClient.getInstance(getActivity()).send(getActivity(), mQueryMotionSystemControl, mSendResponseListener );
+
+        this.mInflater = inflater;
+
+        View view = inflater.inflate(R.layout.fragment_test_motion_system, null);
+
+        initView(view);
+        return view;
+    }
+
+
+    private Handler mHandler = new Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+
+            items = (ArrayList<MotionSystem.Item>) msg.obj;
+            mAdapter.notifyDataSetChanged();
+        }
+    };
+
+    private SendResponseListener mSendResponseListener = new SendResponseListener<MotionSystem>(){
+
+
+        @Override
+        public void onSuccess(MotionSystem motionSystem) {
+
+            LogHelper.i(TAG, LogHelper.__TAG__() + ", ultrasonic : " + new Gson().toJson(motionSystem));
+
+            Message message = mHandler.obtainMessage() ;
+            message.obj = motionSystem.getItems() ;
+            mHandler.sendMessage(message) ;
+        }
+
+        @Override
+        public void onFail(int result, String message) {
+
+            LogHelper.e(TAG, LogHelper.__TAG__());
+        }
+    } ;
+
+
+    private void initView(View view) {
+
+        mMotionSystemLvw = (ListView) view.findViewById(R.id.motion_system_lvw);
+        mMotionSystemLvw.setAdapter(mAdapter);
+
+    }
+
+    private ArrayList<MotionSystem.Item> items ;
+
+    private BaseAdapter mAdapter = new BaseAdapter() {
+
+        @Override
+        public int getCount() {
+
+            return items == null ? 0 :items.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            TextView textView ;
+            if(convertView == null){
+
+                convertView = new TextView(getActivity()) ;
+            }
+
+            textView = (TextView) convertView;
+
+            MotionSystem.Item item = items.get(position) ;
+            textView.setText(item.title + "\n" + item.info);
+
+            return convertView;
+        }
+
+    };
+
+
 }

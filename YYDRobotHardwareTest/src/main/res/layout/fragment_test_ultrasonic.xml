@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <Button
+        android:id="@+id/execute_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="执行"
+        />
+
+    <RadioGroup
+        android:id="@+id/android_rgp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/android_tvw"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:text="是否发送给Android"
+            android:gravity="center"
+            />
+
+        <RadioButton
+            android:id="@+id/android_default_rbn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="默认"
+            />
+
+        <RadioButton
+            android:id="@+id/android_send_rbn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="发送"
+            />
+
+        <RadioButton
+            android:id="@+id/android_no_send_rbn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="不发送"
+            />
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/slam_rgp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/slam_tvw"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:text="是否发送给Slam"
+            android:gravity="center"
+            />
+
+        <RadioButton
+            android:id="@+id/slam_default_rbn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="默认"
+            />
+
+        <RadioButton
+            android:id="@+id/slam_send_rbn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="发送"
+            />
+
+        <RadioButton
+            android:id="@+id/slam_no_send_rbn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="不发送"
+            />
+    </RadioGroup>
+
+
+    <GridView
+        android:id="@+id/distance_gvw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="4"
+        />
+
+
+</LinearLayout>

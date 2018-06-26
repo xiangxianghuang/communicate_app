@@ -2,22 +2,19 @@ package com.yongyida.robot.model.y20.motion;
 
 import android.content.Context;
 
-import com.hiva.communicate.app.common.response.SendResponse;
-import com.hiva.communicate.app.server.IResponseListener;
-import com.yongyida.robot.communicate.app.hardware.motion.MotionHandler;
-import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
+import com.yongyida.robot.communicate.app.hardware.motion.MotionSendHandlers;
 
 /**
  * Created by HuangXiangXiang on 2017/12/5.
  */
-public class Y20DMotionControl extends MotionHandler {
+public class Y20DMotionControl extends MotionSendHandlers {
 
     public Y20DMotionControl(Context context) {
         super(context);
     }
 
-    @Override
-    public SendResponse onHandler(MotionSend send, IResponseListener responseListener) {
-        return null;
-    }
+//    @Override
+//    public SendResponse onHandler(MotionSend send, IResponseListener responseListener) {
+//        return null;
+//    }
 }

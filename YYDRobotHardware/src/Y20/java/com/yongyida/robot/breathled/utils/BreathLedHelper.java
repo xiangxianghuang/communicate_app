@@ -1,8 +1,6 @@
 package com.yongyida.robot.breathled.utils;
 
-import android.graphics.Color;
-
-import com.hiva.communicate.app.utils.LogHelper;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 
 import java.util.HashSet;
 

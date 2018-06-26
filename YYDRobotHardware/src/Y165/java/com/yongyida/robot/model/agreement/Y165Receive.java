@@ -1,7 +1,7 @@
 package com.yongyida.robot.model.agreement;
 
-import com.yongyida.robot.communicate.app.hardware.battery.BatteryHandler;
-import com.yongyida.robot.model.y165.pir.Y165PirHandler;
+import com.yongyida.robot.communicate.app.hardware.battery.BatterySendHandlers;
+import com.yongyida.robot.model.y165.pir.Y165PirSendHandlers;
 import com.yongyida.robot.serial.SerialReceive;
 
 /**
@@ -51,11 +51,11 @@ public class Y165Receive {
 
                 int status = data[4] ;
                 int level = data[5] ;
-
-                if(mOnBatteryChangedListener != null){
-
-                    mOnBatteryChangedListener.onBatteryChanged(status, level);
-                }
+//
+//                if(mOnBatteryChangedListener != null){
+//
+//                    mOnBatteryChangedListener.onBatteryChanged(status, level);
+//                }
 
                 break;
 
@@ -107,19 +107,19 @@ public class Y165Receive {
     }
 
 
-    /**
-     * 电池信息
-     * */
-    private BatteryHandler.OnBatteryChangedListener mOnBatteryChangedListener ;
-    public void setOnBatteryChangedListener(BatteryHandler.OnBatteryChangedListener onBatteryChangedListener){
+//    /**
+//     * 电池信息
+//     * */
+//    private BatterySendHandlers.OnBatteryChangedListener mOnBatteryChangedListener ;
+//    public void setOnBatteryChangedListener(BatterySendHandlers.OnBatteryChangedListener onBatteryChangedListener){
+//
+//        this.mOnBatteryChangedListener = onBatteryChangedListener ;
+//
+//    }
 
-        this.mOnBatteryChangedListener = onBatteryChangedListener ;
 
-    }
-
-
-    private Y165PirHandler.OnMonitorPersonListener mOnMonitorPersonListener ;
-    public void setOnMonitorPersonListener(Y165PirHandler.OnMonitorPersonListener onMonitorPersonListener) {
+    private Y165PirSendHandlers.OnMonitorPersonListener mOnMonitorPersonListener ;
+    public void setOnMonitorPersonListener(Y165PirSendHandlers.OnMonitorPersonListener onMonitorPersonListener) {
 
         this.mOnMonitorPersonListener = onMonitorPersonListener ;
     }

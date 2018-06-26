@@ -46,31 +46,23 @@ public class HandControl extends BaseMotionSendControl {
     /**手指运动类型*/
     public enum Action{
 
-        CUSTOM,                 // 自定义
-        RESET(0x01),            // 手臂手指初始化
-        MARK_FIST(0x02),        // 握拳
-        FINGER_WHEEL(0x03),     // 手指轮动
-        HAND_SHAKE(0x04),       // 握手
-        OK(0x05),               // OK
-        GOOD(0x06),             // 点赞
-        ROCK(0x07),             // 石头
-        SCISSORS(0x08),         // 剪刀
-        PAPER(0x09),            // 布
-        SHOW_WELCOME(0x0A),     // 迎宾
-        SHOW_WAVE(0x0B),        // 挥手
-        SHOW_LOVE(0x0C),        // 示爱
-        SHOW_666(0x0D),         // 666
-        SHOW_SELF(0x0E) ;       // 自定义
+        CUSTOM,           // 自定义
+        RESET,            // 手臂手指初始化
+        MARK_FIST,        // 握拳
+        FINGER_WHEEL,     // 手指轮动
+        HAND_SHAKE,       // 握手
+        OK,               // OK
+        GOOD,             // 点赞
+        ROCK,             // 石头
+        SCISSORS,         // 剪刀
+        PAPER,            // 布
+        SHOW_WELCOME,     // 迎宾
+        SHOW_WAVE,        // 挥手
+        SHOW_LOVE,        // 示爱
+        SHOW_666,         // 666
+        SHOW_SELF ;       // 自定义
 
-        public final byte value ;
-        Action(){
 
-            this(0) ;
-        }
-        Action(int value){
-
-            this.value = (byte) value;
-        }
 
     }
 

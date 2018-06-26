@@ -36,14 +36,24 @@ package com.yongyida.robot.communicate.app.hardware.motion.send.data;
 /**
  * Create By HuangXiangXiang 2018/6/12
  * 声源定位
+ *
+ * 转动的度数 对应的位置
+ *
+ *                  180
+ *              150     210
+ *          120             240
+ *      90                      270
+ *           60             300
+ *               30     330
+ *                   0
  */
 public class SoundLocationControl extends BaseMotionSendControl{
 
     /**
      * 转动的角度
      *
-     * 如果是360的倍数会立即停止
-     *
+     *  如果是360的倍数会立即停止
+     *  转动的角度值从0-359
      * */
     private int angle ;
 

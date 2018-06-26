@@ -1,10 +1,13 @@
 package com.yongyida.robot.model.agreement;
 
-import com.hiva.communicate.app.utils.LogHelper;
-import com.yongyida.robot.communicate.app.hardware.battery.BatteryHandler;
-import com.yongyida.robot.communicate.app.hardware.touch.TouchHandler;
-import com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchInfo;
-import com.yongyida.robot.model.y128.motion.Y128MotionHandler;
+import com.yongyida.robot.communicate.app.hardware.battery.control.QueryBatteryControlHandler;
+import com.yongyida.robot.communicate.app.hardware.battery.response.data.BatteryInfo;
+import com.yongyida.robot.communicate.app.hardware.motion.control.QueryMotionSystemControlHandler;
+import com.yongyida.robot.communicate.app.hardware.motion.control.QueryUltrasonicControlHandler;
+import com.yongyida.robot.communicate.app.hardware.touch.TouchSendHandlers;
+import com.yongyida.robot.communicate.app.hardware.touch.control.QueryTouchPositionControlHandler;
+import com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchPosition;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.serial.SerialReceive;
 
 /**
@@ -81,36 +84,36 @@ public class Y128Receive {
 
         LogHelper.i(TAG, LogHelper.__TAG__() + String.format("position :  %X" , data[4]));
 
-        if(mOnTouchListener != null) {
+        if(onTouchPositionListener != null) {
 
-            TouchInfo.Point point;
+            TouchPosition.Position point;
             // 前脑
-            if (0x01 == (data[4] & 0x01)) {
-                point = TouchInfo.Point.FORE_HEAD;
+            if (equal(data[4], 0x01)) {
+                point = TouchPosition.Position.FORE_HEAD;
             }
             // 后脑勺
-            else if (0x02 == (data[4] & 0x02)) {
-                point = TouchInfo.Point.BACK_HEAD;
+            else if (equal(data[4], 0x02)) {
+                point = TouchPosition.Position.BACK_HEAD;
             }
             // 右手臂
-            else if (0x04 == (data[4] & 0x04)) {
+            else if (equal(data[4], 0x04)) {
 
-                point = TouchInfo.Point.RIGHT_ARM;
+                point = TouchPosition.Position.RIGHT_ARM;
             }
             // 右肩
-            else if (0x08 == (data[4] & 0x08)) {
+            else if (equal(data[4], 0x08)) {
 
-                point = TouchInfo.Point.RIGHT_SHOULDER;
+                point = TouchPosition.Position.RIGHT_SHOULDER;
             }
             // 左肩
-            else if (0x10 == (data[4] & 0x10)) {
+            else if (equal(data[4], 0x10)) {
 
-                point = TouchInfo.Point.LEFT_SHOULDER;
+                point = TouchPosition.Position.LEFT_SHOULDER;
             }
             // 左手臂
-            else if (0x20 == (data[4] & 0x20)) {
+            else if (equal(data[4], 0x20)) {
 
-                point = TouchInfo.Point.LEFT_ARM;
+                point = TouchPosition.Position.LEFT_ARM;
             } else {
 
                 point = null;
@@ -118,18 +121,22 @@ public class Y128Receive {
 
             if (point != null) {
 
-                mOnTouchListener.onTouchListener(point);
+                onTouchPositionListener.onTouchPosition(point);
             }
         }
+    }
+
+    private boolean equal(int i1 , int i2){
+
+        return  i2 == (i1 & i2) ;
     }
 
     /**故障信息*/
     private void receiveFault(byte[] data){
 
-        if(this.mOnMoveFaultListener != null){
+        if(mOnMotionSystemChangedListener != null){
 
-            int faultCode = data[4] ;
-            this.mOnMoveFaultListener.onMoveFault(faultCode);
+            mOnMotionSystemChangedListener.onMotionSystemChanged( "运动故障信息", Y128Steering.ReceiveFault.getFaultMessages(data[4]));
         }
 
     }
@@ -139,9 +146,9 @@ public class Y128Receive {
 
         if(mOnUltrasonicChangedListener != null){
 
+            LogHelper.i(TAG, LogHelper.__TAG__());
             mReceiveUltrasonic.setData(data);
-
-            mOnUltrasonicChangedListener.onUltrasonicChanged(mReceiveUltrasonic);
+            mOnUltrasonicChangedListener.onUltrasonicChanged(mReceiveUltrasonic.getDistances());
         }
 
     }
@@ -152,22 +159,21 @@ public class Y128Receive {
 
         LogHelper.i(TAG, LogHelper.__TAG__() + " " + mOBDData .toString());
 
-        if(mOnBatteryChangedListener != null){
+        if(mOnBatteryChangeListener != null){
 
-            level = mOBDData.getLevel();
-
-            mOnBatteryChangedListener.onBatteryChanged(state, level);
+            mBatteryInfo.setLevel(mOBDData.getLevel());
+            mOnBatteryChangeListener.onBatteryChange(mBatteryInfo);
         }
 
-        if(mOnOBDDataChangedListener != null){
+        if(mOnMotionSystemChangedListener != null){
 
-            mOnOBDDataChangedListener.onSystemChanged(mOBDData);
+            mOnMotionSystemChangedListener.onMotionSystemChanged( "OBD信息", mOBDData.toString());
         }
     }
 
     /**
      * 系统信息
-     *
+     * 其中包括电池信息
      *
      * */
     private void receiveSystemState(byte[] data){
@@ -176,29 +182,27 @@ public class Y128Receive {
 
         LogHelper.i(TAG, LogHelper.__TAG__() + " " + mReceiveSystemState .toString());
 
-        if(mOnBatteryChangedListener != null){
+        if(mOnBatteryChangeListener != null){
 
-            state = mReceiveSystemState.getChargeState();
+            mBatteryInfo.setCharging(mReceiveSystemState.isCharging());
+            mBatteryInfo.setState(mReceiveSystemState.getChargeState());
 
-            mOnBatteryChangedListener.onBatteryChanged(state, level);
+            mOnBatteryChangeListener.onBatteryChange(mBatteryInfo);
         }
 
-        if(mOnSystemChangedListener != null){
+        if(mOnMotionSystemChangedListener != null){
 
-            mOnSystemChangedListener.onSystemChanged(mReceiveSystemState);
+            mOnMotionSystemChangedListener.onMotionSystemChanged( "系统信息", mReceiveSystemState.toString());
         }
-
 
     }
 
-    private int state ;
-    private int level ;
+    private BatteryInfo mBatteryInfo = new BatteryInfo() ;
     private Y128Steering.ReceiveTouch mReceiveTouch = new Y128Steering.ReceiveTouch();
     private Y128Steering.ReceiveFault mReceiveFault = new Y128Steering.ReceiveFault() ;
     private Y128Steering.ReceiveUltrasonic mReceiveUltrasonic = new Y128Steering.ReceiveUltrasonic() ;
     private Y128Steering.OBDData mOBDData = new Y128Steering.OBDData() ;
     private Y128Steering.ReceiveSystemState mReceiveSystemState = new Y128Steering.ReceiveSystemState();
-
 
 
     /**
@@ -234,44 +238,34 @@ public class Y128Receive {
     /**
      * 电池信息
      * */
-    private BatteryHandler.OnBatteryChangedListener mOnBatteryChangedListener ;
-    public void setOnBatteryChangedListener(BatteryHandler.OnBatteryChangedListener onBatteryChangedListener){
+    private QueryBatteryControlHandler.OnBatteryChangeListener mOnBatteryChangeListener ;
+    public void setOnBatteryChangeListener(QueryBatteryControlHandler.OnBatteryChangeListener onBatteryChangeListener) {
 
-        this.mOnBatteryChangedListener = onBatteryChangedListener ;
-
+        this.mOnBatteryChangeListener = onBatteryChangeListener;
     }
-
 
     /**
      * 触摸信息
      * */
-    private TouchHandler.OnTouchListener mOnTouchListener ;
-    public void setOnTouchListener(TouchHandler.OnTouchListener onTouchListener) {
-        this.mOnTouchListener = onTouchListener;
+    private QueryTouchPositionControlHandler.OnTouchPositionListener onTouchPositionListener ;
+    public void setOnTouchPositionListener(QueryTouchPositionControlHandler.OnTouchPositionListener onTouchPositionListener) {
+        this.onTouchPositionListener = onTouchPositionListener;
     }
 
-
-    private Y128MotionHandler.OnMoveFaultListener mOnMoveFaultListener ;
-    public void setOnMoveFaultListener(Y128MotionHandler.OnMoveFaultListener onMoveFaultListener) {
-        this.mOnMoveFaultListener = onMoveFaultListener;
-    }
-
-
-    private Y128MotionHandler.OnUltrasonicChangedListener mOnUltrasonicChangedListener ;
-    public void setOnUltrasonicChangedListener(Y128MotionHandler.OnUltrasonicChangedListener onUltrasonicChangedListener) {
+    /**
+     * 超声波信息
+     * */
+    private QueryUltrasonicControlHandler.OnUltrasonicChangedListener mOnUltrasonicChangedListener ;
+    public void setOnUltrasonicChangedListener(QueryUltrasonicControlHandler.OnUltrasonicChangedListener onUltrasonicChangedListener) {
         this.mOnUltrasonicChangedListener = onUltrasonicChangedListener;
     }
 
-    private Y128MotionHandler.OnSystemChangedListener mOnSystemChangedListener ;
-    public void setOnSystemChangedListener(Y128MotionHandler.OnSystemChangedListener onSystemChangedListener) {
-        this.mOnSystemChangedListener = onSystemChangedListener;
+    /**
+     * 系统信息
+     * */
+    private QueryMotionSystemControlHandler.OnMotionSystemChangedListener mOnMotionSystemChangedListener ;
+    public void setOnMotionSystemChangedListener(QueryMotionSystemControlHandler.OnMotionSystemChangedListener onMotionSystemChangedListener) {
+        this.mOnMotionSystemChangedListener = onMotionSystemChangedListener;
     }
-
-
-    private Y128MotionHandler.OnOBDDataChangedListener mOnOBDDataChangedListener ;
-    public void setOnOBDDataChangedListener(Y128MotionHandler.OnOBDDataChangedListener onOBDDataChangedListener) {
-        this.mOnOBDDataChangedListener = onOBDDataChangedListener;
-    }
-
 
 }

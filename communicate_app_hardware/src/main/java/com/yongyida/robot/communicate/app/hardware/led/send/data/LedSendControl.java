@@ -214,7 +214,7 @@ public class LedSendControl extends BaseLedSendControl {
 
     public enum Effect{
 
-        LED_NORMAL ,            //常亮
+        NORMAL ,            //常亮
         LED_ON ,            //常亮
         LED_OFF ,           //常灭
         BREATH ,            //呼吸灯

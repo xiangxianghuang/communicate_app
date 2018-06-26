@@ -44,7 +44,7 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.hiva.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.common.send.SendClient;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.FootControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.SteeringControl;
 import com.yongyida.robot.hardware.test.R;

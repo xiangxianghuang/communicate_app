@@ -15,7 +15,7 @@
 7. 亮度传感器(light)
 8. 摄像头状态(camera)
 9. Zigbee(zigbee)
-10. 视觉数据(vision)
+
 
 
 ## communicate_app_2
