@@ -162,6 +162,11 @@ public class UART {
         if(isOpen){
 
             int result = this.mDriver.WriteData(data, data.length) ;//小于0 表示失败
+            try {
+                Thread.sleep(10);   // 防止数据发送过快造成异常
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             LogHelper.i(TAG, LogHelper.__TAG__() + ", result " + result);
             if(result >= 0){
 
@@ -220,7 +225,7 @@ public class UART {
                 int length = mDriver.ReadData(buffer, buffer.length) ;
                 if(length > 0){
 
-//                    LogHelper.i(TAG, LogHelper.__TAG__() + ", length : " + length + ", data : " + toHexString(buffer, length));
+                    LogHelper.i(TAG, LogHelper.__TAG__() + ", length : " + length + ", data : " + toHexString(buffer, length));
                     parseData(buffer, length) ;
 
                 }
@@ -328,13 +333,13 @@ public class UART {
                 break;
             case CB_ID_SENSOR:
 
-                byte d = data[5] ;  // 00 表示 舵机板正常  ; 01 表示 右手 ; 02 表示 左手
+                byte state = data[5] ;  // 00 表示 舵机板正常  ; 01 表示 右手 ; 02 表示 左手
                 LogHelper.i(TAG, LogHelper.__TAG__() + ", length : " + length + ", data : " + toHexString(data, length));
 
                 break;
             case CB_DEV_LEFT_ARM_ANGLE:
 
-                byte f = data[5] ;// 左手运行状态 00 表示正常； 01表示未知错误（一般舵机未知错误）；02 无响应
+                state = data[5] ;// 左手运行状态 00 表示正常； 01表示未知错误（一般舵机未知错误）；02 无响应
                 int leftArm0 = byte2Int(data[6] , data[7]) ;
                 int leftArm1 = byte2Int(data[8] , data[9]) ;
                 int leftArm2 = byte2Int(data[10] , data[11]);
@@ -352,21 +357,21 @@ public class UART {
                     leftArms[4] = this.leftArm4 = leftArm4 ;
                     leftArms[5] = this.leftArm5 = leftArm5 ;
 
-                    LogHelper.i(TAG, LogHelper.__TAG__() + "左臂运行状态：" + f +
-                            ", leftArm0 : " + leftArm0 + ", leftArm1 : " + leftArm1 +
-                            ", leftArm2 : " + leftArm2 + ", leftArm3 : " + leftArm3 +
-                            ", leftArm4 : " + leftArm4 + ", leftArm5 : " + leftArm5  );
+//                    LogHelper.i(TAG, LogHelper.__TAG__() + "左臂运行状态：" + state +
+//                            ", leftArm0 : " + leftArm0 + ", leftArm1 : " + leftArm1 +
+//                            ", leftArm2 : " + leftArm2 + ", leftArm3 : " + leftArm3 +
+//                            ", leftArm4 : " + leftArm4 + ", leftArm5 : " + leftArm5  );
 
-                    for (DataChangeListener dataChangeListener : dataChangeListeners.values()) {
+                    if(mHandAngleChangedListener != null){
 
-                        dataChangeListener.onLeftArmChanged(leftArms);
+                        mHandAngleChangedListener.onLeftArmsChanged(state, leftArms);
                     }
                 }
 
                 break;
             case CB_DEV_RIGHT_ARM_ANGLE:
 
-                f = data[5] ;// 右手运行状态 00 表示正常； 01表示未知错误（一般舵机未知错误）；02 无响应
+                state = data[5] ;// 右手运行状态 00 表示正常； 01表示未知错误（一般舵机未知错误）；02 无响应
                 int rightArm0 = byte2Int(data[6] , data[7]) ;
                 int rightArm1 = byte2Int(data[8] , data[9]) ;
                 int rightArm2 = byte2Int(data[10] , data[11]);
@@ -385,25 +390,32 @@ public class UART {
                     rightArms[5] = this.rightArm5 = rightArm5 ;
 
 
-                    LogHelper.i(TAG, LogHelper.__TAG__() + "右臂运行状态：" + f +
-                            ", rightArm0 : " + rightArm0 + ", rightArm1 : " + rightArm1 +
-                            ", rightArm2 : " + rightArm2 + ", rightArm3 : " + rightArm3 +
-                            ", rightArm4 : " + rightArm4 + ", rightArm5 : " + rightArm5  );
+//                    LogHelper.i(TAG, LogHelper.__TAG__() + "右臂运行状态：" + state +
+//                            ", rightArm0 : " + rightArm0 + ", rightArm1 : " + rightArm1 +
+//                            ", rightArm2 : " + rightArm2 + ", rightArm3 : " + rightArm3 +
+//                            ", rightArm4 : " + rightArm4 + ", rightArm5 : " + rightArm5  );
 
-                    for (DataChangeListener dataChangeListener : dataChangeListeners.values()) {
+                    if(mHandAngleChangedListener != null){
 
-                        dataChangeListener.onRightArmChanged(rightArms);
+                        mHandAngleChangedListener.onRightArmsChanged(state, rightArms);
                     }
                 }
 
 
                 break;
-            case CB_DEV_HEAD_ANGLE:
+            case CB_DEV_HEAD_ANGLE: // 头部值（先左右，后前后）
+
+                state = data[5] ;
+                int headLeftRight = byte2Int(data[6], data[7]) ;
+                int headUpDown = byte2Int(data[8], data[9]) ;
+
+                LogHelper.i(TAG, LogHelper.__TAG__() + "头部运行状态：" + state +
+                        ", headLeftRight : " + headLeftRight + ", headUpDown : " + headUpDown );
 
                 break;
             case CB_DEV_LEFT_PALM_ANGLE:
 
-                f = data[5] ;// 左手指 运行状态 00 表示正常； 01表示未知错误（一般舵机未知错误）；02 无响应
+                state = data[5] ;// 左手指 运行状态 00 表示正常； 01表示未知错误（一般舵机未知错误）；02 无响应
                 int leftPalm0 = byte2Int(data[6] , data[7]) ;
                 int leftPalm1 = byte2Int(data[8] , data[9]) ;
                 int leftPalm2 = byte2Int(data[10] , data[11]);
@@ -421,14 +433,14 @@ public class UART {
                     leftFingers[4] = this.leftPalm4 = leftPalm4 ;
 
 
-                    LogHelper.i(TAG, LogHelper.__TAG__() + "左指运行状态：" + f +
+                    LogHelper.i(TAG, LogHelper.__TAG__() + "左指运行状态：" + state +
                             ", leftPalm0 : " + leftPalm0 + ", leftPalm1 : " + leftPalm1 +
                             ", leftPalm2 : " + leftPalm2 + ", leftPalm3 : " + leftPalm3 +
                             ", leftPalm4 : " + leftPalm4 );
 
-                    for (DataChangeListener dataChangeListener : dataChangeListeners.values()) {
+                    if(mHandAngleChangedListener != null){
 
-                        dataChangeListener.onLeftFinger(leftFingers);
+                        mHandAngleChangedListener.onLeftFingersChanged(state, leftFingers);
                     }
                 }
 
@@ -438,7 +450,7 @@ public class UART {
 
             case CB_DEV_RIGHT_PALM_ANGLE:
 
-                f = data[5] ;// 右手指 运行状态 00 表示正常； 01表示未知错误（一般舵机未知错误）；02 无响应
+                state = data[5] ;// 右手指 运行状态 00 表示正常； 01表示未知错误（一般舵机未知错误）；02 无响应
                 int rightPalm0 = byte2Int(data[6] , data[7]) ;
                 int rightPalm1 = byte2Int(data[8] , data[9]) ;
                 int rightPalm2 = byte2Int(data[10] , data[11]);
@@ -455,14 +467,14 @@ public class UART {
                     rightFingers[3] = this.rightPalm3 = rightPalm3 ;
                     rightFingers[4] = this.rightPalm4 = rightPalm4 ;
 
-                    LogHelper.i(TAG, LogHelper.__TAG__() + "右指运行状态：" + f +
+                    LogHelper.i(TAG, LogHelper.__TAG__() + "右指运行状态：" + state +
                             ", rightPalm0 : " + rightPalm0 + ", rightPalm1 : " + rightPalm1 +
                             ", rightPalm2 : " + rightPalm2 + ", rightPalm3 : " + rightPalm3 +
                             ", rightPalm4 : " + rightPalm4 );
 
-                    for (DataChangeListener dataChangeListener : dataChangeListeners.values()) {
+                    if(mHandAngleChangedListener != null){
 
-                        dataChangeListener.onRightFinger(rightFingers);
+                        mHandAngleChangedListener.onRightFingersChanged(state, rightFingers);
                     }
                 }
 
@@ -609,32 +621,21 @@ public class UART {
     }
 
 
-    public interface DataChangeListener{
 
-        void onLeftArmChanged(int[] leftArms) ;
+    private HandAngleChangedListener mHandAngleChangedListener ;
+    public void setHandAngleChangedListener(HandAngleChangedListener handAngleChangedListener){
 
-        void onRightArmChanged(int[] rightArms) ;
-
-        void onLeftFinger(int[] leftFingers) ;
-
-        void onRightFinger(int[] leftRights) ;
-
+        this.mHandAngleChangedListener = handAngleChangedListener ;
     }
+    public interface HandAngleChangedListener{
 
-    private final HashMap<String, DataChangeListener> dataChangeListeners = new HashMap<>() ;
-    public void addDataChangeListener(String tag, DataChangeListener dataChangeListener){
+        void onLeftArmsChanged(int state, int[] leftArms) ;
 
-        LogHelper.i(TAG, LogHelper.__TAG__()) ;
-        dataChangeListeners.put(tag, dataChangeListener);
+        void onRightArmsChanged(int state, int[] rightArms) ;
+
+        void onLeftFingersChanged(int state, int[] leftFingers) ;
+
+        void onRightFingersChanged(int state, int[] leftRights) ;
     }
-
-
-    public void removeDataChangeListener(String tag){
-
-        LogHelper.i(TAG, LogHelper.__TAG__()) ;
-        dataChangeListeners.remove(tag) ;
-    }
-
-
 
 }

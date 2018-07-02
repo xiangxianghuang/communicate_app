@@ -40,11 +40,11 @@ import com.yongyida.robot.model.agreement.Y128Steering;
 /**
  * Create By HuangXiangXiang 2018/6/6
  * 串口控制LED
+ * Y148 机器人的脚部灯
  */
 public class SerialLed {
 
     private Y128Steering.SteerHorseLed mSteerHorseLed = new Y128Steering.SteerHorseLed() ;
-
 
     private static SerialLed mInstance ;
     public static SerialLed getInstance(){

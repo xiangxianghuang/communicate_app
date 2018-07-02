@@ -4,8 +4,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SyncStats;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.yongyida.robot.communicate.app.common.response.SendResponse;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.FootControl;
@@ -196,23 +198,19 @@ public class FootSlam {
             return new SendResponse(SendResponse.RESULT_SERVER_PARAMETERS_ERROR , "foot 数据为空") ;
         }
 
+
+
         FootControl.Action action = footControl.getAction() ;
         switch (action){
 
             case FORWARD:
-                forward(2000) ;
-               break;
             case BACK:
-                back(2000); ;
-                break;
             case LEFT:
-                left(2000); ;
-                break;
             case RIGHT:
-                right(2000); ;
+                startMove(action, getTimeValue(footControl.getFoot().getTime())) ;
                 break;
             case STOP:
-                stop();
+                stopMove();
                 break;
 
             default:
@@ -222,8 +220,177 @@ public class FootSlam {
     }
 
 
+    private int getTimeValue(SteeringControl.Time time){
 
-    private void forward(int arg) {
+        if(time == null){
+
+            return 2000 ;
+        }
+
+        SteeringControl.Time.Unit unit = time.getUnit();
+
+        int value = time.getValue() ;
+        switch (unit){
+            case SECOND:
+                value *= 1000 ;
+                break;
+        }
+        return value ;
+    }
+
+
+    private MoveThread mMoveThread ;
+    private void startMove(FootControl.Action action,int time){
+
+        if(mMoveThread == null || !mMoveThread.isRun){
+
+            mMoveThread = new MoveThread(action, time) ;
+            mMoveThread.start();
+
+        }else {
+
+            mMoveThread.setData(action, time);
+
+        }
+
+    }
+
+    private void stopMove(){
+
+        if(mMoveThread != null){
+
+            mMoveThread.stopRun();
+            mMoveThread = null ;
+        }
+
+    }
+
+
+    private class MoveThread extends Thread{
+
+        private static final int FORWARD_BACK_MIN_TIME = 1000 ;
+        private static final int LEFT_RIGHT_MIN_TIME = 500 ;
+
+
+        private FootControl.Action action ;
+        private boolean isRun;
+        private int minTime ;
+        private int times ;
+        private int leftTime ;
+
+        private MoveThread(FootControl.Action action,int time){
+
+            isRun = true ;
+            setData(action, time);
+        }
+
+
+        void setData(FootControl.Action action, int time){
+
+            this.action = action ;
+
+            if(action == FootControl.Action.FORWARD || action == FootControl.Action.BACK){
+
+                minTime = FORWARD_BACK_MIN_TIME ;
+
+            }else {
+
+                minTime = LEFT_RIGHT_MIN_TIME ;
+            }
+
+            times = time / minTime ;
+            leftTime = time % minTime ;
+        }
+
+        @Override
+        public void run() {
+
+            while (isRun){
+
+                if (times-- > 0){
+
+                    LogHelper.i(TAG , LogHelper.__TAG__() + ", times : " + times);
+
+                    int left = minTime - onMove() ;
+                    if(left > 0){
+
+                        try {
+                            sleep(left);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                }else{
+
+                    LogHelper.i(TAG , LogHelper.__TAG__() + ", leftTime : " + leftTime);
+
+                    isRun = false ;
+
+                    if(leftTime > 0){
+
+                        int left = leftTime - onMove() ;
+                        if(left > 0){
+
+                            try {
+                                sleep(left);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+                    FootSlam.this.stop() ;
+                }
+            }
+        }
+
+
+
+        public void stopRun(){
+
+            isRun = false ;
+            FootSlam.this.stop() ;
+        }
+
+
+        private int onMove(){
+
+            long start = System.currentTimeMillis() ;
+
+            switch (action){
+                case FORWARD:
+                    FootSlam.this.forward() ;
+                    break;
+                case BACK:
+                    FootSlam.this.back();
+                    break;
+                case LEFT:
+                    FootSlam.this.left();
+                    break;
+                case RIGHT:
+                    FootSlam.this.right();
+                    break;
+            }
+
+            long end = System.currentTimeMillis() ;
+
+            int used = (int) (end - start);
+
+            LogHelper.i(TAG , "used time : " + used );
+
+            return used ;
+        }
+
+
+
+    }
+
+
+
+
+    private void forward() {
 
         LogHelper.i(TAG, LogHelper.__TAG__());
 
@@ -234,7 +401,7 @@ public class FootSlam {
         }
     }
 
-    private void back(int arg) {
+    private void back() {
 
         LogHelper.i(TAG, LogHelper.__TAG__());
         try {
@@ -244,7 +411,7 @@ public class FootSlam {
         }
     }
 
-    public void left(int arg) {
+    private void left() {
 
         LogHelper.i(TAG, LogHelper.__TAG__());
         try {
@@ -254,7 +421,7 @@ public class FootSlam {
         }
     }
 
-    public void right(int arg) {
+    private void right() {
 
         LogHelper.i(TAG, LogHelper.__TAG__());
         try {
@@ -266,8 +433,7 @@ public class FootSlam {
     }
 
 
-
-    public void turnSoundAngle(final int angle) {
+    private void turnSoundAngle(final int angle) {
 
         LogHelper.i(TAG, LogHelper.__TAG__() + ", angle : " + angle);
 
@@ -279,7 +445,7 @@ public class FootSlam {
 
     }
 
-    public void stop() {
+    private void stop() {
 
         LogHelper.i(TAG, LogHelper.__TAG__());
         try {
@@ -293,7 +459,7 @@ public class FootSlam {
     /**
      * 巡航某条线路
      * */
-    public void navigateLine(String position) {
+    private void navigateLine(String position) {
 
         LogHelper.i(TAG, LogHelper.__TAG__());
 
@@ -302,7 +468,7 @@ public class FootSlam {
     /**
      * 导航某个点
      * */
-    public void navigatePoint(String position) {
+    private void navigatePoint(String position) {
 
         LogHelper.i(TAG, LogHelper.__TAG__());
 
@@ -353,12 +519,9 @@ public class FootSlam {
 
     private SendResponse soundLocationControl(final SoundLocationControl soundLocationControl, final IResponseListener responseListener){
 
+        LogHelper.i(TAG, LogHelper.__TAG__()) ;
         int angle = soundLocationControl.getAngle() ;
-        try {
-            mSlamController.turnSoundAngle(angle) ;
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        turnSoundAngle(angle) ;
 
         return new SendResponse();
     }

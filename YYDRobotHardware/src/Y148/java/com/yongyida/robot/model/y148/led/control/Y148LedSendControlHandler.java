@@ -39,6 +39,7 @@ import com.yongyida.robot.communicate.app.common.response.SendResponse;
 import com.yongyida.robot.communicate.app.hardware.led.control.LedSendControlHandler;
 import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSendControl;
 import com.yongyida.robot.communicate.app.server.IResponseListener;
+import com.yongyida.robot.model.agreement.Y148Steering;
 import com.yongyida.robot.model.y148.led.type.AndroidLed;
 import com.yongyida.robot.model.y148.led.type.SerialLed;
 import com.yongyida.robot.model.y148.led.type.UsbLed;
@@ -76,19 +77,19 @@ public class Y148LedSendControlHandler extends LedSendControlHandler {
 
             case CHEST:
 
-                mUsbLed.controlLed(ledControl);
-
-                break;
+                return mUsbLed.controlChestLed(ledControl);
 
             case LEFT_ARM:
 
-                break;
+                return mUsbLed.controlArmLed(Y148Steering.SingleChip.DIRECTION_LEFT, ledControl);
 
             case RIGHT_ARM:
-                break;
+
+                return mUsbLed.controlArmLed(Y148Steering.SingleChip.DIRECTION_RIGHT, ledControl);
 
             case ARM:
-                break;
+
+                return mUsbLed.controlArmLed(Y148Steering.SingleChip.DIRECTION_SAME, ledControl);
 
         }
 

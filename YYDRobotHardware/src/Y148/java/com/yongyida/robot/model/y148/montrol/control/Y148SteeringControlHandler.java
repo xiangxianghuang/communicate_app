@@ -81,43 +81,50 @@ public class Y148SteeringControlHandler extends SteeringControlHandler {
             case ARM_LEFT_0:
                 return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.ARM_0,control, responseListener);
             case ARM_RIGHT_0:
-                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.ARM_0,control, responseListener);
+                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_RIGHT, Y148Steering.SteerArm.ARM_0,control, responseListener);
             case ARM_LEFT_1:
-                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.ARM_0,control, responseListener);
+                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.ARM_1,control, responseListener);
             case ARM_RIGHT_1:
-                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.ARM_0,control, responseListener);
+                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_RIGHT, Y148Steering.SteerArm.ARM_1,control, responseListener);
             case ARM_LEFT_2:
-                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.ARM_0,control, responseListener);
+                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.ARM_2,control, responseListener);
             case ARM_RIGHT_2:
-                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.ARM_0,control, responseListener);
+                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_RIGHT, Y148Steering.SteerArm.ARM_2,control, responseListener);
             case ARM_LEFT_3:
-                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.ARM_0,control, responseListener);
+                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.ARM_3,control, responseListener);
             case ARM_RIGHT_3:
-                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.ARM_0,control, responseListener);
+                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_RIGHT, Y148Steering.SteerArm.ARM_3,control, responseListener);
             case ARM_LEFT_4:
-                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.ARM_0,control, responseListener);
+                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.ARM_4,control, responseListener);
             case ARM_RIGHT_4:
-                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.ARM_0,control, responseListener);
+                return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_RIGHT, Y148Steering.SteerArm.ARM_4,control, responseListener);
             case ARM_LEFT_5:
                 return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.ARM_5,control, responseListener);
             case ARM_RIGHT_5:
                 return mArm.onHandler(Y148Steering.SteerArm.DIRECTION_RIGHT, Y148Steering.SteerArm.ARM_5, control, responseListener);
-
             case FINGER_LEFT_0:
-                return mFinger.onHandler(Y148Steering.SteerArm.DIRECTION_RIGHT, Y148Steering.SteerArm.ARM_5, control, responseListener);
+                return mFinger.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.FINGER_0, control, responseListener);
             case FINGER_LEFT_1:
+                return mFinger.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.FINGER_1, control, responseListener);
             case FINGER_LEFT_2:
+                return mFinger.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.FINGER_2, control, responseListener);
             case FINGER_LEFT_3:
+                return mFinger.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.FINGER_3, control, responseListener);
             case FINGER_LEFT_4:
+                return mFinger.onHandler(Y148Steering.SteerArm.DIRECTION_LEFT, Y148Steering.SteerArm.FINGER_4, control, responseListener);
             case FINGER_RIGHT_0:
+                return mFinger.onHandler(Y148Steering.SteerArm.DIRECTION_RIGHT, Y148Steering.SteerArm.FINGER_0, control, responseListener);
             case FINGER_RIGHT_1:
+                return mFinger.onHandler(Y148Steering.SteerArm.DIRECTION_RIGHT, Y148Steering.SteerArm.FINGER_1, control, responseListener);
             case FINGER_RIGHT_2:
+                return mFinger.onHandler(Y148Steering.SteerArm.DIRECTION_RIGHT, Y148Steering.SteerArm.FINGER_2, control, responseListener);
             case FINGER_RIGHT_3:
+                return mFinger.onHandler(Y148Steering.SteerArm.DIRECTION_RIGHT, Y148Steering.SteerArm.FINGER_3, control, responseListener);
             case FINGER_RIGHT_4:
-                return mFinger.onHandler(control, responseListener);
+                return mFinger.onHandler(Y148Steering.SteerArm.DIRECTION_RIGHT, Y148Steering.SteerArm.FINGER_4, control, responseListener);
 
-                default:
-                    return new SendResponse(SendResponse.RESULT_SERVER_PARAMETERS_ERROR, "不能处理对应的位置" ) ;
+            default:
+                return new SendResponse(SendResponse.RESULT_SERVER_PARAMETERS_ERROR, "不能处理对应的位置" ) ;
         }
     }
 }

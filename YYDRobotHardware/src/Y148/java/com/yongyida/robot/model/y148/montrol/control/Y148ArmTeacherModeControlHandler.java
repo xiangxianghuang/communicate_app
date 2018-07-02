@@ -1,4 +1,13 @@
-package com.yongyida.robot.hardware.client;
+package com.yongyida.robot.model.y148.montrol.control;
+
+import android.content.Context;
+
+import com.yongyida.robot.communicate.app.common.response.SendResponse;
+import com.yongyida.robot.communicate.app.hardware.motion.control.ArmTeacherModeControlHandler;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.ArmTeacherModeControl;
+import com.yongyida.robot.communicate.app.server.IResponseListener;
+import com.yongyida.robot.model.y148.montrol.control.item.Arm;
+
 
 
 /* 
@@ -33,58 +42,19 @@ package com.yongyida.robot.hardware.client;
                     不见满街漂亮妹，哪个归得程序员？ 
 */
 
-import android.content.Context;
-
-import com.robot.communicate.app.client.Receiver;
-import com.robot.communicate.app.common.IResponseListener;
-import com.robot.communicate.app.common.SendResponse;
-import com.robot.communicate.app.common.send.BaseControl;
-import com.robot.communicate.app.common.send.BaseSend;
-
 /**
- * Create By HuangXiangXiang 2018/6/5
+ * Create By HuangXiangXiang 2018/6/28
  */
-public class SendClient {
+public class Y148ArmTeacherModeControlHandler extends ArmTeacherModeControlHandler {
 
-    private static SendClient mSendClient ;
-    public static SendClient getInstance(Context context){
-
-        if(mSendClient == null){
-
-            mSendClient = new SendClient(context.getApplicationContext()) ;
-        }
-        return mSendClient ;
+    private Arm mArm ;
+    public Y148ArmTeacherModeControlHandler(Context context) {
+        super(context);
+        mArm = Arm.getInstance(context);
     }
 
-    private HardwareClient mHardwareClient ;
-    private Receiver mReceiver ;
-
-
-    private SendClient(Context context){
-
-        mHardwareClient = HardwareClient.getInstance(context) ;
-        mReceiver = mHardwareClient.getHardwareReceiver() ;
+    @Override
+    public SendResponse onHandler(ArmTeacherModeControl armTeacherModeControl, IResponseListener responseListener) {
+        return mArm.onHandler(armTeacherModeControl,responseListener );
     }
-
-
-    public SendResponse send(final BaseControl control, final IResponseListener response) {
-
-        BaseSend send = control.getSend();
-
-        return mReceiver.send(send , response) ;
-    }
-
-
-    public void sendInMainThread(final BaseControl control, final IResponseListener response) {
-
-        new Thread(){
-
-            @Override
-            public void run() {
-
-                send(control , response) ;
-            }
-        }.start();
-    }
-
 }

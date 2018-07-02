@@ -44,7 +44,7 @@ import com.yongyida.robot.communicate.app.server.IResponseListener;
 /**
  * Create By HuangXiangXiang 2018/6/21
  */
-public class SoundLocationControlHandler extends BaseControlHandler<SoundLocationControl> {
+public abstract class SoundLocationControlHandler extends BaseControlHandler<SoundLocationControl> {
 
     public SoundLocationControlHandler(Context context) {
         super(context);

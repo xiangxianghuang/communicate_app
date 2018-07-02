@@ -60,7 +60,6 @@ import com.yongyida.robot.hardware.test.view.HorizontalListView;
 public class TestHandFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener, RadioGroup.OnCheckedChangeListener, CompoundButton.OnCheckedChangeListener {
 
     private HandControl mHandControl = new HandControl();
-    private View view;
     /**
      * 执行
      */

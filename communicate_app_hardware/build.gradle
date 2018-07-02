@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
-def versionCodeApp = 3              //版本号
-def versionNameApp = "1.1.0"        //版本名称
+def versionCodeApp = 202              //版本号
+def versionNameApp = "2.0.2"        //版本名称
 def projectName = "communicate_app_hardware"            //项目(因为和远程仓库名称一致，不能修改)
 
 android {
@@ -22,12 +22,13 @@ android {
 
     }
 
-//    //重命名
-//    android.libraryVariants.all { variant ->
-//        variant.outputs.all {
+    //重命名
+    android.libraryVariants.all { variant ->
+        variant.outputs.all {
 //            outputFileName = "${projectName}-${name}-${defaultConfig.versionName}.aar"
-//        }
-//    }
+            outputFileName = "${projectName}-${defaultConfig.versionName}.aar"
+        }
+    }
 }
 
 dependencies {

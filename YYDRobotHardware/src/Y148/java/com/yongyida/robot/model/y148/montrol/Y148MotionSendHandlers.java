@@ -3,11 +3,18 @@ package com.yongyida.robot.model.y148.montrol;
 import android.content.Context;
 
 import com.yongyida.robot.communicate.app.hardware.motion.MotionSendHandlers;
+import com.yongyida.robot.model.y128.motion.control.Y128QueryMotionSystemControlHandler;
+import com.yongyida.robot.model.y128.motion.control.Y128QueryUltrasonicControlHandler;
 import com.yongyida.robot.model.y148.led.Y148LedSendHandlers;
 import com.yongyida.robot.model.y148.montrol.control.Y148ArmControlHandler;
+import com.yongyida.robot.model.y148.montrol.control.Y148ArmTeacherModeControlHandler;
 import com.yongyida.robot.model.y148.montrol.control.Y148ChangeArmIdControlHandler;
+import com.yongyida.robot.model.y148.montrol.control.Y148FingerControlHandler;
 import com.yongyida.robot.model.y148.montrol.control.Y148FootControlHandler;
 import com.yongyida.robot.model.y148.montrol.control.Y148HandControlHandler;
+import com.yongyida.robot.model.y148.montrol.control.Y148HeadControlHandler;
+import com.yongyida.robot.model.y148.montrol.control.Y148QueryHandAngleControlHandler;
+import com.yongyida.robot.model.y148.montrol.control.Y148SoundLocationControlHandler;
 import com.yongyida.robot.model.y148.montrol.control.Y148SteeringControlHandler;
 
 /**
@@ -22,9 +29,17 @@ public class Y148MotionSendHandlers extends MotionSendHandlers {
 
         addBaseControlHandler(new Y148SteeringControlHandler(context));
         addBaseControlHandler(new Y148ArmControlHandler(context));
+        addBaseControlHandler(new Y148FingerControlHandler(context));
         addBaseControlHandler(new Y148ChangeArmIdControlHandler(context));
         addBaseControlHandler(new Y148HandControlHandler(context));
         addBaseControlHandler(new Y148FootControlHandler(context));
+        addBaseControlHandler(new Y148SoundLocationControlHandler(context));
+        addBaseControlHandler(new Y148HeadControlHandler(context));
+        addBaseControlHandler(new Y148QueryHandAngleControlHandler(context));
+        addBaseControlHandler(new Y148ArmTeacherModeControlHandler(context));
+
+        addBaseControlHandler(new Y128QueryUltrasonicControlHandler(context));
+        addBaseControlHandler(new Y128QueryMotionSystemControlHandler(context));
 
     }
 

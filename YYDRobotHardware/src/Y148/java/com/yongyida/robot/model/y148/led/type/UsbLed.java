@@ -35,17 +35,25 @@ package com.yongyida.robot.model.y148.led.type;
 
 import android.content.Context;
 
+import com.yongyida.robot.communicate.app.common.response.SendResponse;
 import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSendControl;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.model.agreement.Y148Steering;
 import com.yongyida.robot.usb_uart.UART;
 
+import static com.yongyida.robot.model.agreement.Y148Steering.SingleChip.DIRECTION_RIGHT;
+
 /**
  * Create By HuangXiangXiang 2018/6/6
+ * Y148 连接在USB串口的灯[胸、手臂]
  */
 public class UsbLed {
 
+    private static final String TAG = UsbLed.class.getSimpleName() ;
+
     private UART mUART ;
-    private Y148Steering.SteerLed mSteerLed = new Y148Steering.SteerLed() ;
+    private Y148Steering.SteerLed mChestLed = new Y148Steering.SteerLed() ;     // 胸前灯
+    private Y148Steering.SteerFinger mFingerLed = new Y148Steering.SteerFinger() ;    // 手臂灯
 
     private static UsbLed mInstance ;
     public static UsbLed getInstance(Context context){
@@ -60,100 +68,174 @@ public class UsbLed {
     private UsbLed(Context context){
 
         mUART = UART.getInstance(context) ;
+
+        mChestLed.setPosition(Y148Steering.SteerLed.POSITION_CHEST);
     }
 
 
-    public void controlLed(LedSendControl ledControl) {
+    /**LED 参数*/
+    private static class LedParam{
 
-        LedSendControl.Effect effect = ledControl.getEffect();
-        if (effect != null) {
+
+        private static final byte MODE_OFF                               = 0x00 ; // 常灭
+        private static final byte MODE_ON                                = 0x01 ; // 常亮
+        private static final byte MODE_BREATH                            = 0x02 ; // 呼吸
+//        private static final byte MODE_HORSE                             = 0x03 ; // 跑马
+
+        private static final short PARAM_BREATH_LOW                     = 16000 ;   // 呼吸慢(16秒一个轮回)
+        private static final short PARAM_BREATH_MIDDLE                  = 2500 ;    // 呼吸中(2.5秒一个轮回)
+        private static final short PARAM_BREATH_FAST                    = 500 ;     // 呼吸快(0.5秒一个轮回)
+
+        private byte mode ;     // 模式
+        private short param ;
+        private byte red ;
+        private byte green ;
+        private byte blue ;
+
+        private final boolean isArm ;
+
+        LedParam(boolean isArm, byte mode){
+
+            this.isArm = isArm ;
+            this.mode = mode ;
+        }
+
+        LedParam(boolean isArm, short param){
+
+            this.isArm = isArm ;
+            this.mode = MODE_BREATH ;
+            this.param = param ;
+        }
+
+
+        private static LedParam parseLedSendControl(boolean isArm, LedSendControl ledSendControl){
+
+            LedParam ledParam ;
+
+            LedSendControl.Effect effect = ledSendControl.getEffect();
+            if(effect == null ){
+
+                return null ;
+            }
 
             switch (effect) {
 
-                case LED_ON:
-
-                    setColor(ledControl);
-
-                    mSteerLed.setLedOnMode();
-                    byte[] data = Y148Steering.getCmd(mSteerLed);
-                    mUART.writeData(data);
-                    break;
-
                 case LED_OFF:
 
-                    mSteerLed.setLedOffMode();
-                    data = Y148Steering.getCmd(mSteerLed);
-                    mUART.writeData(data);
+                    ledParam = new LedParam(isArm, MODE_OFF) ;
+                    return ledParam ;
+
+                case LED_ON:
+                case NORMAL:
+
+                    ledParam = new LedParam(isArm, MODE_ON) ;
                     break;
 
                 case BREATH_LOW:
 
-                    setColor(ledControl);
-
-                    mSteerLed.setLedBreathMode(16000);
-                    data = Y148Steering.getCmd(mSteerLed);
-                    mUART.writeData(data);
+                    ledParam = new LedParam(isArm, PARAM_BREATH_LOW) ;
                     break;
 
                 case BREATH_MIDDLE:
 
-                    setColor(ledControl);
-
-                    mSteerLed.setLedBreathMode(2500);
-                    data = Y148Steering.getCmd(mSteerLed);
-                    mUART.writeData(data);
+                    ledParam = new LedParam(isArm, PARAM_BREATH_MIDDLE) ;
                     break;
 
                 case BREATH_FAST:
 
-                    setColor(ledControl);
-
-                    mSteerLed.setLedBreathMode(500);
-                    data = Y148Steering.getCmd(mSteerLed);
-                    mUART.writeData(data);
+                    ledParam = new LedParam(isArm, PARAM_BREATH_FAST) ;
                     break;
 
                 case BREATH:
 
-                    setColor(ledControl);
-
-                    int v = ledControl.getEffectValue();
-                    mSteerLed.setLedBreathMode(v);
-                    data = Y148Steering.getCmd(mSteerLed);
-                    mUART.writeData(data);
-
+                    short param = (short) ledSendControl.getEffectValue();
+                    ledParam = new LedParam(isArm, param) ;
                     break;
+
+                default:
+
+                    return null ;
             }
 
+            ledParam.setColor(ledSendControl);
+
+            return ledParam ;
         }
+
+
+        private void setColor (LedSendControl ledControl){
+
+            int b;
+            LedSendControl.Brightness brightness = ledControl.getBrightness();
+            if (brightness != null) {
+                b = brightness.getValue();
+            } else {
+
+                b = 100;
+            }
+
+            LedSendControl.Color color = ledControl.getColor();
+            if (color != null) {
+
+                int red = color.getRed();
+                int green = color.getGreen();
+                int blue = color.getBlue();
+
+                if(isArm){
+
+                    this.red = (byte) (red * b / 200);
+                    this.green = (byte) (green * b / 200);
+                    this.blue = (byte) (blue * b / 200);
+
+                }else {
+
+                    this.red = (byte) (red * b / 100);
+                    this.green = (byte) (green * b / 100);
+                    this.blue = (byte) (blue * b / 100);
+                }
+
+
+                LogHelper.i(TAG,LogHelper.__TAG__() + ", red : " + this.red  + ", green : " + this.green  + ", blue : " + this.blue);
+
+            }
+        }
+
     }
 
 
-    private void setColor (LedSendControl ledControl){
 
-        int b;
-        LedSendControl.Brightness brightness = ledControl.getBrightness();
-        if (brightness != null) {
-            b = brightness.getValue();
-        } else {
+    /**控制胸口灯*/
+    public SendResponse controlChestLed(LedSendControl ledControl) {
 
-            b = 100;
+        LedParam ledParam = LedParam.parseLedSendControl(false, ledControl) ;
+        if(ledParam == null){
+
+            return new SendResponse(SendResponse.RESULT_SERVER_PARAMETERS_ERROR, "参数错误" ) ;
         }
 
-        LedSendControl.Color color = ledControl.getColor();
-        if (color != null) {
+        mChestLed.setLedParam(ledParam.mode, ledParam.param, ledParam.red, ledParam.green, ledParam.blue);
+        mUART.writeData(mChestLed.getCmd()) ;
 
-            int red = color.getRed();
-            int green = color.getGreen();
-            int blue = color.getBlue();
-
-            red = red * b / 100;
-            green = green * b / 100;
-            blue = blue * b / 100;
-
-            mSteerLed.setColor((byte) red, (byte) green, (byte) blue);
-        }
+        return new SendResponse() ;
     }
 
+
+    /**
+     * 控制手臂灯
+     * 由于LED挂在手指的上面，所以走手指上的控制
+     * */
+    public SendResponse controlArmLed(byte direction , LedSendControl ledControl) {
+
+        LedParam ledParam = LedParam.parseLedSendControl(true, ledControl) ;
+        if(ledParam == null){
+
+            return new SendResponse(SendResponse.RESULT_SERVER_PARAMETERS_ERROR, "参数错误" ) ;
+        }
+
+        mFingerLed.controlLed(direction,ledParam.mode, ledParam.param, ledParam.red, ledParam.green, ledParam.blue);
+        mUART.writeData(mFingerLed.getCmd()) ;
+
+        return new SendResponse() ;
+    }
 
 }

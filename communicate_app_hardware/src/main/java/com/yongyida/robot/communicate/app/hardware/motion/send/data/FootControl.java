@@ -86,10 +86,6 @@ public class FootControl extends BaseMotionSendControl {
         return foot;
     }
 
-    public void setFoot(SteeringControl foot) {
-        this.foot = foot;
-    }
-
 
     @Override
     public String toJson() {

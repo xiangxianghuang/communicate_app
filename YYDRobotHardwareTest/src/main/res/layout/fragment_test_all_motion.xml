@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <Button
         android:id="@+id/execute_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="执行"
-        />
+        android:visibility="gone" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -49,10 +47,10 @@
                 />
 
             <TextView
+                android:id="@+id/distance_tvw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="距离"
-                />
+                android:text="距离" />
             <LinearLayout
                 android:id="@+id/distance_llt"
                 android:layout_width="match_parent"
@@ -100,33 +98,32 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/time_tvw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="时间"
-                />
+                android:text="时间" />
+
             <LinearLayout
+                android:id="@+id/time_llt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginLeft="50dp"
-                >
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="单位"
-                    />
+                    android:text="单位" />
+
                 <com.yongyida.robot.hardware.test.view.HorizontalListView
                     android:id="@+id/time_unit_hlv"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    />
+                    android:layout_height="50dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="数据值"
-                    />
+                    android:text="数据值" />
 
                 <EditText
                     android:id="@+id/time_value_ett"
@@ -139,40 +136,40 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/speed_tvw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="速度"
-                />
+                android:text="速度" />
+
             <LinearLayout
+                android:id="@+id/speed_llt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="单位"
-                    />
-                <com.yongyida.robot.hardware.test.view.HorizontalListView
-                    android:id="@+id/speed_unit_hlv"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    />
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="数据值"
-                    />
+                    android:text="单位" />
+
+                <com.yongyida.robot.hardware.test.view.HorizontalListView
+                    android:id="@+id/speed_unit_hlv"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="数据值" />
+
                 <EditText
                     android:id="@+id/speed_value_ett"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0"
-                    android:inputType="number"
                     android:imeOptions="flagNoExtractUi|actionDone"
-                    />
+                    android:inputType="number"
+                    android:text="0" />
 
 
             </LinearLayout>

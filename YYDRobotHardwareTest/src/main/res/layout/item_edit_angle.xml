@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/position_tvw"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="4dp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="FINGER_RIGHT_0" />
+    <EditText
+        android:id="@+id/angle_value_ett"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="4096"
+        android:hint="数值"
+        android:inputType="number"
+        android:singleLine="true"
+        android:imeOptions="flagNoExtractUi"
+        />
+    <EditText
+        android:id="@+id/delay_time_ett"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="0"
+        android:hint="延时"
+        android:inputType="number"
+        android:singleLine="true"
+        android:imeOptions="flagNoExtractUi"
+        />
+
+    <EditText
+        android:id="@+id/used_time_ett"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="2000"
+        android:hint="用时"
+        android:inputType="number"
+        android:singleLine="true"
+        android:imeOptions="flagNoExtractUi"
+        />
+
+</LinearLayout>

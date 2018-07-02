@@ -1,5 +1,6 @@
 package com.yongyida.robot.hardware.test.item;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -8,11 +9,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.data.SettingData;
 
@@ -20,6 +23,8 @@ import com.yongyida.robot.hardware.test.data.SettingData;
  * Created by HuangXiangXiang on 2018/2/8.
  */
 public abstract class TestBaseActivity extends Activity {
+
+    private static final String TAG = TestBaseActivity.class.getSimpleName() ;
 
     public static final String TITLE = "title";
     protected LayoutInflater mLayoutInflater ;
@@ -69,6 +74,27 @@ public abstract class TestBaseActivity extends Activity {
         return null ;
     }
 
+
+    protected void onTouchTitleLeft(){
+
+        LogHelper.i(TAG, LogHelper.__TAG__());
+
+    }
+    protected void onTouchTitleRight(){
+
+        LogHelper.i(TAG, LogHelper.__TAG__());
+    }
+
+    private long lastLeftTime = 0;      // 点击左侧时间
+    private int touchLeftTimes  = 0;
+
+    private long lastRightTime = 0 ;
+    private int touchRightTimes  = 0;
+
+    private static final int MIN_TIME = 500 ;       //点击最小间隔
+    private static final int MIN_TIMES = 3 ;        //点击最小次数
+
+    @SuppressLint("ClickableViewAccessibility")
     private void initView() {
 
         mTitleTvw = (TextView) findViewById(R.id.title_tvw);
@@ -78,6 +104,58 @@ public abstract class TestBaseActivity extends Activity {
         mFailBtn.setOnClickListener(onClickListener);
         mSuccessBtn = (Button) findViewById(R.id.success_btn);
         mSuccessBtn.setOnClickListener(onClickListener);
+
+
+        mTitleTvw.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+
+                    if(event.getX() < v.getWidth()/2){
+
+                        long curr = System.currentTimeMillis() ;
+                        if(curr - lastLeftTime < MIN_TIME ){
+
+                            touchLeftTimes++ ;
+
+                        }else {
+                            touchLeftTimes = 0 ;
+                        }
+                        lastLeftTime = curr ;
+
+                        if(touchLeftTimes > MIN_TIMES){
+
+                            onTouchTitleLeft() ;
+                            touchLeftTimes = 0 ;
+                        }
+
+                    }else {
+
+
+                        long curr = System.currentTimeMillis() ;
+                        if(curr - lastRightTime < MIN_TIME ){
+
+                            touchRightTimes++ ;
+
+                        }else {
+                            touchRightTimes = 0 ;
+                        }
+                        lastRightTime = curr ;
+
+                        if(touchRightTimes > MIN_TIMES){
+
+                            onTouchTitleRight();
+                            touchRightTimes = 0 ;
+                        }
+                    }
+                }
+
+                return true;
+            }
+        });
+
 
         String tips = getTips() ;
         if(TextUtils.isEmpty(tips)){
@@ -93,7 +171,6 @@ public abstract class TestBaseActivity extends Activity {
         if (contentView != null) {
 
             mContentLlt.addView(contentView,LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-//            mContentLlt.addView(contentView);
         }
 
     }
@@ -129,7 +206,6 @@ public abstract class TestBaseActivity extends Activity {
         SettingData.saveStatus(TestBaseActivity.this, this.getClass().getName(), SettingData.STATUS_SUCCESS);
         finish();
     }
-
 
 
 

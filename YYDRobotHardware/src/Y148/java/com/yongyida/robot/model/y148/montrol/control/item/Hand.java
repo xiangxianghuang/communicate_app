@@ -92,33 +92,33 @@ public class Hand {
             case CUSTOM:
                 return custom(handControl, responseListener);
             case RESET:
-                return preHandGuest(Y148Steering.SteerAction.GUEST_RESET, getDirectionValue(handControl.getDirection()));
+                return preHandGuest(Y148Steering.SteerAction.HAND_RESET, getDirectionValue(handControl.getDirection()));
             case MARK_FIST:
-                return preHandGuest(Y148Steering.SteerAction.GUEST_MARK_FIST, getDirectionValue(handControl.getDirection()));
+                return preHandGuest(Y148Steering.SteerAction.HAND_MARK_FIST, getDirectionValue(handControl.getDirection()));
             case FINGER_WHEEL:
-                return preHandGuest(Y148Steering.SteerAction.GUEST_FINGER_WHEEL, getDirectionValue(handControl.getDirection()));
+                return preHandGuest(Y148Steering.SteerAction.HAND_FINGER_WHEEL, getDirectionValue(handControl.getDirection()));
             case HAND_SHAKE:
-                return preHandGuest(Y148Steering.SteerAction.GUEST_HAND_SHAKE, getDirectionValue(handControl.getDirection()));
+                return preHandGuest(Y148Steering.SteerAction.HAND_HAND_SHAKE, getDirectionValue(handControl.getDirection()));
             case OK:
-                return preHandGuest(Y148Steering.SteerAction.GUEST_OK, getDirectionValue(handControl.getDirection()));
+                return preHandGuest(Y148Steering.SteerAction.HAND_OK, getDirectionValue(handControl.getDirection()));
             case GOOD:
-                return preHandGuest(Y148Steering.SteerAction.GUEST_GOOD, getDirectionValue(handControl.getDirection()));
+                return preHandGuest(Y148Steering.SteerAction.HAND_GOOD, getDirectionValue(handControl.getDirection()));
             case ROCK:
-                return preHandGuest(Y148Steering.SteerAction.GUEST_ROCK, getDirectionValue(handControl.getDirection()));
+                return preHandGuest(Y148Steering.SteerAction.HAND_ROCK, getDirectionValue(handControl.getDirection()));
             case SCISSORS:
-                return preHandGuest(Y148Steering.SteerAction.GUEST_SCISSORS, getDirectionValue(handControl.getDirection()));
+                return preHandGuest(Y148Steering.SteerAction.HAND_SCISSORS, getDirectionValue(handControl.getDirection()));
             case PAPER:
-                return preHandGuest(Y148Steering.SteerAction.GUEST_PAPER, getDirectionValue(handControl.getDirection()));
+                return preHandGuest(Y148Steering.SteerAction.HAND_PAPER, getDirectionValue(handControl.getDirection()));
             case SHOW_WELCOME:
-                return preHandGuest(Y148Steering.SteerAction.GUEST_SHOW_WELCOME, getDirectionValue(handControl.getDirection()));
+                return preHandGuest(Y148Steering.SteerAction.HAND_SHOW_WELCOME, getDirectionValue(handControl.getDirection()));
             case SHOW_WAVE:
-                return preHandGuest(Y148Steering.SteerAction.GUEST_SHOW_WAVE, getDirectionValue(handControl.getDirection()));
+                return preHandGuest(Y148Steering.SteerAction.HAND_SHOW_WAVE, getDirectionValue(handControl.getDirection()));
             case SHOW_LOVE:
-                return preHandGuest(Y148Steering.SteerAction.GUEST_SHOW_LOVE, getDirectionValue(handControl.getDirection()));
+                return preHandGuest(Y148Steering.SteerAction.HAND_SHOW_LOVE, getDirectionValue(handControl.getDirection()));
             case SHOW_666:
-                return preHandGuest(Y148Steering.SteerAction.GUEST_SHOW_666, getDirectionValue(handControl.getDirection()));
+                return preHandGuest(Y148Steering.SteerAction.HAND_SHOW_666, getDirectionValue(handControl.getDirection()));
             case SHOW_SELF:
-                return preHandGuest(Y148Steering.SteerAction.GUEST_SHOW_SELF, getDirectionValue(handControl.getDirection()));
+                return preHandGuest(Y148Steering.SteerAction.HAND_SHOW_SELF, getDirectionValue(handControl.getDirection()));
             default:
                 return new SendResponse(SendResponse.RESULT_SERVER_PARAMETERS_ERROR, "Action 参数正确");
         }
@@ -167,6 +167,7 @@ public class Hand {
 
                     return Y148Steering.SingleChip.DIRECTION_RIGHT;
                 case SAME:
+                case BOTH:
 
                     return Y148Steering.SingleChip.DIRECTION_SAME;
             }

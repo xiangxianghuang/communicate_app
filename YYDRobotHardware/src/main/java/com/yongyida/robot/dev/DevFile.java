@@ -49,6 +49,7 @@ public class DevFile {
 
     public static final String PATH_FILE = "/dev/aw9523b" ;
 
+
     /**
      * 写入文件
      * */

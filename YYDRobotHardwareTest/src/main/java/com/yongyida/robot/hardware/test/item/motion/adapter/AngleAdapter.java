@@ -95,17 +95,17 @@ public class AngleAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         TextView textView ;
-        if(convertView == null){
+//        if(convertView == null){      // 使用缓存 会出现数据丢失
 
             convertView = inflater.inflate(R.layout.item_angle, null) ;
             textView = convertView.findViewById(R.id.angle_tvw) ;
 
             convertView.setTag(textView);
 
-        }else {
-
-            textView = (TextView) convertView.getTag();
-        }
+//        }else {
+//
+//            textView = (TextView) convertView.getTag();
+//        }
 
         int index = position/2 ;
         if(position % 2 == 0){
@@ -113,13 +113,15 @@ public class AngleAdapter extends BaseAdapter {
 
             if(index < handAngle.leftArmAngle.angles.length){
                 // 臂
-                textView.setText("左臂"+index+"：" + handAngle.leftArmAngle.angles[index]);
+                int angle = handAngle.leftArmAngle.angles[index] ;
+                textView.setText("左臂"+index+"：" + angle);
 
             }else {
                 // 指
 
                 int left = index - handAngle.leftArmAngle.angles.length ;
-                textView.setText("左指"+left+"：" + handAngle.leftFingerAngle.angles[left]);
+                int angle = handAngle.leftFingerAngle.angles[left] ;
+                textView.setText("左指"+left+"：" + angle);
             }
 
         }else {
@@ -127,14 +129,16 @@ public class AngleAdapter extends BaseAdapter {
 
             if(index < handAngle.rightArmAngle.angles.length){
                 // 臂
-
-                textView.setText("右臂"+index+"：" + handAngle.rightArmAngle.angles[index]);
+                int angle = 0 ;
+                angle = handAngle.rightArmAngle.angles[index] ;
+                textView.setText("右臂"+index+"：" + angle);
 
             }else {
                 // 指
 
                 int left = index - handAngle.rightArmAngle.angles.length ;
-                textView.setText("右指"+left+"：" + handAngle.rightFingerAngle.angles[left]);
+                int angle = handAngle.rightFingerAngle.angles[left] ;
+                textView.setText("右指"+left+"：" + angle);
             }
         }
 

@@ -50,6 +50,8 @@ public class Y148LedSend2ControlHandler extends LedSend2ControlHandler {
 
     public Y148LedSend2ControlHandler(Context context) {
         super(context);
+
+        mSerialLed = SerialLed.getInstance() ;
     }
 
     @Override

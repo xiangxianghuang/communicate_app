@@ -21,22 +21,22 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.yongyida.robot.communicate.app.common.send.SendClient;
 import com.yongyida.robot.communicate.app.common.send.SendResponseListener;
 import com.yongyida.robot.communicate.app.hardware.motion.response.data.HandAngle;
-import com.yongyida.robot.communicate.app.hardware.motion.send.data.OneFrameScript;
-import com.yongyida.robot.communicate.app.hardware.motion.send.data.QueryHandAngleControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.ArmTeacherModeControl;
-import com.yongyida.robot.communicate.app.utils.LogHelper;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.QueryHandAngleControl;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.item.motion.adapter.AngleAdapter;
-import com.yongyida.robot.hardware.test.item.motion.dialog.ReadDanceDialog;
 import com.yongyida.robot.hardware.test.item.motion.adapter.RecordAngleAdapter;
-import com.yongyida.robot.hardware.test.item.motion.dialog.RecordArmDialog;
+import com.yongyida.robot.hardware.test.item.motion.bean.GroupFrame;
+import com.yongyida.robot.hardware.test.item.motion.bean.OneFrameScript;
+import com.yongyida.robot.hardware.test.item.motion.dialog.EditOneFrameScriptDialog;
+import com.yongyida.robot.hardware.test.item.motion.dialog.ReadDanceDialog;
 import com.yongyida.robot.hardware.test.item.motion.untils.RecordActionsHelper;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 
@@ -90,7 +90,7 @@ public class TestGroupFrameFragment extends BaseFragment implements
     private Button mResetBtn;
 
     private ArmTeacherModeControl mTeacherControl = new ArmTeacherModeControl();
-    private QueryHandAngleControl mQueryHandAngle = new QueryHandAngleControl();;
+    private QueryHandAngleControl mQueryHandAngle = new QueryHandAngleControl();
     private GridView mAngleGvw;
     /**
      * 记录
@@ -112,7 +112,7 @@ public class TestGroupFrameFragment extends BaseFragment implements
      * 保存
      */
     private Button mSaveBtn;
-    private TextView mActionNameTvw ;
+    private TextView mActionNameTvw;
 
 
     private GridView mRecordAngleGvw;
@@ -120,9 +120,9 @@ public class TestGroupFrameFragment extends BaseFragment implements
     private AngleAdapter mAngleAdapter;
 
 
-    private final int HAND_ANGLE                = 0x01;
-    private final int EXECUTING_ACTION          = 0x02;
-    private final int EXECUTED_ACTION           = 0x03;
+    private final int HAND_ANGLE = 0x01;
+    private final int EXECUTING_ACTION = 0x02;
+    private final int EXECUTED_ACTION = 0x03;
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -139,7 +139,7 @@ public class TestGroupFrameFragment extends BaseFragment implements
 
                 case EXECUTING_ACTION:
 
-                    int index = msg.arg1 ;
+                    int index = msg.arg1;
 
                     mRecordAngleAdapter.setSelectIndex(index);
                     mRecordAngleAdapter.notifyDataSetChanged();
@@ -160,17 +160,15 @@ public class TestGroupFrameFragment extends BaseFragment implements
 
     private HandAngle mHandAngle = new HandAngle();
 
-    private OneFrameScript mResetRecordArmAngle = new OneFrameScript();
+    private OneFrameScript mResetRecordArmAngle = OneFrameScript.getReset();
 
-
-
-    private SendResponseListener mSendResponseListener = new SendResponseListener<HandAngle>(){
+    private SendResponseListener mSendResponseListener = new SendResponseListener<HandAngle>() {
 
         @Override
         public void onSuccess(HandAngle handAngle) {
 
             mHandAngle = handAngle;
-            LogHelper.i(TAG, "leftArmAngle : " + mHandAngle.leftArmAngle.angles);
+//            LogHelper.i(TAG, "leftArmAngle : " + mHandAngle.leftArmAngle.angles);
 
 //                    LogHelper.i(TAG, LogHelper.__TAG__() + "右手臂指运行状态：" + 0 +
 //                            ", rightPalm0 : " + handAngle.rightArms[0] + ", rightPalm1 : " + handAngle.rightArms[1] +
@@ -184,7 +182,20 @@ public class TestGroupFrameFragment extends BaseFragment implements
         public void onFail(int result, String message) {
 
         }
-    } ;
+    };
+    private View view;
+    /**
+     * 复制
+     */
+    private Button mCopyBtn;
+    /**
+     * 删除
+     */
+    private Button mDeleteBtn;
+    /**
+     * 编辑
+     */
+    private Button mEditBtn;
 
     @Override
     public String getName() {
@@ -197,8 +208,6 @@ public class TestGroupFrameFragment extends BaseFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        SendClient.getInstance(getActivity()).send(getActivity(), mQueryHandAngle, mSendResponseListener);
-
         View view = inflater.inflate(R.layout.fragment_test_group_frame, null);
 
         initView(view);
@@ -206,11 +215,17 @@ public class TestGroupFrameFragment extends BaseFragment implements
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onResume() {
+        super.onResume();
+        SendClient.getInstance(getActivity()).send(getActivity(), mQueryHandAngle, mSendResponseListener);
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
         SendClient.getInstance(getActivity()).send(getActivity(), mQueryHandAngle, null);
     }
+
 
     private void initView(View view) {
 
@@ -228,7 +243,7 @@ public class TestGroupFrameFragment extends BaseFragment implements
         mAngleAdapter = new AngleAdapter(getActivity());
         mAngleGvw.setAdapter(mAngleAdapter);
 
-        mRecordAngleAdapter = new RecordAngleAdapter(getActivity());
+        mRecordAngleAdapter = new RecordAngleAdapter(getActivity(),mSelectOneFrameScripts);
         mRecordAngleGvw.setAdapter(mRecordAngleAdapter);
         mRecordAngleGvw.setOnItemClickListener(this);
         mRecordAngleGvw.setOnItemLongClickListener(this);
@@ -241,6 +256,12 @@ public class TestGroupFrameFragment extends BaseFragment implements
         mSaveBtn = (Button) view.findViewById(R.id.save_btn);
         mSaveBtn.setOnClickListener(this);
         mActionNameTvw = (TextView) view.findViewById(R.id.action_name_tvw);
+        mCopyBtn = (Button) view.findViewById(R.id.copy_btn);
+        mCopyBtn.setOnClickListener(this);
+        mDeleteBtn = (Button) view.findViewById(R.id.delete_btn);
+        mDeleteBtn.setOnClickListener(this);
+        mEditBtn = (Button) view.findViewById(R.id.edit_btn);
+        mEditBtn.setOnClickListener(this);
     }
 
     @Override
@@ -263,20 +284,20 @@ public class TestGroupFrameFragment extends BaseFragment implements
 
                 showRecordArmDialog(null);
 
-            }else{
+            } else {
 
-                Toast.makeText(getActivity(), "没有接受到当前数据" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "没有接受到当前数据", Toast.LENGTH_SHORT).show();
             }
 
 
         } else if (v == mResetBtn) {
 
             //恢复初始化
-            new Thread(){
+            new Thread() {
                 @Override
                 public void run() {
 
-                    executeRecordArmAngle(mResetRecordArmAngle);
+                    mResetRecordArmAngle.executeScript(getActivity());
 
                 }
             }.start();
@@ -284,11 +305,11 @@ public class TestGroupFrameFragment extends BaseFragment implements
         } else if (v == mExecuteBtn) {
 
 
-            if(isRunActionThread()){
+            if (isRunActionThread()) {
 
                 stopRunAction();
 
-            }else {
+            } else {
 
                 startRunAction();
             }
@@ -297,9 +318,10 @@ public class TestGroupFrameFragment extends BaseFragment implements
         } else if (v == mReadBtn) {
 
             // 读取本地
-            ReadDanceDialog readDanceDialog = new ReadDanceDialog(getActivity()) ;
+            ReadDanceDialog readDanceDialog = new ReadDanceDialog(getActivity());
             readDanceDialog.setOnSelectDataListener(mOnSelectDataListener);
             readDanceDialog.show();
+
 
         } else if (v == mClearBtn) {
 
@@ -308,9 +330,9 @@ public class TestGroupFrameFragment extends BaseFragment implements
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    if(which == DialogInterface.BUTTON_POSITIVE){
+                    if (which == DialogInterface.BUTTON_POSITIVE) {
 
-                        mRecordAction.recordArmAngles.getFrameScripts().clear();
+                        mRecordAction.getFrameScripts().clear();
                         mRecordAngleAdapter.notifyDataSetChanged();
                     }
                 }
@@ -318,22 +340,22 @@ public class TestGroupFrameFragment extends BaseFragment implements
             new AlertDialog.Builder(getActivity())
                     .setTitle("清空全部动作")
                     .setMessage("是否清空全部动作?")
-                    .setNegativeButton("取消",null)
-                    .setPositiveButton("确定",mOnClickListener)
+                    .setNegativeButton("取消", null)
+                    .setPositiveButton("确定", mOnClickListener)
                     .create()
                     .show();
 
 
         } else if (v == mSaveBtn) {
 
-            final EditText editText = new EditText(getActivity()) ;
+            final EditText editText = new EditText(getActivity());
             DialogInterface.OnClickListener mOnClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    if(which == DialogInterface.BUTTON_POSITIVE){
+                    if (which == DialogInterface.BUTTON_POSITIVE) {
 
-                        mRecordAction.name = editText.getText().toString() ;
+                        mRecordAction.name = editText.getText().toString();
 
                         RecordActionsHelper.getInstance(getActivity()).writeRecordActions(mRecordAction);
                     }
@@ -346,21 +368,100 @@ public class TestGroupFrameFragment extends BaseFragment implements
                     .setTitle("保存动作组")
                     .setTitle("请输入动作组名称")
                     .setView(editText)
-                    .setNegativeButton("取消",null)
-                    .setPositiveButton("确定",mOnClickListener)
+                    .setNegativeButton("取消", null)
+                    .setPositiveButton("确定", mOnClickListener)
                     .create()
                     .show();
 
 
-        } else {
+        } else if(v == mEditBtn){
+
+            isEdit = !isEdit ;      // 切换模式
+            //
+            if(isEdit){
+                // 进入编辑模式
+                mEditBtn.setText("完成");
+
+                mDeleteBtn.setVisibility(View.VISIBLE);
+                mCopyBtn.setVisibility(View.VISIBLE);
+                mDeleteBtn.setEnabled(false);
+                mCopyBtn.setEnabled(false);
+
+                mSelectOneFrameScripts.clear();
+                mRecordAngleAdapter.setEdit(isEdit);
+
+
+            }else {
+                // 退出编辑模式
+                mEditBtn.setText("编辑");
+
+                mDeleteBtn.setVisibility(View.INVISIBLE);
+                mCopyBtn.setVisibility(View.INVISIBLE);
+
+                mRecordAngleAdapter.setEdit(isEdit);
+
+            }
+
+        } else if(v == mDeleteBtn){
+
+            DialogInterface.OnClickListener mOnClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    if (which == DialogInterface.BUTTON_POSITIVE) {
+
+                        mRecordAction.delete(mSelectOneFrameScripts) ;
+                        mRecordAngleAdapter.notifyDataSetChanged();
+
+                        mSelectOneFrameScripts.clear();
+                        mDeleteBtn.setEnabled(false);
+                        mCopyBtn.setEnabled(false);
+
+                    }
+                }
+            };
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("删除选中动作")
+                    .setMessage("删除选中" + mSelectOneFrameScripts.size()+ "动作?")
+                    .setNegativeButton("取消", null)
+                    .setPositiveButton("确定", mOnClickListener)
+                    .create()
+                    .show();
+
+
+
+        } else if(v == mCopyBtn){
+
+            DialogInterface.OnClickListener mOnClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    if (which == DialogInterface.BUTTON_POSITIVE) {
+
+                        mRecordAction.copy(mSelectOneFrameScripts) ;
+                        mRecordAngleAdapter.notifyDataSetChanged();
+
+                    }
+                }
+            };
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("复制选中动作")
+                    .setMessage("复制选中" + mSelectOneFrameScripts.size()+ "动作?")
+                    .setNegativeButton("取消", null)
+                    .setPositiveButton("确定", mOnClickListener)
+                    .create()
+                    .show();
 
         }
     }
 
+    private boolean isEdit = false ;
+    private ArrayList<OneFrameScript> mSelectOneFrameScripts = new ArrayList<>();
 
-    private void startRunAction(){
 
-        startMusic() ;
+    private void startRunAction() {
+
+        startMusic();
         mExecuteBtn.setText("停止");
 
         mReadBtn.setEnabled(false);
@@ -368,14 +469,14 @@ public class TestGroupFrameFragment extends BaseFragment implements
         mClearBtn.setEnabled(false);
         mSaveBtn.setEnabled(false);
 
-        mRunActionThread = new RunActionThread() ;
+        mRunActionThread = new RunActionThread();
         mRunActionThread.start();
     }
 
 
-    private void stopRunAction(){
+    private void stopRunAction() {
 
-        stopMusic() ;
+        stopMusic();
         mExecuteBtn.setText("执行");
 
         mReadBtn.setEnabled(true);
@@ -386,19 +487,20 @@ public class TestGroupFrameFragment extends BaseFragment implements
         mRecordAngleAdapter.setSelectIndex(-1);
         mRecordAngleAdapter.notifyDataSetChanged();
 
-        if(isRunActionThread()){
+        if (isRunActionThread()) {
 
             mRunActionThread.stopRun();
-            mRunActionThread = null ;
+            mRunActionThread = null;
 
         }
     }
 
-    private MediaPlayer mediaPlayer = new MediaPlayer() ;
-    private void startMusic(){
+    private MediaPlayer mediaPlayer = new MediaPlayer();
+
+    private void startMusic() {
 
         try {
-            AssetFileDescriptor afd = getActivity().getAssets().openFd("GOOD BOY_GD X TAEYANG_GOOD BOY.mp3") ;
+            AssetFileDescriptor afd = getActivity().getAssets().openFd("GOOD BOY_GD X TAEYANG_GOOD BOY.mp3");
             mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             mediaPlayer.prepare();
             mediaPlayer.start();
@@ -407,9 +509,10 @@ public class TestGroupFrameFragment extends BaseFragment implements
         }
 
     }
-    private void stopMusic(){
 
-        if(mediaPlayer.isPlaying()){
+    private void stopMusic() {
+
+        if (mediaPlayer.isPlaying()) {
 
             mediaPlayer.stop();
             mediaPlayer.reset();
@@ -418,59 +521,57 @@ public class TestGroupFrameFragment extends BaseFragment implements
     }
 
 
-    private boolean isRunActionThread(){
+    private boolean isRunActionThread() {
 
         return (mRunActionThread != null && mRunActionThread.isRun);
     }
 
 
-    private RunActionThread mRunActionThread ;
+    private RunActionThread mRunActionThread;
 
 
+    private class RunActionThread extends Thread {
 
-    private class RunActionThread extends Thread{
-
-        private boolean isRun = true ;
+        private boolean isRun = true;
 
         @Override
         public void run() {
 
-            int size = mRecordAction.recordArmAngles.getFrameScripts().size();
+            int size = mRecordAction.getFrameScripts().size();
             for (int i = 0; i < size; i++) {
 
-//                mRecordAngleAdapter.setSelectIndex(i);
-//                mHandler.sendEmptyMessage(EXECUTING_ACTION) ;
+                mRecordAngleAdapter.setSelectIndex(i);
+                mHandler.sendEmptyMessage(EXECUTING_ACTION);
 
-                Message msg = mHandler.obtainMessage(EXECUTING_ACTION) ;
-                msg.arg1 = i ;
-                mHandler.sendMessage(msg) ;
+                Message msg = mHandler.obtainMessage(EXECUTING_ACTION);
+                msg.arg1 = i;
+                mHandler.sendMessage(msg);
 
-                OneFrameScript recordArmAngle = mRecordAction.recordArmAngles.getFrameScripts().get(i);
-
-                executeRecordArmAngle(recordArmAngle) ;
+                OneFrameScript recordArmAngle = mRecordAction.getFrameScripts().get(i);
+                recordArmAngle.executeScript(getActivity());
 
                 try {
-                    Thread.sleep(recordArmAngle.getUsedTime() + recordArmAngle.getWaitTime());
+                    Thread.sleep(recordArmAngle.getNextScriptTime());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
-                if(!isRun){
+                if (!isRun) {
 
                     return;
                 }
 
             }
 
-            mHandler.sendEmptyMessage(EXECUTED_ACTION) ;
+            mHandler.sendEmptyMessage(EXECUTED_ACTION);
 
         }
 
-        private void stopRun(){
+        private void stopRun() {
 
-            if(isRun){
+            if (isRun) {
 
-                isRun = false ;
+                isRun = false;
             }
 
         }
@@ -478,93 +579,76 @@ public class TestGroupFrameFragment extends BaseFragment implements
     }
 
 
-
-    /**
-     * 执行一个指定动作脚本（包括左右手臂及左右手指）
-     * */
-    private void executeRecordArmAngle(OneFrameScript recordArmAngle){
-
-        SendClient.getInstance(getActivity()).send(null, recordArmAngle, null);
-    }
-
-
-    private RecordActionsHelper.RecordAction mRecordAction ;
-    private ReadDanceDialog.OnSelectDataListener mOnSelectDataListener = new ReadDanceDialog.OnSelectDataListener(){
+    private GroupFrame mRecordAction;
+    private ReadDanceDialog.OnSelectDataListener mOnSelectDataListener = new ReadDanceDialog.OnSelectDataListener() {
 
         @Override
-        public void onSelected(RecordActionsHelper.RecordAction recordAction) {
+        public void onSelected(GroupFrame recordAction) {
 
             mRecordBtn.setEnabled(true);
             mExecuteBtn.setEnabled(!mTeacherSih.isChecked());
             mClearBtn.setEnabled(true);
             mSaveBtn.setEnabled(true);
 
-            mRecordAction = recordAction ;
+            mRecordAction = recordAction;
 
             mActionNameTvw.setText(recordAction.name);
-            mRecordAngleAdapter.setRecordArmAngles(recordAction.recordArmAngles.getFrameScripts());
+            mRecordAngleAdapter.setRecordArmAngles(recordAction.getFrameScripts());
             mRecordAngleAdapter.notifyDataSetChanged();
 
         }
     };
 
 
-    private RecordArmDialog mRecordArmDialog;
-
+    private EditOneFrameScriptDialog mEditOneFrameScriptDialog;
     private OneFrameScript mRecordArmAngle; //
     private RecordAngleAdapter mRecordAngleAdapter;
 
-
-    private RecordArmDialog.OnChangedListener mOnChangedListener = new RecordArmDialog.OnChangedListener() {
-
+    private EditOneFrameScriptDialog.OnDataChangedListener mOnDataChangedListener = new EditOneFrameScriptDialog.OnDataChangedListener() {
         @Override
-        public void onChanged(OneFrameScript recordArmAngle, boolean isChangedAction) {
+        public void onDataChanged(OneFrameScript oneFrameScript) {
 
-            if(mRecordArmAngle == null){
-                // 新增动作组
+            if (mRecordArmAngle == null) {// 新增
 
-                recordArmAngle.setHandAngle(mHandAngle);
-
-                mRecordArmAngle = recordArmAngle ;
+                mRecordArmAngle = oneFrameScript;
                 mRecordAction.addOneFrameScript(mRecordArmAngle);
 
-            }else {
+            } else {// 修改
 
-                if(isChangedAction){
-
-                    recordArmAngle.setHandAngle(mHandAngle);
-                }
-
-                mRecordArmAngle.setRecordArmAngle(recordArmAngle) ;
+                mRecordArmAngle.setRecordArmAngle(oneFrameScript);
             }
-
             mRecordAngleAdapter.notifyDataSetChanged();
-
         }
-
     };
+
 
     private void showRecordArmDialog(OneFrameScript recordArmAngle) {
 
-        if (mRecordArmDialog == null) {
+        if (mEditOneFrameScriptDialog == null) {
 
-            mRecordArmDialog = new RecordArmDialog(getActivity());
-            mRecordArmDialog.setOnChangedListener(mOnChangedListener);
+            mEditOneFrameScriptDialog = new EditOneFrameScriptDialog(getActivity());
+            mEditOneFrameScriptDialog.setOnDataChangedListener(mOnDataChangedListener);
         }
 
-        if(recordArmAngle == null){
+        if (recordArmAngle == null) {
 
-            mRecordArmAngle = null ;
-            mRecordArmDialog.setRecordArmAngle(new OneFrameScript());
+            mRecordArmAngle = null;
 
-        }else {
+            OneFrameScript oneFrameScript = new OneFrameScript();
+            if (mHandAngle != null) {
 
-            mRecordArmAngle = recordArmAngle ;
-            mRecordArmDialog.setRecordArmAngle(mRecordArmAngle.deepClone());
+                oneFrameScript.setHandAngle(mHandAngle);
+            }
+
+            mEditOneFrameScriptDialog.setOneFrameScript(oneFrameScript);
+
+        } else {
+
+            mRecordArmAngle = recordArmAngle;
+            mEditOneFrameScriptDialog.setOneFrameScript(mRecordArmAngle.deepClone());
         }
 
-        mRecordArmDialog.show();
-
+        mEditOneFrameScriptDialog.show();
     }
 
     @Override
@@ -574,9 +658,9 @@ public class TestGroupFrameFragment extends BaseFragment implements
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                if(which == DialogInterface.BUTTON_POSITIVE){
+                if (which == DialogInterface.BUTTON_POSITIVE) {
 
-                    mRecordAction.recordArmAngles.getFrameScripts().remove(position);
+                    mRecordAction.getFrameScripts().remove(position);
                     mRecordAngleAdapter.notifyDataSetChanged();
                 }
             }
@@ -584,8 +668,8 @@ public class TestGroupFrameFragment extends BaseFragment implements
         new AlertDialog.Builder(getActivity())
                 .setTitle("清空当前动作")
                 .setMessage("是否清空当前动作?")
-                .setNegativeButton("取消",null)
-                .setPositiveButton("确定",mOnClickListener)
+                .setNegativeButton("取消", null)
+                .setPositiveButton("确定", mOnClickListener)
                 .create()
                 .show();
 
@@ -596,6 +680,36 @@ public class TestGroupFrameFragment extends BaseFragment implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        showRecordArmDialog(mRecordAction.recordArmAngles.getFrameScripts().get(position) ) ;
+        OneFrameScript oneFrameScript = mRecordAction.getFrameScripts().get(position) ;
+
+        if(isEdit){
+
+            if(mSelectOneFrameScripts.contains(oneFrameScript)){
+
+                mSelectOneFrameScripts.remove(oneFrameScript) ;
+
+            }else {
+
+                mSelectOneFrameScripts.add(oneFrameScript) ;
+            }
+            mRecordAngleAdapter.notifyDataSetChanged();
+
+            if(mSelectOneFrameScripts.isEmpty()){
+
+                mCopyBtn.setEnabled(false) ;
+                mDeleteBtn.setEnabled(false) ;
+
+            }else {
+
+                mCopyBtn.setEnabled(true) ;
+                mDeleteBtn.setEnabled(true) ;
+
+            }
+
+        }else{
+
+            showRecordArmDialog(oneFrameScript);
+        }
+
     }
 }

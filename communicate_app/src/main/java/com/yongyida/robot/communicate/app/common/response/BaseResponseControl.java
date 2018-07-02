@@ -38,7 +38,7 @@ import com.yongyida.robot.communicate.app.common.send.data.BaseSendControl;
 /**
  * Create By HuangXiangXiang 2018/6/6
  */
-public abstract class BaseResponseControl {
+public class BaseResponseControl {
 
     private static final String TAG = BaseSendControl.class.getSimpleName() ;
 

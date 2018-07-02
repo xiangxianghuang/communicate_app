@@ -56,12 +56,21 @@ public class Y148SoundLocationControlHandler extends SoundLocationControlHandler
     public Y148SoundLocationControlHandler(Context context) {
         super(context);
 
+        mFootSerial = FootSerial.getInstance(context) ;
+        mFootSlam = FootSlam.getInstance(context) ;
 
     }
 
     @Override
     public SendResponse onHandler(SoundLocationControl soundLocationControl, IResponseListener responseListener) {
 
-        return super.onHandler(soundLocationControl, responseListener);
+        if(mFootSlam.isExist()){
+
+            return mFootSlam.onHandler(soundLocationControl, responseListener);
+
+        }else {
+
+            return mFootSerial.onHandler(soundLocationControl, responseListener);
+        }
     }
 }

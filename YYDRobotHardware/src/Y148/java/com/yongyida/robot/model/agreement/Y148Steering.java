@@ -1,6 +1,9 @@
 package com.yongyida.robot.model.agreement;
 
 
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.constant.Direction;
+import com.yongyida.robot.communicate.app.utils.LogHelper;
+
 /**
  * Y138底层控制板与上位机串口通讯协议(Agreement)
  *
@@ -15,6 +18,8 @@ package com.yongyida.robot.model.agreement;
  *  Version 1.0.0 （2018.04.18）(HuJun & Huangxiangxiang)
  */
 public class Y148Steering {
+
+    private static final String TAG = Y148Steering.class.getSimpleName() ;
 
     /**手臂(0x01)*/
     public static final byte TYPE_ARM                       = 0x01 ;
@@ -57,7 +62,7 @@ public class Y148Steering {
     public static final byte HEAD_1                         = (byte) 0X55;
 
 
-    public static byte[] getCmd(SingleChip singleChip){
+    private static byte[] getCmd(SingleChip singleChip){
 
         return getCmd(singleChip.getContent()) ;
     }
@@ -110,7 +115,7 @@ public class Y148Steering {
 
 
         public static final byte POSITIVE                            = 0x00 ;   // 正向
-        public static final byte NEGATIVE                            = 0x00 ;   // 反向
+        public static final byte NEGATIVE                            = 0x01 ;   // 反向
 
 
         protected byte[] content ;
@@ -148,13 +153,61 @@ public class Y148Steering {
 
             return Y148Steering.getCmd(this) ;
         }
+
+
+
+        public static class Joint{
+
+            private final byte id ;
+            private final byte negativeValue;
+            private final byte type ;
+            private final byte mode ;
+            private final int typeValue;
+            private final int modeValue;
+            private final int delay ;
+
+            public Joint(byte id ,byte negativeValue, byte type ,
+                         byte mode , int typeValue,int modeValue,int delay ){
+
+                this.id = id ;
+                this.negativeValue = negativeValue ;
+                this.type = type ;
+                this.mode = mode ;
+                this.typeValue = typeValue ;
+                this.modeValue = modeValue ;
+                this.delay =delay ;
+            }
+
+        }
+
+        /**
+         * 获取左右方向值
+         * */
+        public static byte getDirectionValue(Direction direction) {
+
+            if (direction != null) {
+
+                switch (direction) {
+                    case LEFT:
+
+                        return DIRECTION_LEFT;
+                    case RIGHT:
+
+                        return DIRECTION_RIGHT;
+                    case SAME:
+
+                        return DIRECTION_SAME;
+                }
+            }
+            return DIRECTION_LEFT;
+        }
+
     }
 
 
     /**
      * 总线(0x01)
      *  手臂上面的轴
-     * （待写）
      *
      * */
     public static class SteerArm extends SingleChip{
@@ -165,6 +218,12 @@ public class Y148Steering {
         public static final byte ARM_3                              = 0x03 ;
         public static final byte ARM_4                              = 0x04 ;
         public static final byte ARM_5                              = 0x05 ;
+
+        public static final byte FINGER_0                           = 0x00 ;
+        public static final byte FINGER_1                           = 0x01 ;
+        public static final byte FINGER_2                           = 0x02 ;
+        public static final byte FINGER_3                           = 0x03 ;
+        public static final byte FINGER_4                           = 0x04 ;
 
         @Override
         public byte getFunction() {
@@ -212,29 +271,7 @@ public class Y148Steering {
         }
 
 
-        public static class Joint{
 
-            public final byte id ;
-            public final byte negativeValue;
-            public final byte type ;
-            public final byte mode ;
-            public final int typeValue;
-            public final int modeValue;
-            public final int delay ;
-
-            public Joint(byte id ,byte negativeValue, byte type ,
-                     byte mode , int typeValue,int modeValue,int delay ){
-
-                this.id = id ;
-                this.negativeValue = negativeValue ;
-                this.type = type ;
-                this.mode = mode ;
-                this.typeValue = typeValue ;
-                this.modeValue = modeValue ;
-                this.delay =delay ;
-            }
-
-        }
 
         /**
          * 控制手臂多个舵机
@@ -319,23 +356,13 @@ public class Y148Steering {
      * */
     public static class SteerLed extends SingleChip{
 
-        public static final byte POSITION_LEFT_EAR                      = 0x01 ;
-        public static final byte POSITION_RIGHT_EAR                     = 0x02 ;
-        public static final byte POSITION_EAR                           = 0x03 ;
-
-        public static final byte POSITION_LEFT_ARM                      = 0x04 ;
-        public static final byte POSITION_RIGHT_ARM                     = 0x08 ;
-        public static final byte POSITION_ARM                           = 0x0C ;
-
-        public static final byte POSITION_LEFT_FOOT                     = 0x10 ;
-        public static final byte POSITION_RIGHT_FOOT                    = 0x20 ;
-        public static final byte POSITION_FOOT                          = 0x30 ;
-
 
         public static final byte MODE_OFF                               = 0x00 ; // 常灭
         public static final byte MODE_ON                                = 0x01 ; // 常亮
         public static final byte MODE_BREATH                            = 0x02 ; // 呼吸
         public static final byte MODE_HORSE                             = 0x03 ; // 跑马
+
+        public static final byte POSITION_CHEST                         = 0x30 ; // 胸
 
 
         @Override
@@ -356,56 +383,64 @@ public class Y148Steering {
             content[2] = position ;
         }
 
-        /**
-         * 设置灯的速度
-         * */
-        public void setLedOffMode(){
+//        /**
+//         * 设置灯的速度
+//         * */
+//        public void setLedOffMode(){
+//
+//            setMode(MODE_OFF, 0 );
+//        }
+//        /**
+//         * 设置灯的速度
+//         * */
+//        public void setLedOnMode(){
+//
+//            setMode(MODE_ON, 0 );
+//        }
+//
+//        /**
+//         * 设置灯的速度
+//         * */
+//        public void setLedBreathMode(int parameter){
+//
+//            setMode(MODE_BREATH, parameter );
+//        }
+//
+//
+//        /**
+//         * 跑马灯效果
+//         * */
+//        public void setLedHorseMode(int parameter){
+//
+//            setMode(MODE_HORSE, parameter );
+//        }
+//
+//        public void setMode(byte mode, int parameter){
+//
+//            content[3] = mode ;
+//
+//            content[4] = (byte) (parameter & 0xFF);
+//            content[5] = (byte) ((parameter >> 8) & 0xFF) ;
+//        }
+//
+//
+//        public void setColor(byte red, byte green, byte blue){
+//
+//            content[6] = red ;
+//            content[7] = green ;
+//            content[8] = blue ;
+//        }
 
-            setMode(MODE_OFF, 0 );
-        }
-        /**
-         * 设置灯的速度
-         * */
-        public void setLedOnMode(){
-
-            setMode(MODE_ON, 0 );
-        }
-
-        /**
-         * 设置灯的速度
-         * */
-        public void setLedBreathMode(int parameter){
-
-            setMode(MODE_BREATH, parameter );
-        }
-
-
-        /**
-         * 跑马灯效果
-         * */
-        public void setLedHorseMode(int parameter){
-
-            setMode(MODE_HORSE, parameter );
-        }
-
-        public void setMode(byte mode, int parameter){
+        public void setLedParam(byte mode, short param, byte red, byte green, byte blue) {
 
             content[3] = mode ;
 
-            content[4] = (byte) (parameter & 0xFF);
-            content[5] = (byte) ((parameter >> 8) & 0xFF) ;
-        }
-
-
-        public void setColor(byte red, byte green, byte blue){
-
+            content[4] = (byte) (param & 0xFF);
+            content[5] = (byte) ((param >> 8) & 0xFF) ;
             content[6] = red ;
             content[7] = green ;
             content[8] = blue ;
         }
-
-
-
     }
 
     /**
@@ -439,6 +474,10 @@ public class Y148Steering {
         public void controlHead(byte negativeValue, byte type, byte mode,
                                 int typeValue, int modeValue, int delay){
 
+            LogHelper.i(TAG,LogHelper.__TAG__() + ", negativeValue : " + negativeValue  +
+                    ", type : " + type  + ", mode : " + mode  + ", typeValue : " + typeValue  +
+                    ", modeValue : " + modeValue  + ", delay : " + delay);
+
             content[2] = (byte) ((mode & 0x0F) | ((negativeValue & 0x01) << 4 ) | ((type & 0x01) << 5 )) ;
             content[3] = (byte) (typeValue & 0xFF) ;
             content[4] = (byte) ((typeValue >> 8) & 0xFF);
@@ -459,6 +498,19 @@ public class Y148Steering {
     public static class SteerFinger extends SingleChip{
 
 
+        public static final byte FINGER_STOP                = 0x00 ; // 停止
+        public static final byte FINGER_RESET               = 0x01 ; // 手臂手指初始化
+        public static final byte FINGER_MARK_FIST           = 0x02 ; // 握拳
+        public static final byte FINGER_GOOD                = 0x03 ; // 点赞
+        public static final byte FINGER_OK                  = 0x04 ; // OK
+        public static final byte FINGER_ROCK                = 0x05 ; // 石头
+        public static final byte FINGER_SCISSORS            = 0x06 ; // 剪刀
+        public static final byte FINGER_PAPER               = 0x07 ; // 布
+        public static final byte FINGER_HAND_SHAKE          = 0x08 ; // 握手
+        public static final byte FINGER_SHOW_LOVE           = 0x09 ; // 示爱
+        public static final byte FINGER_FINGER_WHEEL        = 0x0A ; // 手指轮动
+
+
         @Override
         public byte getType() {
             return TYPE_STEPPER_MOTOR;
@@ -469,50 +521,71 @@ public class Y148Steering {
             return FUNCTION_SEND_STEER;
         }
 
-//        /**
-//         * 手指控制
-//         *
-//         * @param direction 方向  3[4-5]  0 左手  1右手
-//         *
-//         * */
-//        public void controlFingers(byte direction, ArrayList<FingerSendControl.Finger> fingers){
-//
-//            final int size = fingers.size() ;
-//            changeContent = setDataLength(size*8 + 5) ;
-//            content = changeContent ;
-//
-//            content[2] = 0x00 ;
-//            content[3] = direction ;
-//            content[4] = (byte) size;
-//
-//            for (int i = 0 ; i < size ; i++){
-//
-//                FingerSendControl.Finger finger = fingers.get(i) ;
-//
-//                content[8*i+5] = (byte) finger.id ;
-//                content[8*i+6] = (byte) ((finger.mode.value & 0x0F) | ((finger.openValue() & 0x01) << 4 ) | ((finger.type.value & 0x01) << 5 )) ;
-//                content[8*i+7] = (byte) (finger.typeValue & 0xFF) ;
-//                content[8*i+8] =  (byte) ((finger.typeValue >> 8) & 0xFF);
-//                content[8*i+9] = (byte) (finger.modeValue & 0xFF);
-//                content[8*i+10] = (byte) ((finger.modeValue >> 8) & 0xFF) ;
-//                content[8*i+11] = (byte) (finger.delay & 0xFF) ;
-//                content[8*i+12] = (byte) ((finger.delay >> 8) & 0xFF) ;
-//            }
-//        }
-//
-//
-//        /**
-//         * 手掌控制(属于手指的组合)
-//         * */
-//        public void controlPalm(){
-//
-//            content[2] = 0x01 ;
-//        }
-//
-//
-//
-//
-//
+        /**
+         * 手指控制
+         *
+         * @param direction 方向  3[4-5]  0 左手  1右手
+         *
+         * */
+        public void controlFingers(byte direction, Joint[] fingers){
+
+            final int size = fingers.length ;
+            changeContent = setDataLength(size*8 + 5) ;
+            content = changeContent ;
+
+            content[2] = 0x00 ;
+            content[3] = direction ;
+            content[4] = (byte) size;
+
+            for (int i = 0 ; i < size ; i++){
+
+                Joint finger = fingers[i] ;
+
+                content[8*i+5] = finger.id;
+                content[8*i+6] = (byte) ((finger.mode & 0x0F) | (finger.negativeValue << 4 ) | ((finger.type & 0x01) << 5 )) ;
+                content[8*i+7] = (byte) (finger.typeValue & 0xFF) ;
+                content[8*i+8] =  (byte) ((finger.typeValue >> 8) & 0xFF);
+                content[8*i+9] = (byte) (finger.modeValue & 0xFF);
+                content[8*i+10] = (byte) ((finger.modeValue >> 8) & 0xFF) ;
+                content[8*i+11] = (byte) (finger.delay & 0xFF) ;
+                content[8*i+12] = (byte) ((finger.delay >> 8) & 0xFF) ;
+            }
+        }
+
+
+        /**
+         * 手掌控制(属于手指的组合)
+         * */
+        public void controlPreFinger(byte direction, byte preFinger){
+
+            content = fixedContent ;
+
+            content[2] = 0x01 ;
+            content[3] = direction ;
+            content[4] = preFinger ;
+        }
+
+        /**
+         * 手臂灯
+         * */
+        public void controlLed(byte direction, byte mode, short param, byte red, byte green, byte blue) {
+
+            LogHelper.i(TAG,LogHelper.__TAG__() + ", direction : " + direction  + ", mode : " + mode  + ", param : " + param  + ", red : " + red  + ", green : " + green  + ", blue : " + blue);
+
+            content = fixedContent ;
+
+            content[2] = 0x02 ;
+            content[3] = direction ;
+            content[4] = 0x01 ;
+            content[5] = 0x00 ;
+            content[6] = mode ;
+            content[7] = (byte) (param & 0xFF);
+            content[8] = (byte) ((param >> 8) & 0xFF) ;
+            content[9] = red ;
+            content[10] = green ;
+            content[11] = blue ;
+        }
+
     }
 
 
@@ -521,20 +594,20 @@ public class Y148Steering {
      * */
     public static class SteerAction extends SingleChip{
 
-        public static final byte GUEST_RESET            = 0x01 ; // 手臂手指初始化
-        public static final byte GUEST_MARK_FIST        = 0x02 ; // 握拳
-        public static final byte GUEST_FINGER_WHEEL     = 0x03 ; // 手指轮动
-        public static final byte GUEST_HAND_SHAKE       = 0x04 ; // 握手
-        public static final byte GUEST_OK               = 0x05 ; // OK
-        public static final byte GUEST_GOOD             = 0x06 ; // 点赞
-        public static final byte GUEST_ROCK             = 0x07 ; // 石头
-        public static final byte GUEST_SCISSORS         = 0x08 ; // 剪刀
-        public static final byte GUEST_PAPER            = 0x09 ; // 布
-        public static final byte GUEST_SHOW_WELCOME     = 0x0A ; // 迎宾
-        public static final byte GUEST_SHOW_WAVE        = 0x0B ; // 挥手
-        public static final byte GUEST_SHOW_LOVE        = 0x0C ; // 示爱
-        public static final byte GUEST_SHOW_666         = 0x0D ; // 666
-        public static final byte GUEST_SHOW_SELF        = 0x0E ; // 自定义(无用)
+        public static final byte HAND_RESET            = 0x01 ; // 手臂手指初始化
+        public static final byte HAND_MARK_FIST        = 0x02 ; // 握拳
+        public static final byte HAND_FINGER_WHEEL     = 0x03 ; // 手指轮动
+        public static final byte HAND_HAND_SHAKE       = 0x04 ; // 握手
+        public static final byte HAND_OK               = 0x05 ; // OK
+        public static final byte HAND_GOOD             = 0x06 ; // 点赞
+        public static final byte HAND_ROCK             = 0x07 ; // 石头
+        public static final byte HAND_SCISSORS         = 0x08 ; // 剪刀
+        public static final byte HAND_PAPER            = 0x09 ; // 布
+        public static final byte HAND_SHOW_WELCOME     = 0x0A ; // 迎宾
+        public static final byte HAND_SHOW_WAVE        = 0x0B ; // 挥手
+        public static final byte HAND_SHOW_LOVE        = 0x0C ; // 示爱
+        public static final byte HAND_SHOW_666         = 0x0D ; // 666
+        public static final byte HAND_SHOW_SELF        = 0x0E ; // 自定义(无用)
 
 
 
@@ -554,6 +627,9 @@ public class Y148Steering {
             content[2] = guest;
             content[3] = direction ;
         }
+
+
+
 
     }
 

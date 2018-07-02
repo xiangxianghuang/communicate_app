@@ -36,18 +36,21 @@ package com.yongyida.robot.model.y148.led.type;
 import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSendControl;
 import com.yongyida.robot.dev.DevFile;
 
+import java.util.Locale;
+
 /**
  * Create By HuangXiangXiang 2018/6/6
  * 连接在Android 板子上面的呼吸灯
+ * Y148 机器耳朵灯连接在其上面
  *
  */
 public class AndroidLed {
 
 
-    private static final String HEAD_LED_ON = "112";  // 开灯
-    private static final String HEAD_LED_OFF = "113";  // 关灯
-    private static final String HEAD_LED_COLOR = "111";  // 颜色
-    private static final String HEAD_LED_BREATH = "114";  // 呼吸
+    private static final String HEAD_LED_ON         = "112";  // 开灯
+    private static final String HEAD_LED_OFF        = "113";  // 关灯
+    private static final String HEAD_LED_COLOR      = "111";  // 颜色
+    private static final String HEAD_LED_BREATH     = "114";  // 呼吸
 
 
     private int bright = 100 ;
@@ -55,7 +58,6 @@ public class AndroidLed {
     private int red = 255 ;
     private int green = 255 ;
     private int blue = 255 ;
-
 
     private static AndroidLed mInstance ;
     public static AndroidLed getInstance(){
@@ -149,7 +151,7 @@ public class AndroidLed {
         int green = this.green * bright / 100 ;
         int blue = this.blue * bright / 100 ;
 
-        String color = HEAD_LED_COLOR + String.format("%03d %03d %03d", red, green, blue);
+        String color = HEAD_LED_COLOR + String.format(Locale.CHINA, "%03d %03d %03d", red, green, blue);
         DevFile.writeString(color);
     }
 
@@ -159,7 +161,7 @@ public class AndroidLed {
         int green = this.green * bright / 100 ;
         int blue = this.blue * bright / 100 ;
 
-        String color = HEAD_LED_BREATH + String.format("%03d %03d %03d %03d",time,red,green,blue);
+        String color = HEAD_LED_BREATH + String.format(Locale.CHINA, "%03d %03d %03d %03d",time,red,green,blue);
         DevFile.writeString(color);
     }
 }

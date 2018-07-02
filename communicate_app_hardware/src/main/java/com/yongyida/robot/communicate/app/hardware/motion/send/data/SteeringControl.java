@@ -123,7 +123,7 @@ public class SteeringControl extends BaseMotionSendControl {
 
         private Unit unit = Unit.CM ;
 
-        private Type type ;
+        private Type type = Type.BY ;
 
         private int value ;
 

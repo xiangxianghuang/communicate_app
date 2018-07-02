@@ -62,16 +62,26 @@ public class Y148FootControlHandler extends FootControlHandler {
     public SendResponse onHandler(FootControl footControl, IResponseListener responseListener) {
 
         FootControl.Type type = footControl.getType() ;
-        switch (type){
+        if(type != null){
 
-            case SERIAL:
-                return mFootSerial.onHandler(footControl, responseListener);
+            switch (type){
 
-            case SLAM:
-                return mFootSlam.onHandler(footControl, responseListener);
+                case SERIAL:
+                    return mFootSerial.onHandler(footControl, responseListener);
+
+                case SLAM:
+                    return mFootSlam.onHandler(footControl, responseListener);
+            }
         }
 
-        return new SendResponse(SendResponse.RESULT_SERVER_PARAMETERS_ERROR , "不支持的运作方式") ;
+        if(mFootSlam.isExist()){
+
+            return mFootSlam.onHandler(footControl, responseListener);
+
+        }else {
+
+            return mFootSerial.onHandler(footControl, responseListener);
+        }
     }
 
 }

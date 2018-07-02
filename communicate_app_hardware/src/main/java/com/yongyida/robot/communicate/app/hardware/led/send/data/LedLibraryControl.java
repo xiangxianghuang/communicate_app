@@ -38,11 +38,11 @@ package com.yongyida.robot.communicate.app.hardware.led.send.data;
  * Led灯库
  *
  */
-public class LedLibraryControl {
+public class LedLibraryControl extends BaseLedSendControl{
 
 
     /**状态*/
-    public enum state{
+    public enum State{
 
         POWER_ON,                           // 开机
         BASIC,                              // 基本无任务
@@ -73,5 +73,12 @@ public class LedLibraryControl {
     }
 
 
+    private State state ;
 
+    public State getState() {
+        return state;
+    }
+    public void setState(State state) {
+        this.state = state;
+    }
 }

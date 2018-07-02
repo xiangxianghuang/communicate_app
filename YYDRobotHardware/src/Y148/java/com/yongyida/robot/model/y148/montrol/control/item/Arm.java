@@ -38,10 +38,12 @@ import android.content.Context;
 import com.yongyida.robot.communicate.app.common.response.SendResponse;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.ArmControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.ArmChangeIdControl;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.ArmTeacherModeControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.SteeringControl;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.constant.Direction;
 import com.yongyida.robot.communicate.app.server.IResponseListener;
 import com.yongyida.robot.communicate.app.utils.LogHelper;
+import com.yongyida.robot.model.agreement.Y128Steering;
 import com.yongyida.robot.model.agreement.Y148Steering;
 import com.yongyida.robot.usb_uart.UART;
 
@@ -55,6 +57,13 @@ import java.util.Locale;
 public class Arm {
 
     private static final String TAG = Arm.class.getSimpleName() ;
+
+    private static final int SPEED_MIN = 0 ;
+    private static final int SPEED_MAX = 15 ;
+
+    private static final int DISTANCE_MIN = 0 ;
+    private static final int DISTANCE_MAX = 4096 ;
+
 
     private Y148Steering.SteerArm mSteerArm;
 
@@ -101,7 +110,7 @@ public class Arm {
                 return custom(armControl) ;
             case RESET:
                 // 重置
-                byte direction = getDirectionValue(armControl.getDirection()) ;
+                byte direction = Y148Steering.SingleChip.getDirectionValue(armControl.getDirection()) ;
                 return reset(direction) ;
         }
 
@@ -211,7 +220,7 @@ public class Arm {
 
             int delay = 0 ;
 
-            joints[i] = new Y148Steering.SteerArm.Joint(id, negativeValue, mode,type,modeValue,typeValue,delay) ;
+            joints[i] = new Y148Steering.SteerArm.Joint(id, negativeValue, type, mode, typeValue,modeValue,delay) ;
         }
 
         mSteerArm.controlArms(direction,joints);
@@ -225,7 +234,7 @@ public class Arm {
     /**
      * 控制手臂多个舵机
      * */
-    public boolean controlArms(byte direction, ArrayList<SteeringControl> controls){
+    private boolean controlArms(byte direction, ArrayList<SteeringControl> controls){
 
         final int size = controls.size() ;
         Y148Steering.SteerArm.Joint[] joints = new Y148Steering.SteerArm.Joint[size] ;
@@ -267,31 +276,54 @@ public class Arm {
 
                 case LOOP:
 
+                    negativeValue = 0 ;
+
                     mode = Y148Steering.SteerArm.MODE_LOOP ;
-                    modeValue = 0 ;
+                    modeValue = getSpeedValue(control.getSpeed()) ; //速度值
 
                     type = 0 ;
-                    typeValue = 0 ;
+                    typeValue = 1 ; //这个值 不能为0 否则不会转动
 
                     break;
                 case DISTANCE_TIME:
 
+                    negativeValue = getNegativeValue(control) ;
+
                     mode = Y148Steering.SteerArm.MODE_DISTANCE_TIME ;
-                    modeValue = 0 ;
+                    modeValue = getTimeValue(control.getTime()) ; // 表示时间
 
                     SteeringControl.Distance distance = control.getDistance() ;
-                    type = getDistanceType(distance) ;
-                    typeValue = getDistanceValue(distance) ;
+                    if(distance.getType() == SteeringControl.Distance.Type.BY){// 偏移量
+
+                        type = Y148Steering.SteerArm.TYPE_BY ;
+                        typeValue = getDistanceByValue(distance) ;
+
+                    }else{  // 目标值
+
+                        type = Y148Steering.SteerArm.TYPE_TO ;
+                        typeValue = getDistanceToValue(distance) ;
+                    }
+
 
                     break;
                 case DISTANCE_SPEED:
 
+                    negativeValue = getNegativeValue(control) ;
+
                     mode = Y148Steering.SteerArm.MODE_DISTANCE_SPEED ;
-                    modeValue = 0 ;
+                    modeValue = getSpeedValue(control.getSpeed()) ;// 表示速度
 
                     distance = control.getDistance() ;
-                    type = getDistanceType(distance) ;
-                    typeValue = getDistanceValue(distance) ;
+                    if(distance.getType() == SteeringControl.Distance.Type.BY){// 偏移量
+
+                        type = Y148Steering.SteerArm.TYPE_BY ;
+                        typeValue = getDistanceByValue(distance) ;
+
+                    }else{  // 目标值
+
+                        type = Y148Steering.SteerArm.TYPE_TO ;
+                        typeValue = getDistanceToValue(distance) ;
+                    }
 
                     break;
 
@@ -299,7 +331,7 @@ public class Arm {
                     return false ;
             }
 
-            joints[i] = new Y148Steering.SteerArm.Joint(id, negativeValue, mode,type,modeValue,typeValue,delay) ;
+            joints[i] = new Y148Steering.SteerArm.Joint(id, negativeValue, type,mode,typeValue,modeValue,delay) ;
         }
 
         mSteerArm.controlArms(direction,joints);
@@ -309,7 +341,10 @@ public class Arm {
     }
 
 
-    public SendResponse controlArm(byte direction, byte position, SteeringControl control){
+    /**
+     * 控制单个手臂舵机
+     * */
+    private SendResponse controlArm(byte direction, byte position, SteeringControl control){
 
         Y148Steering.SteerArm.Joint[] joints = new Y148Steering.SteerArm.Joint[1] ;
 
@@ -353,10 +388,10 @@ public class Arm {
                 negativeValue = 0 ;
 
                 mode = Y148Steering.SteerArm.MODE_LOOP ;
-                modeValue = 0 ;
+                modeValue = getSpeedValue(control.getSpeed()) ; //速度值
 
                 type = 0 ;
-                typeValue = 0 ;
+                typeValue = 1 ; //这个值 不能为0 否则不会转动
 
                 break;
             case DISTANCE_TIME:
@@ -364,12 +399,20 @@ public class Arm {
                 negativeValue = getNegativeValue(control) ;
 
                 mode = Y148Steering.SteerArm.MODE_DISTANCE_TIME ;
-                modeValue = getTimeValue(control.getTime()) ;
-
+                modeValue = getTimeValue(control.getTime()) ; // 表示时间
 
                 SteeringControl.Distance distance = control.getDistance() ;
-                type = getDistanceType(distance) ;
-                typeValue = getDistanceValue(distance) ;
+                if(distance.getType() == SteeringControl.Distance.Type.BY){// 偏移量
+
+                    type = Y148Steering.SteerArm.TYPE_BY ;
+                    typeValue = getDistanceByValue(distance) ;
+
+                }else{  // 目标值
+
+                    type = Y148Steering.SteerArm.TYPE_TO ;
+                    typeValue = getDistanceToValue(distance) ;
+                }
+
 
                 break;
             case DISTANCE_SPEED:
@@ -377,11 +420,19 @@ public class Arm {
                 negativeValue = getNegativeValue(control) ;
 
                 mode = Y148Steering.SteerArm.MODE_DISTANCE_SPEED ;
-                modeValue = getSpeedValue(control.getSpeed()) ;
+                modeValue = getSpeedValue(control.getSpeed()) ;// 表示速度
 
                 distance = control.getDistance() ;
-                type = getDistanceType(distance) ;
-                typeValue = getDistanceValue(distance) ;
+                if(distance.getType() == SteeringControl.Distance.Type.BY){// 偏移量
+
+                    type = Y148Steering.SteerArm.TYPE_BY ;
+                    typeValue = getDistanceByValue(distance) ;
+
+                }else{  // 目标值
+
+                    type = Y148Steering.SteerArm.TYPE_TO ;
+                    typeValue = getDistanceToValue(distance) ;
+                }
 
                 break;
 
@@ -392,18 +443,13 @@ public class Arm {
         String msg = String.format(Locale.CHINA,", id:%d, negativeValue:%d, mode:%d, type:%d, modeValue:%d, typeValue:%d, delay:%d",id, negativeValue, mode,type,modeValue,typeValue,delay) ;
         LogHelper.i(TAG ,LogHelper.__TAG__() + msg );
 
-        joints[0] = new Y148Steering.SteerArm.Joint(id, negativeValue, mode, type, modeValue, typeValue, delay) ;
+        joints[0] = new Y148Steering.SteerArm.Joint(id, negativeValue, type, mode, typeValue, modeValue, delay) ;
 
         mSteerArm.controlArms(direction,joints);
         mUART.writeData(mSteerArm.getCmd()) ;
 
         return new SendResponse() ;
     }
-
-
-
-    private static final int VALUE_MIN = 0 ;
-    private static final int VALUE_MAX = 4096 ;
 
 
     private byte getPositionValue(SteeringControl.Position position){
@@ -450,17 +496,10 @@ public class Arm {
         return control.isNegative() ? Y148Steering.SteerArm.NEGATIVE : Y148Steering.SteerArm.POSITIVE ;
     }
 
-    private byte getDistanceType(SteeringControl.Distance distance){
 
-        if(distance.getType() == SteeringControl.Distance.Type.BY){
 
-            return Y148Steering.SteerArm.TYPE_BY ;
-        }
 
-        return Y148Steering.SteerArm.TYPE_TO ;
-    }
-
-    private int getDistanceValue(SteeringControl.Distance distance){
+    private int getDistanceToValue(SteeringControl.Distance distance){
 
         SteeringControl.Distance.Unit unit = distance.getUnit() ;
         int value = distance.getValue() ;
@@ -469,7 +508,7 @@ public class Arm {
 
             case PERCENT:
 
-                value = VALUE_MIN + (VALUE_MAX - VALUE_MIN) * value / 100 ;
+                value = DISTANCE_MIN + (DISTANCE_MAX - DISTANCE_MIN) * value / 100 ;
 
                 break;
             case MM:
@@ -493,31 +532,46 @@ public class Arm {
         return value ;
     }
 
-    private byte getDirectionValue(Direction direction) {
+    private int getDistanceByValue(SteeringControl.Distance distance){
 
-        if (direction != null) {
+        SteeringControl.Distance.Unit unit = distance.getUnit() ;
+        int value = distance.getValue() ;
 
-            switch (direction) {
-                case LEFT:
+        switch (unit){
 
-                    return Y148Steering.SingleChip.DIRECTION_LEFT;
-                case RIGHT:
+            case PERCENT:
 
-                    return Y148Steering.SingleChip.DIRECTION_RIGHT;
-                case SAME:
+                value = (DISTANCE_MAX - DISTANCE_MIN) * value / 100 ;
 
-                    return Y148Steering.SingleChip.DIRECTION_SAME;
-            }
+                break;
+            case MM:
+
+
+                break;
+            case CM:
+
+
+                break;
+            case ANGLE:
+
+                break ;
+            default:
+
+                break;
         }
-        return Y148Steering.SingleChip.DIRECTION_LEFT;
+
+
+
+        return value ;
     }
 
 
 
 
 
-    private static final int SPEED_MIN = 0 ;
-    private static final int SPEED_MAX = 16 ;
+
+
+
 
     /**
      *
@@ -526,7 +580,7 @@ public class Arm {
 
         if(speed == null){
 
-            return 15 ;
+            return (SPEED_MAX - SPEED_MIN )/2 ;
         }
         int value = speed.getValue() ;
         switch (speed.getUnit()){
@@ -578,4 +632,17 @@ public class Arm {
     }
 
 
+    public SendResponse onHandler(ArmTeacherModeControl armTeacherModeControl, IResponseListener responseListener) {
+
+        if(armTeacherModeControl.isTeacher()){
+
+            mSteerArm.openTeacherMode();
+        }else {
+
+            mSteerArm.closeTeacherMode();
+        }
+
+        mUART.writeData(mSteerArm.getCmd()) ;
+        return new SendResponse() ;
+    }
 }

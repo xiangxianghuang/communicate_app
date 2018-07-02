@@ -52,12 +52,10 @@ import com.yongyida.robot.hardware.test.R;
  */
 public class TestHeadFragment extends BaseFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
-
     private HeadControl mHeadControl = new HeadControl() ;
     private SteeringControl mHeadLeftRight = mHeadControl.getHeadLeftRightControl();
     private SteeringControl mHeadUpDown = mHeadControl.getHeadUpDownControl() ;
 
-    private View view;
     private SeekBar mHeadLeftRightSpeedSbr;
     /**
      * 50
@@ -124,6 +122,9 @@ public class TestHeadFragment extends BaseFragment implements View.OnClickListen
      * 停止
      */
     private Button mHeadUpDownStopBtn;
+
+    public TestHeadFragment() {
+    }
 
     @Override
     public String getName() {
@@ -211,6 +212,7 @@ public class TestHeadFragment extends BaseFragment implements View.OnClickListen
             mHeadControl.setAction(HeadControl.Action.LEFT_RIGHT);
             mHeadLeftRight.setMode(SteeringControl.Mode.DISTANCE_SPEED);
             mHeadLeftRight.getDistance().setType(SteeringControl.Distance.Type.BY);
+            mHeadLeftRight.setNegative(false);
             mHeadLeftRight.getDistance().setValue(10);
 
             SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
@@ -228,7 +230,8 @@ public class TestHeadFragment extends BaseFragment implements View.OnClickListen
             mHeadControl.setAction(HeadControl.Action.LEFT_RIGHT);
             mHeadLeftRight.setMode(SteeringControl.Mode.DISTANCE_SPEED);
             mHeadLeftRight.getDistance().setType(SteeringControl.Distance.Type.BY);
-            mHeadLeftRight.getDistance().setValue(-10);
+            mHeadLeftRight.setNegative(true);
+            mHeadLeftRight.getDistance().setValue(10);
 
             SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
@@ -237,7 +240,7 @@ public class TestHeadFragment extends BaseFragment implements View.OnClickListen
             mHeadControl.setAction(HeadControl.Action.LEFT_RIGHT);
             mHeadLeftRight.setMode(SteeringControl.Mode.DISTANCE_SPEED);
             mHeadLeftRight.getDistance().setType(SteeringControl.Distance.Type.TO);
-            mHeadLeftRight.getDistance().setValue(-100);
+            mHeadLeftRight.getDistance().setValue(0);
 
             SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
@@ -262,7 +265,7 @@ public class TestHeadFragment extends BaseFragment implements View.OnClickListen
             mHeadControl.setAction(HeadControl.Action.UP_DOWN);
             mHeadUpDown.setMode(SteeringControl.Mode.DISTANCE_SPEED);
             mHeadUpDown.getDistance().setType(SteeringControl.Distance.Type.TO);
-            mHeadUpDown.getDistance().setValue(-100);
+            mHeadUpDown.getDistance().setValue(0);
 
             SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
@@ -271,7 +274,8 @@ public class TestHeadFragment extends BaseFragment implements View.OnClickListen
             mHeadControl.setAction(HeadControl.Action.UP_DOWN);
             mHeadUpDown.setMode(SteeringControl.Mode.DISTANCE_SPEED);
             mHeadUpDown.getDistance().setType(SteeringControl.Distance.Type.BY);
-            mHeadUpDown.getDistance().setValue(-10);
+            mHeadUpDown.setNegative(true);
+            mHeadUpDown.getDistance().setValue(10);
 
             SendClient.getInstance(getActivity()).send(null, mHeadControl, null );
 
@@ -287,6 +291,7 @@ public class TestHeadFragment extends BaseFragment implements View.OnClickListen
             mHeadControl.setAction(HeadControl.Action.UP_DOWN);
             mHeadUpDown.setMode(SteeringControl.Mode.DISTANCE_SPEED);
             mHeadUpDown.getDistance().setType(SteeringControl.Distance.Type.BY);
+            mHeadUpDown.setNegative(false);
             mHeadUpDown.getDistance().setValue(10);
 
             SendClient.getInstance(getActivity()).send(null, mHeadControl, null );

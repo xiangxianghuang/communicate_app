@@ -48,15 +48,15 @@ import com.yongyida.robot.usb_uart.UART;
  */
 public class Head {
 
-    private static final int HEAD_LEFT_RIGHT_DISTANCE_MIN       = 500 ;   // 可移动的最小值
-    private static final int HEAD_LEFT_RIGHT_DISTANCE_MAX       = 1700 ; // 可移动的最大值
+    private static final int HEAD_LEFT_RIGHT_DISTANCE_MIN       = 500 ;     // 可移动的最小值
+    private static final int HEAD_LEFT_RIGHT_DISTANCE_MAX       = 2500 ;    // 可移动的最大值
 
     private static final int HEAD_UP_DOWN_DISTANCE_MIN          = 1300 ;   // 可移动的最小值
-    private static final int HEAD_UP_DOWN_DISTANCE_MAX          = 1700 ; // 可移动的最大值
+    private static final int HEAD_UP_DOWN_DISTANCE_MAX          = 1700 ;    // 可移动的最大值
 
 
-    private static final int SPEED_MIN          = 0 ;   // 可移动的最小速度
-    private static final int SPEED_MAX          = 100 ; // 可移动的最大速度
+    private static final int SPEED_MIN                          = 0 ;   // 可移动的最小速度
+    private static final int SPEED_MAX                          = 15 ;  // 可移动的最大速度
 
 
     private Y148Steering.SteerHead mSteerHeadLeftRight ;
@@ -90,32 +90,36 @@ public class Head {
 
             case LEFT_RIGHT:
 
-                SteeringControl control = headControl.getHeadLeftRightControl();;
-                if(control == null){
-
-                    return new SendResponse(SendResponse.RESULT_SERVER_PARAMETERS_ERROR) ;
-                }
-
+                SteeringControl control = headControl.getHeadLeftRightControl();
                 return onHandler(true, control, responseListener);
 
             case UP_DOWN:
 
-                control = headControl.getHeadUpDownControl() ;
-                if(control == null){
-
-                    return new SendResponse(SendResponse.RESULT_SERVER_PARAMETERS_ERROR) ;
-                }
-
+                control = headControl.getHeadUpDownControl();
                 return onHandler(false, control, responseListener);
 
             case CUSTOM:
 
-                break;
+                control = headControl.getHeadLeftRightControl();
+                SendResponse leftRight = onHandler(true, control, responseListener);
 
+                control = headControl.getHeadUpDownControl();
+                SendResponse upDown = onHandler(false, control, responseListener);
+
+                if(leftRight.getResult() == SendResponse.RESULT_SUCCESS && upDown.getResult() == SendResponse.RESULT_SUCCESS){
+
+
+                    return leftRight ;
+                }
+
+                if(leftRight.getResult() != SendResponse.RESULT_SUCCESS){
+
+                    return leftRight ;
+                }
+
+                return upDown ;
 
         }
-
-
 
         return new SendResponse() ;
     }
@@ -123,6 +127,11 @@ public class Head {
 
     /**脑袋上下 或者 左右运动*/
     public SendResponse onHandler(boolean isLeftRight,SteeringControl control, IResponseListener responseListener) {
+
+        if(control == null || !control.isControl()){
+
+            return new SendResponse(SendResponse.RESULT_SERVER_PARAMETERS_ERROR, "数据为空" ) ;
+        }
 
         byte negativeValue = getNegativeValue(control);
         byte mode ;
@@ -154,30 +163,44 @@ public class Head {
 
                 break;
 
-            case LOOP :
+            case LOOP :     // 循环
 
                 mode = Y148Steering.SingleChip.MODE_LOOP ;
-                modeValue = 0 ;
+                modeValue = getSpeedValue(control.getSpeed()) ;// 速度值
 
                 type = 0 ;
-                typeValue = 0 ;
+                typeValue = 1 ; //这个值 不能为0 否则不会转动
 
                 break;
 
-
-            case DISTANCE_TIME :    // 距离时间
+            case DISTANCE_TIME :    // 距离 时间
 
                 mode = Y148Steering.SingleChip.MODE_DISTANCE_TIME ;
-                modeValue = 0 ;
+                modeValue = getTimeValue(control.getTime()) ;     // 表示时间
 
                 SteeringControl.Distance distance = control.getDistance() ;
-                type = getDistanceType(distance) ;
-                if(isLeftRight){
+                if(distance.getType() == SteeringControl.Distance.Type.BY){// 偏移量
 
-                    typeValue = getLeftRightDistanceValue(distance) ;
-                }else {
+                    type = Y148Steering.SteerArm.TYPE_BY ;
+                    if(isLeftRight){
 
-                    typeValue = getUpDownDistanceValue(distance) ;
+                        typeValue = getLeftRightDistanceByValue(distance) ;
+                    }else {
+
+                        typeValue = getUpDownDistanceByValue(distance) ;
+                    }
+
+                }else{  // 目标值
+
+                    type = Y148Steering.SteerArm.TYPE_TO ;
+
+                    if(isLeftRight){
+
+                        typeValue = getLeftRightDistanceToValue(distance) ;
+                    }else {
+
+                        typeValue = getUpDownDistanceToValue(distance) ;
+                    }
                 }
 
                 break;
@@ -185,16 +208,32 @@ public class Head {
             case DISTANCE_SPEED :
 
                 mode = Y148Steering.SingleChip.MODE_DISTANCE_SPEED ;
-                modeValue = 0 ;
+                modeValue = getSpeedValue(control.getSpeed()) ;     // 表示速度
 
                 distance = control.getDistance() ;
-                type = getDistanceType(distance) ;
-                if(isLeftRight){
+                if(distance.getType() == SteeringControl.Distance.Type.BY){// 偏移量
 
-                    typeValue = getLeftRightDistanceValue(distance) ;
-                }else {
+                    type = Y148Steering.SteerArm.TYPE_BY ;
+                    if(isLeftRight){
 
-                    typeValue = getUpDownDistanceValue(distance) ;
+                        typeValue = getLeftRightDistanceByValue(distance) ;
+                    }else {
+
+                        typeValue = getUpDownDistanceByValue(distance) ;
+                    }
+
+                }else{  // 目标值
+
+                    type = Y148Steering.SteerArm.TYPE_TO ;
+
+                    if(isLeftRight){
+
+                        typeValue = getLeftRightDistanceToValue(distance) ;
+                    }else {
+
+                        typeValue = getUpDownDistanceToValue(distance) ;
+                    }
+
                 }
 
                 break;
@@ -203,8 +242,16 @@ public class Head {
                 return new SendResponse(SendResponse.RESULT_SERVER_NO_METHOD) ;
         }
 
-        mSteerHeadLeftRight.controlHead(negativeValue,type, mode, typeValue, modeValue,delay);
-        mUART.writeData(mSteerHeadLeftRight.getCmd()) ;
+        if(isLeftRight){
+
+            mSteerHeadLeftRight.controlHead(negativeValue,type, mode, typeValue, modeValue,delay);
+            mUART.writeData(mSteerHeadLeftRight.getCmd()) ;
+
+        }else {
+
+            mSteerHeadUpDown.controlHead(negativeValue,type, mode, typeValue, modeValue,delay);
+            mUART.writeData(mSteerHeadUpDown.getCmd()) ;
+        }
 
         return new SendResponse();
     }
@@ -215,17 +262,8 @@ public class Head {
         return control.isNegative() ? Y148Steering.SteerArm.NEGATIVE : Y148Steering.SteerArm.POSITIVE ;
     }
 
-    private byte getDistanceType(SteeringControl.Distance distance){
 
-        if(distance.getType() == SteeringControl.Distance.Type.BY){
-
-            return Y148Steering.SteerArm.TYPE_BY ;
-        }
-
-        return Y148Steering.SteerArm.TYPE_TO ;
-    }
-
-    private int getLeftRightDistanceValue(SteeringControl.Distance distance){
+    private int getLeftRightDistanceToValue(SteeringControl.Distance distance){
 
         SteeringControl.Distance.Unit unit = distance.getUnit() ;
         int value = distance.getValue() ;
@@ -234,7 +272,39 @@ public class Head {
 
             case PERCENT:
 
-                value = HEAD_LEFT_RIGHT_DISTANCE_MIN + (HEAD_LEFT_RIGHT_DISTANCE_MAX - HEAD_LEFT_RIGHT_DISTANCE_MIN) * value / 100 ;
+                value = HEAD_LEFT_RIGHT_DISTANCE_MIN + (HEAD_LEFT_RIGHT_DISTANCE_MAX - HEAD_LEFT_RIGHT_DISTANCE_MIN) * value  / 100 ;
+
+                break;
+            case MM:
+
+
+                break;
+            case CM:
+
+
+                break;
+            case ANGLE:
+
+                break ;
+            default:
+
+                break;
+        }
+
+
+        return value ;
+    }
+
+    private int getLeftRightDistanceByValue(SteeringControl.Distance distance){
+
+        SteeringControl.Distance.Unit unit = distance.getUnit() ;
+        int value = distance.getValue() ;
+
+        switch (unit){
+
+            case PERCENT:
+
+                value = (HEAD_LEFT_RIGHT_DISTANCE_MAX - HEAD_LEFT_RIGHT_DISTANCE_MIN) * value / 100 ;
 
                 break;
             case MM:
@@ -258,8 +328,39 @@ public class Head {
         return value ;
     }
 
+    private int getUpDownDistanceToValue(SteeringControl.Distance distance){
 
-    private int getUpDownDistanceValue(SteeringControl.Distance distance){
+        SteeringControl.Distance.Unit unit = distance.getUnit() ;
+        int value = distance.getValue() ;
+
+        switch (unit){
+
+            case PERCENT:
+                value = HEAD_UP_DOWN_DISTANCE_MIN + (HEAD_UP_DOWN_DISTANCE_MAX - HEAD_UP_DOWN_DISTANCE_MIN) * value / 100 ;
+
+                break;
+            case MM:
+
+
+                break;
+            case CM:
+
+
+                break;
+            case ANGLE:
+
+                break ;
+            default:
+
+                break;
+        }
+
+
+
+        return value ;
+    }
+
+    private int getUpDownDistanceByValue(SteeringControl.Distance distance){
 
         SteeringControl.Distance.Unit unit = distance.getUnit() ;
         int value = distance.getValue() ;
@@ -268,7 +369,7 @@ public class Head {
 
             case PERCENT:
 
-                value = HEAD_UP_DOWN_DISTANCE_MIN + (HEAD_UP_DOWN_DISTANCE_MAX - HEAD_UP_DOWN_DISTANCE_MIN) * value / 100 ;
+                value = (HEAD_UP_DOWN_DISTANCE_MAX - HEAD_UP_DOWN_DISTANCE_MIN) * value / 100 ;
                 break;
             case MM:
 
@@ -293,21 +394,28 @@ public class Head {
 
 
     /**
-     *
+     * 转换成对应真实的速度值
      * */
     private int getSpeedValue(SteeringControl.Speed speed){
 
         if(speed == null){
 
-            return 2;
+            return (SPEED_MIN + SPEED_MAX) / 2 ;
         }
         int value = speed.getValue() ;
         switch (speed.getUnit()){
 
-            case PERCENT:
+            case ORIGINAL:
 
                 break;
+
+            case PERCENT:
+
+                value = SPEED_MIN + (SPEED_MAX - SPEED_MIN ) * value / 100 ;
+                break;
+
             case ACCORDING_DISTANCE:
+
                 break;
 
         }
@@ -321,8 +429,6 @@ public class Head {
             value = SPEED_MAX ;
 
         }
-
-
 
         return value ;
 
@@ -342,7 +448,6 @@ public class Head {
 
                 value *= 1000 ;
                 break;
-
         }
 
         return value ;

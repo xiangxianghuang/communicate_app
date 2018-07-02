@@ -48,7 +48,7 @@ public class HandAngle extends BaseResponseControl {
 
     public class Angle{
 
-        public int status ;
+        public int state ;
         public int[] angles ;
 
         public Angle(int length){
@@ -56,6 +56,76 @@ public class HandAngle extends BaseResponseControl {
             angles = new int[length] ;
         }
 
+        private boolean copyValues(int[] values1 , int[] values2){
+
+            if(values1 != null){
+                if(values2 != null){
+
+                    int length1 = values1.length ;
+                    int length2 = values2.length ;
+                    if(length1 != length2){
+
+                        values1 = values2.clone();
+                        return true ;
+
+                    }else {
+
+                        boolean isChanged = false ;
+                        for (int i = 0 ; i < length1 ; i ++ ){
+
+                            if(values1[i] != values2[i]){
+
+                                isChanged = true ;
+                                values1[i] = values2[i] ;
+                            }
+                        }
+
+
+                        return isChanged ;
+
+                    }
+
+                }else {
+
+                    values1 = null;
+                    return true ;
+                }
+
+            }else {
+
+                if(values2 != null){
+
+                    values1 = values2.clone();
+                    return true ;
+
+                }else {
+
+                    return false ;
+                }
+            }
+        }
+
+        public boolean setValues(int state, int[] angles) {
+
+            boolean isChanged = false ;
+
+            if(this.state != state){
+
+                this.state = state ;
+                isChanged = true ;
+            }
+
+            if(copyValues(this.angles, angles)){
+
+                isChanged = true ;
+            }
+
+            return isChanged ;
+        }
+
     }
+
+
+
 
 }

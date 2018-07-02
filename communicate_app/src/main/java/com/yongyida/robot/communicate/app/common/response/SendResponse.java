@@ -25,7 +25,7 @@ public final class SendResponse {
 
     public static final int RESULT_SERVER_NO_SETTING_PERMISSION         = 0xF010 ; //服务端没有对应的Send
     public static final int RESULT_SERVER_TEST_MODE                     = 0xF011 ; //测试模式不允许操作
-    public static final int RESULT_SERVER_EXCEPTION                     = 0xF012 ; //测试模式不允许操作
+    public static final int RESULT_SERVER_EXCEPTION                     = 0xF012 ; //服务端发送异常
 
     private final static Gson GSON = new Gson() ;
 
@@ -103,13 +103,19 @@ public final class SendResponse {
 
     public BaseResponseControl getBaseResponseControl() {
 
-        try {
-            Class clazz = Class.forName(className) ;
-            return (BaseResponseControl) GSON.fromJson(baseControl.toString(), clazz);
+        if(className != null  && baseControl != null){
 
-        } catch (ClassNotFoundException e) {
+            try {
+                Class clazz = Class.forName(className) ;
+                return (BaseResponseControl) GSON.fromJson(baseControl.toString(), clazz);
 
-            e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+
+                e.printStackTrace();
+            }catch (Exception e){
+
+                //当返回 为空
+            }
         }
 
         return null;

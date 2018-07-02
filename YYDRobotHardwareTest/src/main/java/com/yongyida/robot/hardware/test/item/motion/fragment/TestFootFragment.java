@@ -163,14 +163,14 @@ public class TestFootFragment extends BaseFragment implements View.OnClickListen
         if (i == R.id.foot_forward_btn) {
 
             mFootControl.setAction(FootControl.Action.FORWARD);
-            mFootControl.getFoot().getTime().setValue(2000);
+            mFootControl.getFoot().getTime().setValue(1500);
 
             SendClient.getInstance(getActivity()).send(null, mFootControl,null );
 
         } else if (i == R.id.foot_back_btn) {
 
             mFootControl.setAction(FootControl.Action.BACK);
-            mFootControl.getFoot().getTime().setValue(2000);
+            mFootControl.getFoot().getTime().setValue(1500);
 
             SendClient.getInstance(getActivity()).send(null, mFootControl,null );
 
@@ -191,15 +191,12 @@ public class TestFootFragment extends BaseFragment implements View.OnClickListen
         } else if (i == R.id.foot_random_btn) {
 
 
-
         } else if (i == R.id.foot_stop_btn) {
 
             mFootControl.setAction(FootControl.Action.STOP);
 
             SendClient.getInstance(getActivity()).send(null, mFootControl,null );
 
-
-        } else {
         }
     }
 
@@ -220,10 +217,7 @@ public class TestFootFragment extends BaseFragment implements View.OnClickListen
 
                 mFootControl.setType(null);
             }
-
-
         }
-
     }
 
     @Override

@@ -44,7 +44,7 @@ import com.yongyida.robot.communicate.app.server.IResponseListener;
 /**
  * Create By HuangXiangXiang 2018/6/19
  */
-public class FootControlHandler extends BaseControlHandler<FootControl> {
+public abstract class FootControlHandler extends BaseControlHandler<FootControl> {
 
     public FootControlHandler(Context context) {
         super(context);

@@ -108,7 +108,7 @@ public abstract class QueryMotionSystemControlHandler extends BaseControlHandler
     /**
      * 响应
      * */
-    private void responseChangedService() {
+    private synchronized void responseChangedService() {
 
         HashSet<String> deaths = new HashSet<>() ;
         for (Map.Entry<String, ResponseMotionSystemChangedListener> entry : mResponseMotionSystemChangedListeners.entrySet()){

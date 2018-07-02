@@ -8,7 +8,7 @@ import java.io.FileDescriptor;
 import java.util.HashMap;
 
 /**
- * Created by Huangxiangxiang on 2017/8/11.
+ * Created by HuangXiangXiang on 2017/8/11.
  * 串口信息
  */
 public final class Serial {
@@ -16,7 +16,6 @@ public final class Serial {
     public static final String TAG = Serial.class.getSimpleName() ;
 
     public static final String SERIAL_PORT = "/dev/ttyS2";  // 串口名称
-//    public static final String SERIAL_PORT = "/dev/ttyS4";  // 串口名称
 
 
     public static final int RESULT_SUCCESS                      = 0x00000000;   //操作成功

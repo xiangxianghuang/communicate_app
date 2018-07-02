@@ -115,13 +115,12 @@ public class MoreColorDialog extends Dialog implements SeekBar.OnSeekBarChangeLi
             int green = color.getGreen() ;
             int blue = color.getBlue() ;
 
-            int colorValue =  color.getColor() | (0xFF << 24);
-
-
-            mPreColorViw.setBackgroundColor(colorValue);
             mRedSbr.setProgress(red);
             mGreenSbr.setProgress(green);
             mBlueSbr.setProgress(blue);
+
+            int colorValue = Color.rgb(red, green, blue) ;
+            mPreColorViw.setBackgroundColor(colorValue);
 
 
             LedSendControl.Brightness brightness = mLedControl.getBrightness() ;
@@ -134,11 +133,9 @@ public class MoreColorDialog extends Dialog implements SeekBar.OnSeekBarChangeLi
             int brightnessValue = brightness.getValue() ;
             mBrightSbr.setProgress(brightnessValue);
 
+            mPreColorViw.setAlpha(brightnessValue/100F);
         }
-
-
     }
-
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -147,7 +144,6 @@ public class MoreColorDialog extends Dialog implements SeekBar.OnSeekBarChangeLi
             mRedTvw.setText(String.valueOf(progress));
             int colorValue = Color.rgb(mRedSbr.getProgress(), mGreenSbr.getProgress(), mBlueSbr.getProgress()) ;
             mPreColorViw.setBackgroundColor(colorValue);
-
 
             if(mLedControl != null){
 
@@ -179,6 +175,8 @@ public class MoreColorDialog extends Dialog implements SeekBar.OnSeekBarChangeLi
 
         }else if(seekBar == mBrightSbr){
             mBrightTvw.setText(String.valueOf(progress));
+
+            mPreColorViw.setAlpha(progress/100F);
 
             if(mLedControl != null){
 

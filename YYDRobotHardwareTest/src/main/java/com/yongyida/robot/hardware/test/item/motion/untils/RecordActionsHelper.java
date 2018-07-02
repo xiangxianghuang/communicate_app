@@ -37,8 +37,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
-import com.yongyida.robot.communicate.app.hardware.motion.send.data.GroupFrameControl;
-import com.yongyida.robot.communicate.app.hardware.motion.send.data.OneFrameScript;
+import com.yongyida.robot.hardware.test.item.motion.bean.GroupFrame;
+import com.yongyida.robot.hardware.test.item.motion.bean.OneFrameScript;
 
 import java.util.ArrayList;
 
@@ -47,14 +47,11 @@ import java.util.ArrayList;
  */
 public class RecordActionsHelper {
 
-    private static final String DATA            = "Data" ;
-    private static final String RECORD_ACTIONS     = "RecordActions" ;
+    private static final String DATA                = "Data" ;
+    private static final String RECORD_ACTIONS      = "RecordActions" ;
     private static Gson GSON = new Gson() ;
 
     private Context mContext;
-
-
-
 
     public RecordActions recordActions ;
 
@@ -74,7 +71,6 @@ public class RecordActionsHelper {
         this.mContext = context ;
         this.recordActions = readRecordActions(context) ;
     }
-
 
     private RecordActions readRecordActions(Context context){
 
@@ -97,64 +93,57 @@ public class RecordActionsHelper {
 
         return recordActions ;
     }
+
     private String readData(Context context){
 
         SharedPreferences sp = context.getSharedPreferences(DATA, Context.MODE_PRIVATE) ;
-        String data = sp.getString(RECORD_ACTIONS, null) ;
 
-        return data ;
+        return sp.getString(RECORD_ACTIONS, null);
     }
 
-
-    public void writeRecordActions(RecordAction recordAction){
+    public void writeRecordActions(GroupFrame recordAction){
 
         if(recordAction.id == -1){
 
             recordActions.lastId ++ ;
             recordAction.id = recordActions.lastId ;
 
-            recordActions.recordActions.add(recordAction);
+            recordActions.groupFrames.add(recordAction);
 
         }else {
 
-            RecordAction rd = findRecordAction(recordAction);
+            GroupFrame rd = findRecordAction(recordAction);
             if(rd != null){
 
-                rd.setRecordAction(recordAction);
+                rd.setGroupFrame(recordAction);
 
             }else {
 
                 recordActions.lastId ++ ;
                 recordAction.id = recordActions.lastId ;
 
-                recordActions.recordActions.add(recordAction);
+                recordActions.groupFrames.add(recordAction);
             }
         }
 
         saveRecordActions() ;
     }
 
-    private RecordAction findRecordAction(RecordAction recordAction){
+    private GroupFrame findRecordAction(GroupFrame groupFrame){
 
-        int size = recordActions.recordActions.size() ;
+        int size = recordActions.groupFrames.size() ;
         for (int i = 0 ; i < size; i ++){
 
-            RecordAction ra = recordActions.recordActions.get(i) ;
+            GroupFrame ra = recordActions.groupFrames.get(i) ;
 
-            if(ra.id == recordAction.id){
+            if(ra.id == groupFrame.id){
 
                 return ra ;
             }
-
-
         }
 
         return null ;
-
     }
-
-
-
 
     public void saveRecordActions(){
 
@@ -166,7 +155,6 @@ public class RecordActionsHelper {
         editor.apply();
     }
 
-
     private static String toRecordActionsString(RecordActions recordActions){
 
         if(recordActions == null){
@@ -176,49 +164,12 @@ public class RecordActionsHelper {
         return GSON.toJson(recordActions) ;
     }
 
-
     /**动作记录集合*/
     public static class RecordActions{
 
         private int lastId ;    //最后数据的id
 
-        public ArrayList<RecordAction> recordActions = new ArrayList<>() ;
-
+        public ArrayList<GroupFrame> groupFrames = new ArrayList<>() ;
     }
-
-    public static class RecordAction{
-
-        private int id = -1;
-        public String name = "新的动作组";
-        public GroupFrameControl recordArmAngles = new GroupFrameControl();
-
-
-        public void addOneFrameScript(OneFrameScript oneFrameScript){
-
-            recordArmAngles.addOneFrameScript(oneFrameScript) ;
-        }
-
-
-        /**
-         * 深度拷贝
-         * */
-        public RecordAction deepClone(){
-
-            String data = GSON.toJson(this) ;
-
-            return GSON.fromJson(data, RecordAction.class) ;
-        }
-
-
-        public void setRecordAction(RecordAction recordAction){
-
-            this.id = recordAction.id ;
-            this.name = recordAction.name ;
-            this.recordArmAngles = recordAction.recordArmAngles ;
-        }
-
-    }
-
-
 
 }

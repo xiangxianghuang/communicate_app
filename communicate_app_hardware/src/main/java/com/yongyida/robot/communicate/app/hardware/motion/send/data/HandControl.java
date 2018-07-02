@@ -60,9 +60,7 @@ public class HandControl extends BaseMotionSendControl {
         SHOW_WAVE,        // 挥手
         SHOW_LOVE,        // 示爱
         SHOW_666,         // 666
-        SHOW_SELF ;       // 自定义
-
-
+        SHOW_SELF        // 自定义
 
     }
 

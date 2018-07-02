@@ -105,6 +105,9 @@ public class LedSendControl extends BaseLedSendControl {
         LEFT_FOOT(0x07),        // 左脚
         RIGHT_FOOT(0x08),       // 右脚
         FOOT(0x09),             // 脚
+        LEFT_BACK_FOOT(0x07),   // 左后脚
+        RIGHT_BACK_FOOT(0x08),  // 右后脚
+        BACK_FOOT(0x09),        // 后脚
 
         LEFT_EYE(0x0A) ,        // 左眼
         RIGHT_EYE(0x0B),        // 右眼
@@ -221,7 +224,8 @@ public class LedSendControl extends BaseLedSendControl {
         BREATH_LOW ,        //呼吸灯(慢)
         BREATH_MIDDLE ,     //呼吸灯(中)
         BREATH_FAST ,       //呼吸灯(快)
-        HORSE_RACE          //跑马灯
+        HORSE_RACE,         //跑马灯
+        BLINK,              //闪烁
     }
 
 

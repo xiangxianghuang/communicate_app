@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/cancel_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="取消"
+            />
+        <Button
+            android:id="@+id/execute_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:text="执行"
+            />
+
+        <Button
+            android:id="@+id/ok_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            android:text="确定"
+            />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                >
+
+                <CheckBox
+                    android:id="@+id/head_up_down_cbx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="头上下"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="上"
+                    />
+
+                <SeekBar
+                    android:id="@+id/head_up_down_sbr"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="100"
+                    android:progress="50" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="下"
+                    />
+
+                <TextView
+                    android:id="@+id/head_up_down_value_tvw"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:text="50%" />
+
+                <EditText
+                    android:id="@+id/head_up_down_used_time_ett"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:hint="耗时"
+                    android:text="2000"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:imeOptions="flagNoExtractUi|actionNext"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                >
+
+                <CheckBox
+                    android:id="@+id/head_left_right_cbx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="头左右"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="左"
+                    />
+
+                <SeekBar
+                    android:id="@+id/head_left_right_sbr"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="100"
+                    android:progress="50" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="右"
+                    />
+
+                <TextView
+                    android:id="@+id/head_left_right_value_tvw"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:text="50%" />
+
+
+                <EditText
+                    android:id="@+id/head_left_right_used_time_ett"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:hint="耗时"
+                    android:text="2000"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:imeOptions="flagNoExtractUi|actionNext"
+                    />
+
+            </LinearLayout>
+
+            <RadioGroup
+                android:id="@+id/foot_rgp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/foot_cbx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="足行走" />
+
+                <RadioButton
+                    android:id="@+id/foot_forward_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="前" />
+
+                <RadioButton
+                    android:id="@+id/foot_back_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="后" />
+
+                <RadioButton
+                    android:id="@+id/foot_left_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="左" />
+
+                <RadioButton
+                    android:id="@+id/foot_right_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="右" />
+
+                <RadioButton
+                    android:id="@+id/foot_stop_rbn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:text="停止" />
+
+
+                <EditText
+                    android:id="@+id/foot_used_time_ett"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:hint="耗时"
+                    android:text="2000"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:imeOptions="flagNoExtractUi|actionNext"
+                    />
+            </RadioGroup>
+
+            <CheckBox
+                android:id="@+id/hand_cbx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="手"
+                />
+
+            <LinearLayout
+                android:id="@+id/hand_llt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:id="@+id/direction_rgp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="方向" />
+
+                    <RadioButton
+                        android:id="@+id/direction_left_rbn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="左侧" />
+
+                    <RadioButton
+                        android:id="@+id/direction_right_rbn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="右侧" />
+
+                    <RadioButton
+                        android:id="@+id/direction_same_rbn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="两侧相同" />
+
+                    <RadioButton
+                        android:id="@+id/direction_both_rbn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="两侧不同" />
+
+                </RadioGroup>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="手势" />
+
+                <com.yongyida.robot.hardware.test.view.HorizontalListView
+                    android:id="@+id/hand_action_hlv"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+
+
+                <LinearLayout
+                    android:id="@+id/custom_llt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <Switch
+                            android:id="@+id/arm_sih"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="【手臂】 是否发送" />
+
+                        <com.yongyida.robot.hardware.test.view.HorizontalListView
+                            android:id="@+id/arm_action_hlv"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp" />
+
+                        <com.yongyida.robot.hardware.test.view.WrapContentListView
+                            android:id="@+id/arm_lvw"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <Switch
+                            android:id="@+id/finger_sih"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="【手指】 是否发送" />
+
+                        <com.yongyida.robot.hardware.test.view.HorizontalListView
+                            android:id="@+id/finger_action_hlv"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp" />
+
+                        <com.yongyida.robot.hardware.test.view.WrapContentListView
+                            android:id="@+id/finger_lvw"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="下一个时间"
+                    />
+
+                <EditText
+                    android:id="@+id/next_script_time_ett"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="2000"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:imeOptions="flagNoExtractUi|actionDone"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

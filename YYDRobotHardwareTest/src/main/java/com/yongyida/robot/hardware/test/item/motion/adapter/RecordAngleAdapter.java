@@ -6,13 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.yongyida.robot.communicate.app.hardware.motion.send.data.GroupFrameControl;
-import com.yongyida.robot.communicate.app.hardware.motion.send.data.OneFrameScript;
 import com.yongyida.robot.hardware.test.R;
+import com.yongyida.robot.hardware.test.item.motion.bean.OneFrameScript;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 
 
@@ -56,16 +57,25 @@ public class RecordAngleAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private ArrayList<OneFrameScript> mRecordArmAngles;
-    private int selectIndex = -1 ;
+    private final ArrayList<OneFrameScript> mSelectArmAngles;
+    private int selectIndex = -1;
 
-    public RecordAngleAdapter(Context context) {
+    private boolean isEdit ;
+
+    public RecordAngleAdapter(Context context,ArrayList<OneFrameScript> selectArmAngles ) {
 
         this.mContext = context;
         this.mLayoutInflater = LayoutInflater.from(context);
-
+        this.mSelectArmAngles = selectArmAngles ;
     }
 
-    public void setRecordArmAngles(ArrayList<OneFrameScript> recordArmAngles){
+    public void setEdit(boolean edit) {
+
+        isEdit = edit;
+        notifyDataSetChanged();
+    }
+
+    public void setRecordArmAngles(ArrayList<OneFrameScript> recordArmAngles) {
 
         this.mRecordArmAngles = recordArmAngles;
     }
@@ -77,9 +87,9 @@ public class RecordAngleAdapter extends BaseAdapter {
     @Override
     public int getCount() {
 
-        if(mRecordArmAngles == null){
+        if (mRecordArmAngles == null) {
 
-            return 0 ;
+            return 0;
         }
 
         return mRecordArmAngles.size();
@@ -98,52 +108,82 @@ public class RecordAngleAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolder holder ;
-        if(convertView == null){
+        ViewHolder holder;
+        if (convertView == null) {
 
             convertView = mLayoutInflater.inflate(R.layout.item_record_angle, null);
 
-            holder = new ViewHolder(convertView) ;
+            holder = new ViewHolder(convertView);
 
             convertView.setTag(holder);
 
-        }else {
+        } else {
 
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if(selectIndex == position){
+        if (selectIndex == position) {
 
             convertView.setBackgroundColor(Color.GRAY);
-        }else {
+        } else {
 
             convertView.setBackgroundColor(Color.TRANSPARENT);
         }
 
-
-        OneFrameScript recordArmAngle = mRecordArmAngles.get(position) ;
-        holder.setRecordArmAngle(position , recordArmAngle) ;
+        OneFrameScript recordArmAngle = mRecordArmAngles.get(position);
+        holder.setRecordArmAngle(position, recordArmAngle);
 
         return convertView;
     }
 
-    static class ViewHolder {
+    class ViewHolder {
         View view;
+        CheckBox mCheckCbx;
         TextView mTimeTvw;
-        TextView mDelayTvw;
 
         ViewHolder(View view) {
             this.view = view;
+            this.mCheckCbx = (CheckBox) view.findViewById(R.id.check_cbx);
             this.mTimeTvw = (TextView) view.findViewById(R.id.time_tvw);
-            this.mDelayTvw = (TextView) view.findViewById(R.id.delay_tvw);
         }
 
-        public void setRecordArmAngle(int position, OneFrameScript recordArmAngle) {
+        void setRecordArmAngle(int position, OneFrameScript recordArmAngle) {
 
-            this.mTimeTvw.setText((position + 1) + "、 使用时间:"+ recordArmAngle.getUsedTime() + "毫秒");
-            this.mDelayTvw.setText("等待时间:" + recordArmAngle.getWaitTime() + "毫秒");
+            if(isEdit){
+
+                this.mCheckCbx.setVisibility(View.VISIBLE);
+
+                int selectIndex = getSelectIndex(recordArmAngle) ;
+                if(selectIndex == -1){
+
+                    this.mCheckCbx.setChecked(false);
+                    this.mCheckCbx.setText(null);
+                }else {
+                    this.mCheckCbx.setChecked(true);
+                    this.mCheckCbx.setText(String.valueOf(selectIndex+1));
+                }
+            }else {
+
+                this.mCheckCbx.setVisibility(View.GONE);
+            }
+
+            this.mTimeTvw.setText((position + 1) + "、 使用时间:" + recordArmAngle.getNextScriptTime() + "毫秒");
         }
-
 
     }
+
+
+    private int getSelectIndex(OneFrameScript recordArmAngle){
+
+        int size = mSelectArmAngles.size() ;
+        for (int i = 0 ; i < size ; i++){
+
+            if(recordArmAngle == mSelectArmAngles.get(i)){
+
+                return i ;
+            }
+        }
+        return -1 ;
+    }
+
 }

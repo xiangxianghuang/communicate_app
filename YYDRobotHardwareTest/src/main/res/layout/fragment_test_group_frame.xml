@@ -101,15 +101,53 @@
                 />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/action_name_tvw"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:padding="2dp"
-            android:text="动作名称"
-            android:textColor="#feceae"
-            />
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/action_name_tvw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:padding="2dp"
+                android:text="动作名称"
+                android:singleLine="true"
+                android:textColor="#feceae"
+                />
+
+
+
+            <Button
+                android:id="@+id/copy_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="复制"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/delete_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="删除"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/edit_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="编辑"
+
+                />
+        </LinearLayout>
+
 
         <GridView
             android:id="@+id/record_angle_gvw"

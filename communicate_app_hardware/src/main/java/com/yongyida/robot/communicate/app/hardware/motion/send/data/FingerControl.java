@@ -48,27 +48,19 @@ public class FingerControl extends BaseMotionSendControl {
     public enum Action{
 
         CUSTOM,                 // 自定义
-        STOP(0x00),             // 停止
-        RESET(0x01),            // 手臂手指初始化
-        MARK_FIST(0x02),        // 握拳
-        GOOD(0x03),             // 点赞
-        OK(0x04),               // OK
-        ROCK(0x05),             // 石头
-        SCISSORS(0x06),         // 剪刀
-        PAPER(0x07),            // 布
-        HAND_SHAKE(0x08),       // 握手
-        SHOW_LOVE(0x09),        // 示爱
-        FINGER_WHEEL(0x0A);     // 手指轮动
+        STOP,                   // 停止
+        RESET,                  // 手臂手指初始化
+        MARK_FIST,              // 握拳
+        GOOD,                   // 点赞
+        OK,                     // OK
+        ROCK,                   // 石头
+        SCISSORS,               // 剪刀
+        PAPER,                  // 布
+        HAND_SHAKE,             // 握手
+        SHOW_LOVE,              // 示爱
+        FINGER_WHEEL            // 手指轮动
 
-        public final int value ;
-        Action(){
 
-            this(0) ;
-        }
-        Action(int value){
-
-            this.value =  value;
-        }
 
     }
 
@@ -125,6 +117,14 @@ public class FingerControl extends BaseMotionSendControl {
         this.action = action ;
     }
 
+    public ArrayList<SteeringControl> getFingerLefts() {
+        return fingerLefts;
+    }
+
+    public ArrayList<SteeringControl> getFingerRights() {
+        return fingerRights;
+    }
+
     public SteeringControl getFinger(SteeringControl.Position position) {
 
         if(fingerLefts != null){
@@ -155,7 +155,6 @@ public class FingerControl extends BaseMotionSendControl {
 
         return null;
     }
-
 
 
 //    private ArrayList<SteeringControl> getNeedSendControls(ArrayList<SteeringControl> steeringControls){

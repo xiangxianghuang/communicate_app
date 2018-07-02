@@ -5,9 +5,8 @@ import android.content.Context;
 import com.yongyida.robot.communicate.app.common.send.BaseSend;
 import com.yongyida.robot.communicate.app.hardware.BaseSendHandlers;
 import com.yongyida.robot.communicate.app.hardware.led.LedSendHandlers;
-import com.yongyida.robot.communicate.app.hardware.motion.MotionSendHandlers;
-import com.yongyida.robot.communicate.app.hardware.touch.TouchSendHandlers;
 import com.yongyida.robot.communicate.app.utils.LogHelper;
+import com.yongyida.robot.model.s1.montrol.S1MotionSendHandlers;
 import com.yongyida.robot.model.y128.battery.Y128BatterySendHandlers;
 import com.yongyida.robot.model.y128.led.Y128LedSendHandlers;
 import com.yongyida.robot.model.y128.motion.Y128MotionSendHandlers;
@@ -17,7 +16,6 @@ import com.yongyida.robot.model.y148.montrol.Y148MotionSendHandlers;
 import com.yongyida.robot.model.y165.battery.Y165BatterySendHandlers;
 import com.yongyida.robot.model.y165.led.Y165LedSendHandlers;
 import com.yongyida.robot.model.y165.pir.Y165PirSendHandlers;
-import com.yongyida.robot.model.y20.battery.Y20BatterySendHandlers;
 
 import java.util.HashMap;
 
@@ -85,23 +83,22 @@ public final class HardwareConfig {
             return;
         }
 
-//        if(model.contains("Y128") | model.contains("YQ110")){
-//
-//            initY128();
-//
-//        }else if(model.contains("Y165")){
-//
-//            initY165() ;
-//
-//        }else if(model.contains("Y138")){
-//
-//            initY138();
-//
-//        }
+        if(model.contains("Y128") | model.contains("YQ110")){
 
+            initY128();
 
-        initY128();
-//        initY138();
+        }else if(model.contains("Y165")){
+
+            initY165() ;
+
+        }else if(model.contains("Y138") | model.contains("Y148")){
+
+            initY148();
+        }else if(model.contains("m_35_n")){
+            // 中国移动项目
+            initS1() ;
+        }
+
     }
 
 
@@ -143,26 +140,13 @@ public final class HardwareConfig {
     }
 
 
-    private void initY138(){
+    private void initY148(){
 
         LogHelper.i(TAG , LogHelper.__TAG__() );
 
-//        BatterySendHandlers batteryControl = new Y128BatterySendHandlers(mContext) ;
-//        addControl(BatterySend.class, batteryControl) ;
-//
-//        TouchSendHandlers touchControl = new Y128TouchSendHandlers(mContext) ;
-//        addControl(TouchSend.class, touchControl) ;
-//
-        LedSendHandlers ledControl = new Y148LedSendHandlers(mContext) ;
-        addControl(ledControl) ;
+        addControl(new Y148LedSendHandlers(mContext)) ;
+        addControl(new Y148MotionSendHandlers(mContext)) ;
 
-        MotionSendHandlers motionControl = new Y148MotionSendHandlers(mContext) ;
-        addControl( motionControl) ;
-
-//        HandHandler handHandler = new Y138HandHandler(mContext) ;
-//        addControl( handHandler) ;
-
-        addControl(new Y20BatterySendHandlers(mContext)) ;
 
     }
 
@@ -182,6 +166,13 @@ public final class HardwareConfig {
 
     }
 
+
+    // S1项目
+    private void initS1(){
+
+        addControl(new S1MotionSendHandlers(mContext)) ;
+
+    }
 
 
 

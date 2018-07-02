@@ -78,7 +78,7 @@ public class TestMotionActivity extends TestBaseActivity implements AdapterView.
     /**初始控制*/
     private void initFragment(){
 
-        baseFragments.add(new TestAllMotionFragment()) ;
+//        baseFragments.add(new TestAllMotionFragment()) ;
         baseFragments.add(new TestHeadFragment()) ;
         baseFragments.add(new TestHandFragment()) ;
         baseFragments.add(new TestFootFragment()) ;
@@ -110,6 +110,13 @@ public class TestMotionActivity extends TestBaseActivity implements AdapterView.
 
         mFragmentNameHlv.setOnItemClickListener(this);
         mFragmentVpr.setOnPageChangeListener(this);
+    }
+
+    @Override
+    protected void onTouchTitleLeft() {
+
+        AllSteeringControlActivity.statrtActivity(this);
+
     }
 
     private int mSelectIndex = 0 ;

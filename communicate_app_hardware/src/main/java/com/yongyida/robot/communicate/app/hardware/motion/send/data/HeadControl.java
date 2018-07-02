@@ -33,6 +33,8 @@ package com.yongyida.robot.communicate.app.hardware.motion.send.data;
                     不见满街漂亮妹，哪个归得程序员？ 
 */
 
+import com.yongyida.robot.communicate.app.hardware.motion.send.MotionSend;
+
 /**
  * Create By HuangXiangXiang 2018/6/20
  */
@@ -75,4 +77,48 @@ public class HeadControl extends BaseMotionSendControl{
     public void setHeadUpDownControl(SteeringControl headUpDownControl) {
         this.headUpDownControl = headUpDownControl;
     }
+//
+//    @Override
+//    public String toJson() {
+//
+//        MotionSend copySend = this.baseSend ;
+//        SteeringControl copyHeadLeftRightControl = this.headLeftRightControl ;
+//        SteeringControl copyHeadUpDownControl = this.headUpDownControl ;
+//
+//        this.baseSend = null ;
+//        switch (action){
+//
+//            case CUSTOM:
+//
+//                if(!headLeftRightControl.isControl()){
+//
+//                    headLeftRightControl = null ;
+//                }
+//
+//                if(!headUpDownControl.isControl()){
+//
+//                    headUpDownControl = null ;
+//                }
+//
+//                break;
+//            case LEFT_RIGHT:
+//                headUpDownControl = null ;
+//                break;
+//            case UP_DOWN:
+//                headLeftRightControl = null ;
+//                break;
+//            case STOP:
+//                headUpDownControl = null ;
+//                headLeftRightControl = null ;
+//                break;
+//        }
+//
+//        String json = GSON.toJson(this) ;
+//
+//        this.baseSend = copySend ;
+//        this.headLeftRightControl = copyHeadLeftRightControl;
+//        this.headUpDownControl = copyHeadUpDownControl ;
+//
+//        return json ;
+//    }
 }

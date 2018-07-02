@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yongyida.robot.hardware.test.R;
+import com.yongyida.robot.hardware.test.item.motion.bean.GroupFrame;
 import com.yongyida.robot.hardware.test.item.motion.untils.RecordActionsHelper;
 
 
@@ -63,7 +64,7 @@ public class ReadDanceDialog extends Dialog implements AdapterView.OnItemClickLi
     private Button mCancelBtn;
     private Button mOkBtn;
 
-    private RecordActionsHelper.RecordAction mNewRecordAction = new RecordActionsHelper.RecordAction();
+    private GroupFrame mNewRecordAction = new GroupFrame() ;
     private RecordActionsHelper.RecordActions  mRecordActions ;
 
     public ReadDanceDialog(@NonNull Context context) {
@@ -103,20 +104,20 @@ public class ReadDanceDialog extends Dialog implements AdapterView.OnItemClickLi
         @Override
         public int getCount() {
 
-            return 1+ mRecordActions.recordActions.size() ;
+            return 1+ mRecordActions.groupFrames.size() ;
         }
 
         @Override
         public Object getItem(int position) {
 
-            RecordActionsHelper.RecordAction recordArmAngle ;
+            GroupFrame recordArmAngle ;
 
             if(position == 0){
 
                 recordArmAngle = mNewRecordAction ;
 
             }else {
-                recordArmAngle = mRecordActions.recordActions.get(position - 1) ;
+                recordArmAngle = mRecordActions.groupFrames.get(position - 1) ;
             }
 
             return recordArmAngle;
@@ -153,10 +154,9 @@ public class ReadDanceDialog extends Dialog implements AdapterView.OnItemClickLi
                 textView.setBackgroundColor(Color.GRAY);
             }
 
-            RecordActionsHelper.RecordAction recordArmAngle = (RecordActionsHelper.RecordAction) getItem(position);
+            GroupFrame recordArmAngle = (GroupFrame) getItem(position);
 
-
-            textView.setText(recordArmAngle.name + "[" + recordArmAngle.recordArmAngles.getFrameScripts().size()+ "]");
+            textView.setText(recordArmAngle.name + "[" + recordArmAngle.getFrameScripts().size()+ "]");
 
             return convertView;
         }
@@ -167,7 +167,6 @@ public class ReadDanceDialog extends Dialog implements AdapterView.OnItemClickLi
 
         this.selectIndex = position ;
         this.mBaseAdapter.notifyDataSetChanged();
-
     }
 
 
@@ -178,7 +177,8 @@ public class ReadDanceDialog extends Dialog implements AdapterView.OnItemClickLi
 
             if(mOnSelectDataListener != null){
 
-                RecordActionsHelper.RecordAction recordArmAngle = (RecordActionsHelper.RecordAction) mBaseAdapter.getItem(selectIndex);
+                GroupFrame recordArmAngle = (GroupFrame) mBaseAdapter.getItem(selectIndex);
+
                 mOnSelectDataListener.onSelected(recordArmAngle.deepClone());
             }
         }
@@ -193,7 +193,6 @@ public class ReadDanceDialog extends Dialog implements AdapterView.OnItemClickLi
     }
 
 
-
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
@@ -203,7 +202,7 @@ public class ReadDanceDialog extends Dialog implements AdapterView.OnItemClickLi
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    mRecordActions.recordActions.remove(position-1) ;
+                    mRecordActions.groupFrames.remove(position-1) ;
                     RecordActionsHelper.getInstance(getContext()).saveRecordActions();
                     mBaseAdapter.notifyDataSetChanged();
 
@@ -227,7 +226,7 @@ public class ReadDanceDialog extends Dialog implements AdapterView.OnItemClickLi
 
     public interface OnSelectDataListener{
 
-        void onSelected(RecordActionsHelper.RecordAction recordAction) ;
+        void onSelected(GroupFrame recordAction) ;
 
     }
 

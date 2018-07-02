@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.yongyida.robot.communicate.app.common.send.SendClient;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.SteeringControl;
@@ -58,7 +59,6 @@ import com.yongyida.robot.hardware.test.view.HorizontalListView;
 public class TestAllMotionFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private SteeringControl mSteeringControl = new SteeringControl(null);
-    private View view;
     /**
      * 执行
      */
@@ -68,7 +68,6 @@ public class TestAllMotionFragment extends BaseFragment implements View.OnClickL
     private HorizontalListView mDistanceUnitHlv;
     private HorizontalListView mDistanceTypeHlv;
     private EditText mDistanceValueEtt;
-    private LinearLayout mDistanceLlt;
     private HorizontalListView mTimeUnitHlv;
     private EditText mTimeValueEtt;
     private HorizontalListView mSpeedUnitHlv;
@@ -83,19 +82,36 @@ public class TestAllMotionFragment extends BaseFragment implements View.OnClickL
     private EditText mDelayEtt;
 
 
+    /**
+     * 距离
+     */
+    private TextView mDistanceTvw;
+    private LinearLayout mDistanceLlt;
+    /**
+     * 时间
+     */
+    private TextView mTimeTvw;
+    private LinearLayout mTimeLlt;
+    /**
+     * 速度
+     */
+    private TextView mSpeedTvw;
+    private LinearLayout mSpeedLlt;
+
     private final String[] positions = {"头左右", "头上下", "左臂0", "左臂1", "左臂2", "左臂3", "左臂4", "左臂5",
-            "右臂0", "右臂1", "右臂2", "右臂3", "右臂4", "右臂5","左指0", "左指1", "左指2", "左指3", "左指4",
+            "右臂0", "右臂1", "右臂2", "右臂3", "右臂4", "右臂5", "左指0", "左指1", "左指2", "左指3", "左指4",
             "右指0", "右指1", "右指2", "右指3", "右指4", "左腿", "右腿",
-    } ;
+    };
 
-    private final String[] modes = {"停止", "归中", "循环", "距离 时间", "距离 速度", "时间 速度"} ;
+    private final String[] modes = {"停止", "归中", "循环", "距离 时间", "距离 速度", "时间 速度"};
 
-    private final String[] distanceUnits = {"真实值","百分比", "毫米", "厘米", "角度值"} ;
-    private final String[] distanceTypes = {"偏移量", "目标值"} ;
+    private final String[] distanceUnits = {"真实值", "百分比", "毫米", "厘米", "角度值"};
+    private final String[] distanceTypes = {"偏移量", "目标值"};
 
-    private final String[] timeUnits = {"毫秒", "秒"} ;
+    private final String[] timeUnits = {"毫秒", "秒"};
 
-    private final String[] speedUnits = {"真实值", "百分比", "根据距离的单位"} ;
+    private final String[] speedUnits = {"真实值", "百分比", "根据距离的单位"};
+
 
     @Override
     public String getName() {
@@ -122,79 +138,140 @@ public class TestAllMotionFragment extends BaseFragment implements View.OnClickL
         mDistanceUnitHlv = (HorizontalListView) view.findViewById(R.id.distance_unit_hlv);
         mDistanceTypeHlv = (HorizontalListView) view.findViewById(R.id.distance_type_hlv);
         mDistanceValueEtt = (EditText) view.findViewById(R.id.distance_value_ett);
-        mDistanceLlt = (LinearLayout) view.findViewById(R.id.distance_llt);
         mTimeUnitHlv = (HorizontalListView) view.findViewById(R.id.time_unit_hlv);
         mTimeValueEtt = (EditText) view.findViewById(R.id.time_value_ett);
         mSpeedUnitHlv = (HorizontalListView) view.findViewById(R.id.speed_unit_hlv);
         mSpeedValueEtt = (EditText) view.findViewById(R.id.speed_value_ett);
         mIsNegativeSth = (Switch) view.findViewById(R.id.is_negative_sth);
         mDelayEtt = (EditText) view.findViewById(R.id.delay_ett);
+        mDistanceTvw = (TextView) view.findViewById(R.id.distance_tvw);
+        mDistanceLlt = (LinearLayout) view.findViewById(R.id.distance_llt);
+        mTimeTvw = (TextView) view.findViewById(R.id.time_tvw);
+        mTimeLlt = (LinearLayout) view.findViewById(R.id.time_llt);
+        mSpeedTvw = (TextView) view.findViewById(R.id.speed_tvw);
+        mSpeedLlt = (LinearLayout) view.findViewById(R.id.speed_llt);
 
-
-        positionAdapter = new NameAdapter(getActivity(),positions) ;
+        positionAdapter = new NameAdapter(getActivity(), positions);
         mPositionHlv.setAdapter(positionAdapter);
         mPositionHlv.setOnItemClickListener(this);
 
-        modeAdapter = new NameAdapter(getActivity(),modes) ;
+        modeAdapter = new NameAdapter(getActivity(), modes);
         mModeHlv.setAdapter(modeAdapter);
         mModeHlv.setOnItemClickListener(this);
+        onItemClick(mModeHlv,null , 0 ,0 ) ;
 
-        distanceUnitAdapter = new NameAdapter(getActivity(),distanceUnits) ;
+        distanceUnitAdapter = new NameAdapter(getActivity(), distanceUnits);
         mDistanceUnitHlv.setAdapter(distanceUnitAdapter);
         mDistanceUnitHlv.setOnItemClickListener(this);
 
-        distanceTypeAdapter = new NameAdapter(getActivity(),distanceTypes) ;
+        distanceTypeAdapter = new NameAdapter(getActivity(), distanceTypes);
         mDistanceTypeHlv.setAdapter(distanceTypeAdapter);
         mDistanceTypeHlv.setOnItemClickListener(this);
 
-
-        timeUnitAdapter = new NameAdapter(getActivity(),timeUnits) ;
+        timeUnitAdapter = new NameAdapter(getActivity(), timeUnits);
         mTimeUnitHlv.setAdapter(timeUnitAdapter);
         mTimeUnitHlv.setOnItemClickListener(this);
 
-        speedUnitAdapter = new NameAdapter(getActivity(),speedUnits) ;
+        speedUnitAdapter = new NameAdapter(getActivity(), speedUnits);
         mSpeedUnitHlv.setAdapter(speedUnitAdapter);
         mSpeedUnitHlv.setOnItemClickListener(this);
 
+
     }
 
-    private NameAdapter positionAdapter ;
-    private NameAdapter modeAdapter ;
-    private NameAdapter distanceUnitAdapter ;
-    private NameAdapter distanceTypeAdapter ;
-    private NameAdapter timeUnitAdapter ;
-    private NameAdapter speedUnitAdapter ;
+    private NameAdapter positionAdapter;
+    private NameAdapter modeAdapter;
+    private NameAdapter distanceUnitAdapter;
+    private NameAdapter distanceTypeAdapter;
+    private NameAdapter timeUnitAdapter;
+    private NameAdapter speedUnitAdapter;
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        if(parent == mPositionHlv){
+        if (parent == mPositionHlv) {
 
             positionAdapter.setSelectIndex(position);
             mSteeringControl.setPosition(SteeringControl.Position.values()[position]);
 
-        }else if(parent == mModeHlv){
+        } else if (parent == mModeHlv) {
 
             modeAdapter.setSelectIndex(position);
-            mSteeringControl.setMode(SteeringControl.Mode.values()[position]);
+            SteeringControl.Mode mode = SteeringControl.Mode.values()[position];
+            mSteeringControl.setMode(mode);
 
-        }else if(parent == mDistanceUnitHlv){
+            switch (mode) {
+
+                case TIME_SPEED:
+
+                    mDistanceTvw.setVisibility(View.GONE);
+                    mDistanceLlt.setVisibility(View.GONE);
+
+                    mTimeTvw.setVisibility(View.VISIBLE);
+                    mTimeLlt.setVisibility(View.VISIBLE);
+
+                    mSpeedTvw.setVisibility(View.VISIBLE);
+                    mSpeedLlt.setVisibility(View.VISIBLE);
+
+                    break;
+
+                case DISTANCE_TIME:
+
+                    mDistanceTvw.setVisibility(View.VISIBLE);
+                    mDistanceLlt.setVisibility(View.VISIBLE);
+
+                    mTimeTvw.setVisibility(View.VISIBLE);
+                    mTimeLlt.setVisibility(View.VISIBLE);
+
+                    mSpeedTvw.setVisibility(View.GONE);
+                    mSpeedLlt.setVisibility(View.GONE);
+
+                    break;
+
+                case DISTANCE_SPEED:
+
+                    mDistanceTvw.setVisibility(View.VISIBLE);
+                    mDistanceLlt.setVisibility(View.VISIBLE);
+
+                    mTimeTvw.setVisibility(View.GONE);
+                    mTimeLlt.setVisibility(View.GONE);
+
+                    mSpeedTvw.setVisibility(View.VISIBLE);
+                    mSpeedLlt.setVisibility(View.VISIBLE);
+
+                    break;
+
+                default:
+
+                    mDistanceTvw.setVisibility(View.GONE);
+                    mDistanceLlt.setVisibility(View.GONE);
+
+                    mTimeTvw.setVisibility(View.GONE);
+                    mTimeLlt.setVisibility(View.GONE);
+
+                    mSpeedTvw.setVisibility(View.GONE);
+                    mSpeedLlt.setVisibility(View.GONE);
+
+                    break;
+            }
+
+
+        } else if (parent == mDistanceUnitHlv) {
 
             distanceUnitAdapter.setSelectIndex(position);
             mSteeringControl.getDistance().setUnit(SteeringControl.Distance.Unit.values()[position]);
 
-        }else if(parent == mDistanceTypeHlv){
+        } else if (parent == mDistanceTypeHlv) {
 
             distanceTypeAdapter.setSelectIndex(position);
             mSteeringControl.getDistance().setType(SteeringControl.Distance.Type.values()[position]);
 
-
-        }else if(parent == mTimeUnitHlv){
+        } else if (parent == mTimeUnitHlv) {
 
             timeUnitAdapter.setSelectIndex(position);
             mSteeringControl.getTime().setUnit(SteeringControl.Time.Unit.values()[position]);
 
-        }else if(parent == mSpeedUnitHlv){
+        } else if (parent == mSpeedUnitHlv) {
 
             speedUnitAdapter.setSelectIndex(position);
             mSteeringControl.getSpeed().setUnit(SteeringControl.Speed.Unit.values()[position]);
@@ -209,39 +286,46 @@ public class TestAllMotionFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onClick(View v) {
 
-        if(v == mExecuteBtn){
+        if (v == mExecuteBtn) {
 
-            int distanceValue = getIntValue(mDistanceValueEtt) ;
-            int timeValue = getIntValue(mTimeValueEtt) ;
-            int speedValue = getIntValue(mSpeedValueEtt) ;
-            int delayValue = getIntValue(mDelayEtt) ;
-
-            mSteeringControl.getDistance().setValue(distanceValue);
-            mSteeringControl.getTime().setValue(timeValue);
-            mSteeringControl.getSpeed().setValue(speedValue);
-
-            mSteeringControl.setNegative(mIsNegativeSth.isChecked());
-            mSteeringControl.setDelay(delayValue);
-
-            SendClient.getInstance(getActivity()).send(null,mSteeringControl,null );
+            execute() ;
         }
     }
 
-    public int getIntValue(EditText editText){
+    public void execute(){
 
-        int value ;
+        int distanceValue = getIntValue(mDistanceValueEtt);
+        int timeValue = getIntValue(mTimeValueEtt);
+        int speedValue = getIntValue(mSpeedValueEtt);
+        int delayValue = getIntValue(mDelayEtt);
 
-        String string = editText.getText().toString() ;
+        mSteeringControl.getDistance().setValue(distanceValue);
+        mSteeringControl.getTime().setValue(timeValue);
+        mSteeringControl.getSpeed().setValue(speedValue);
+
+        mSteeringControl.setNegative(mIsNegativeSth.isChecked());
+        mSteeringControl.setDelay(delayValue);
+
+        SendClient.getInstance(getActivity()).send(null, mSteeringControl, null);
+
+    }
+
+
+    public int getIntValue(EditText editText) {
+
+        int value;
+
+        String string = editText.getText().toString();
         try {
 
-            value = Integer.parseInt(string) ;
-        }catch (Exception e){
+            value = Integer.parseInt(string);
+        } catch (Exception e) {
 
-            value = 0 ;
+            value = 0;
             editText.setText(String.valueOf(0));
         }
 
-        return value ;
+        return value;
     }
 
 }

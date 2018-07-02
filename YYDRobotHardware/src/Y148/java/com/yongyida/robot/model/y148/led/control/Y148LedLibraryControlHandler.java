@@ -1,4 +1,12 @@
-package com.yongyida.robot.communicate.app.hardware.motion.send.data;
+package com.yongyida.robot.model.y148.led.control;
+
+import android.content.Context;
+
+import com.yongyida.robot.communicate.app.common.response.SendResponse;
+import com.yongyida.robot.communicate.app.hardware.led.control.LedLibraryControlHandler;
+import com.yongyida.robot.communicate.app.hardware.led.send.data.LedLibraryControl;
+import com.yongyida.robot.communicate.app.server.IResponseListener;
+
 
 
 /* 
@@ -33,31 +41,24 @@ package com.yongyida.robot.communicate.app.hardware.motion.send.data;
                     不见满街漂亮妹，哪个归得程序员？ 
 */
 
-import java.util.ArrayList;
-
 /**
- * Create By HuangXiangXiang 2018/6/11
- * 一组动作
+ * Create By HuangXiangXiang 2018/6/26
+ * Y148 灯库
+ *
  */
-public class GroupFrameControl extends BaseMotionSendControl{
+public class Y148LedLibraryControlHandler extends LedLibraryControlHandler {
 
-    private ArrayList<OneFrameScript> frameScripts = new ArrayList<>() ;
-
-
-    public ArrayList<OneFrameScript> getFrameScripts() {
-        return frameScripts;
+    public Y148LedLibraryControlHandler(Context context) {
+        super(context);
     }
 
-    public void setFrameScripts(ArrayList<OneFrameScript> frameScripts) {
-        this.frameScripts = frameScripts;
+    @Override
+    public SendResponse onHandler(LedLibraryControl ledLibraryControl, IResponseListener responseListener) {
+
+
+
+
+
+        return super.onHandler(ledLibraryControl, responseListener);
     }
-
-    public void addOneFrameScript(OneFrameScript oneFrameScript) {
-
-        frameScripts.add(oneFrameScript) ;
-    }
-
-
-
-
 }

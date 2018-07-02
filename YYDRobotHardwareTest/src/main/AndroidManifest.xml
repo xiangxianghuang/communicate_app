@@ -245,6 +245,14 @@
         </activity>
 
 
+        <!-- 普通类 -->
+        <activity android:name=".item.led.LedLibraryActivity"
+            android:screenOrientation="landscape"
+            />
+        <activity android:name=".item.motion.AllSteeringControlActivity"
+            android:screenOrientation="landscape"
+            />
+
     </application>
 
 </manifest>

@@ -44,7 +44,7 @@ import com.yongyida.robot.communicate.app.server.IResponseListener;
 /**
  * Create By HuangXiangXiang 2018/6/20
  */
-public class LedSend2ControlHandler extends BaseControlHandler<LedSend2Control> {
+public abstract class LedSend2ControlHandler extends BaseControlHandler<LedSend2Control> {
 
     public LedSend2ControlHandler(Context context) {
         super(context);
