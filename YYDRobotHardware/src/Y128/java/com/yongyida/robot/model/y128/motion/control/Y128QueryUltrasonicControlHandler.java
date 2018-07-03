@@ -49,16 +49,20 @@ import com.yongyida.robot.model.agreement.Y128Steering;
 public class Y128QueryUltrasonicControlHandler extends QueryUltrasonicControlHandler {
 
     private Y128Send mSend = Y128Send.getInstance();
-    private Y128Steering.Ultrasonic mUltrasonic = new Y128Steering.Ultrasonic() ;
+    private Y128Steering.Ultrasonic mUltrasonicSteering = new Y128Steering.Ultrasonic() ;
 
     public Y128QueryUltrasonicControlHandler(Context context) {
         super(context);
+
+        int[] distances = new int[7] ;
+        mUltrasonic.setDistances(distances) ;
     }
 
     @Override
     protected void setListenUltrasonic(OnUltrasonicChangedListener onUltrasonicChangedListener) {
 
         Y128Receive.getInstance().setOnUltrasonicChangedListener(onUltrasonicChangedListener);
+
     }
 
     @Override
@@ -69,15 +73,15 @@ public class Y128QueryUltrasonicControlHandler extends QueryUltrasonicControlHan
             switch (android){
 
                 case SEND:
-                    mUltrasonic.setSendAndroidMode(Y128Steering.Ultrasonic.MODE_ANDROID_SEND);
+                    mUltrasonicSteering.setSendAndroidMode(Y128Steering.Ultrasonic.MODE_ANDROID_SEND);
                     break;
 
                 case NO_SEND:
-                    mUltrasonic.setSendAndroidMode(Y128Steering.Ultrasonic.MODE_ANDROID_NO_SEND);
+                    mUltrasonicSteering.setSendAndroidMode(Y128Steering.Ultrasonic.MODE_ANDROID_NO_SEND);
                     break;
 
                 case DEFAULT:
-                    mUltrasonic.setSendAndroidMode(Y128Steering.Ultrasonic.MODE_ANDROID_DEFAULT);
+                    mUltrasonicSteering.setSendAndroidMode(Y128Steering.Ultrasonic.MODE_ANDROID_DEFAULT);
                     break;
             }
         }
@@ -87,20 +91,20 @@ public class Y128QueryUltrasonicControlHandler extends QueryUltrasonicControlHan
             switch (slam){
 
                 case SEND:
-                    mUltrasonic.setSendAndroidMode(Y128Steering.Ultrasonic.MODE_SLAM_SEND);
+                    mUltrasonicSteering.setSendAndroidMode(Y128Steering.Ultrasonic.MODE_SLAM_SEND);
                     break;
 
                 case NO_SEND:
-                    mUltrasonic.setSendAndroidMode(Y128Steering.Ultrasonic.MODE_SLAM_NO_SEND);
+                    mUltrasonicSteering.setSendAndroidMode(Y128Steering.Ultrasonic.MODE_SLAM_NO_SEND);
                     break;
 
                 case DEFAULT:
-                    mUltrasonic.setSendAndroidMode(Y128Steering.Ultrasonic.MODE_SLAM_DEFAULT);
+                    mUltrasonicSteering.setSendAndroidMode(Y128Steering.Ultrasonic.MODE_SLAM_DEFAULT);
                     break;
             }
         }
 
-        mSend.sendData(mUltrasonic.getCmd()) ;
+        mSend.sendData(mUltrasonicSteering.getCmd()) ;
 
         return super.onHandler(queryUltrasonicControl, responseListener);
     }

@@ -8,6 +8,7 @@ import com.yongyida.robot.communicate.app.hardware.touch.TouchSendHandlers;
 import com.yongyida.robot.communicate.app.hardware.touch.control.QueryTouchPositionControlHandler;
 import com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchPosition;
 import com.yongyida.robot.communicate.app.utils.LogHelper;
+import com.yongyida.robot.communicate.app.utils.StringUtils;
 import com.yongyida.robot.serial.SerialReceive;
 
 /**
@@ -45,6 +46,7 @@ public class Y128Receive {
 
     private void receive(byte[] data, int length){
 
+        LogHelper.i(TAG, LogHelper.__TAG__() + StringUtils.bytes2HexString(data,length));
         if (isValid(data)){
 
             // 无效数据直接跳出
@@ -65,7 +67,7 @@ public class Y128Receive {
 
             case Y128Steering.FUNCTION_RECEIVE_ULTRASONIC:
 
-                receiveUltrasonic(data) ;
+                receiveUltrasonic(data,length) ;
                 break;
             case Y128Steering.FUNCTION_RECEIVE_OBD_DATA:
 
@@ -142,11 +144,12 @@ public class Y128Receive {
     }
 
     /**超声波信息*/
-    private void receiveUltrasonic(byte[] data){
+    private void receiveUltrasonic(byte[] data, int length){
+
+        LogHelper.i(TAG, LogHelper.__TAG__() + " " + StringUtils.bytes2HexString(data,length));
 
         if(mOnUltrasonicChangedListener != null){
 
-            LogHelper.i(TAG, LogHelper.__TAG__());
             mReceiveUltrasonic.setData(data);
             mOnUltrasonicChangedListener.onUltrasonicChanged(mReceiveUltrasonic.getDistances());
         }

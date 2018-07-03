@@ -31,12 +31,16 @@ import com.yongyida.robot.communicate.app.setting.send.data.FactoryConfig;
 import com.yongyida.robot.hardware.test.data.ModelInfo;
 import com.yongyida.robot.hardware.test.data.SettingData;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
+import com.yongyida.robot.hardware.test.item.fingerprint.TestFingerPrintActivity;
 import com.yongyida.robot.hardware.test.item.idcard.TestIdCardActivity;
 import com.yongyida.robot.hardware.test.item.key.TestKeyActivity;
 import com.yongyida.robot.hardware.test.item.led.TestLed2Activity;
 import com.yongyida.robot.hardware.test.item.microphone.TestMicrophoneActivity;
 import com.yongyida.robot.hardware.test.item.motion.TestMotionActivity;
+import com.yongyida.robot.hardware.test.item.pir.TestPirActivity;
+import com.yongyida.robot.hardware.test.item.printer.TestPrinterActivity;
 import com.yongyida.robot.hardware.test.item.touch.TestTouchActivity;
+import com.yongyida.robot.hardware.test.item.wakeupmic.TestWakeUpMicActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -202,21 +206,21 @@ public class TestMainActivity extends Activity implements AdapterView.OnItemClic
                     temp.add(resolveInfo) ;
                 }
 
-            }else if(TestIdCardActivity.class.getName().equals(name)){//打印机
+            }else if(TestPrinterActivity.class.getName().equals(name)){//打印机
 
                 if(model.contains("Y165")){
 
                     temp.add(resolveInfo) ;
                 }
 
-            }else if(TestIdCardActivity.class.getName().equals(name)){//指纹
+            }else if(TestFingerPrintActivity.class.getName().equals(name)){//指纹
 
                 if(model.contains("Y165")){
 
                     temp.add(resolveInfo) ;
                 }
 
-            }else if(TestMicrophoneActivity.class.getName().equals(name)){//唤醒麦
+            }else if(TestWakeUpMicActivity.class.getName().equals(name)){//唤醒麦
 
                 if(model.contains("Y165")){
 
@@ -247,6 +251,13 @@ public class TestMainActivity extends Activity implements AdapterView.OnItemClic
             }else if(TestLed2Activity.class.getName().equals(name)){// 灯带
 
                 if(model.contains("Y138") || model.contains("Y148")){
+
+                    temp.add(resolveInfo) ;
+                }
+
+            }else if(TestPirActivity.class.getName().equals(name)){// Pir 人体监测
+
+                if(model.contains("Y165")){
 
                     temp.add(resolveInfo) ;
                 }

@@ -68,9 +68,10 @@ public class TestUltrasonicFragment extends BaseFragment implements View.OnClick
     private static String [] POSITION_NAMES ;
     static{
 
-        if(ModelInfo.getInstance().getModel().contains("YQ110")){
+        final String model = ModelInfo.getInstance().getModel() ;
+        if(model.contains("YQ110")){
 
-            POSITION_NAMES = new String[] {"肚子","左前脚","左胸","左后脚","右后脚","右胸","右前腿"} ;
+            POSITION_NAMES = new String[] {"正中","左前","左侧","左后","右后","右侧","右前"} ;
 
         }else{
 

@@ -3,10 +3,12 @@ package com.yongyida.robot.control.server;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 
 import com.yongyida.robot.communicate.app.common.response.SendResponse;
 import com.yongyida.robot.communicate.app.common.send.BaseSend;
 import com.yongyida.robot.communicate.app.hardware.BaseSendHandlers;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.FootControl;
 import com.yongyida.robot.communicate.app.server.IResponseListener;
 import com.yongyida.robot.communicate.app.server.ServerService;
 import com.yongyida.robot.communicate.app.utils.LogHelper;
@@ -100,15 +102,20 @@ public class HardWareServerService extends ServerService {
 
                 try{
 
-//                    String motionAction = intent.getStringExtra(KEY_ACTION) ;
-//                    int time = intent.getIntExtra(KEY_TIME, 1000) ;
-//
-//                    LogHelper.i(TAG, LogHelper.__TAG__() + " motionAction : " + motionAction + ", time : "+ time);
-//                    MotionSendControl.Action action1 = MotionSendControl.Action.valueOf(motionAction);
-//                    motionControl.setAction(action1);
-//                    motionControl.getTime().setValue(time);
-//
-//                    onReceiver(motionControl.getSend(), null) ;
+                    String motionAction = intent.getStringExtra(KEY_ACTION) ;
+                    if(motionAction!=null && motionAction.startsWith("FOOT_")){
+
+                        motionAction = motionAction.substring(5, motionAction.length()) ;
+                    }
+
+                    int time = intent.getIntExtra(KEY_TIME, 1000) ;
+
+                    LogHelper.i(TAG, LogHelper.__TAG__() + " motionAction : " + motionAction + ", time : "+ time);
+                    FootControl.Action action1 = FootControl.Action.valueOf(motionAction);
+                    mFootControl.setAction(action1);
+                    mFootControl.getFoot().getTime().setValue(time);
+
+                    onReceiver(mFootControl.getSend(), null) ;
 
                 }catch (Exception e){
                     LogHelper.e(TAG, LogHelper.__TAG__() + "Exception " + e );
@@ -120,15 +127,13 @@ public class HardWareServerService extends ServerService {
 
 
 
-//    private MotionSendControl motionControl = new MotionSendControl() ;
+    private FootControl mFootControl = new FootControl() ;
     private void registerReceiver(){
 
-//        motionControl.setTime(new MotionSendControl.Time());
-//
-//        IntentFilter filter = new IntentFilter() ;
-//        filter.addAction(ACTION_MOVE);
-//
-//        registerReceiver(receiver, filter) ;
+        // 使用广播兼容旧的
+        IntentFilter filter = new IntentFilter() ;
+        filter.addAction(ACTION_MOVE);
+        registerReceiver(receiver, filter) ;
     }
 
 
