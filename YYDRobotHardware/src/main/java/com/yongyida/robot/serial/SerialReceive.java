@@ -122,7 +122,7 @@ public class SerialReceive {
 
                     if(mOnReceiveListener != null){
 
-                        mOnReceiveListener.onReceive(data);
+                        mOnReceiveListener.onReceive(data,length);
                     }
 
 
@@ -148,7 +148,7 @@ public class SerialReceive {
 
     public interface OnReceiveListener{
 
-        void onReceive(byte[] data);
+        void onReceive(byte[] data, int length);
 
     }
 

@@ -36,14 +36,14 @@ public class Y128Receive {
 
     private SerialReceive.OnReceiveListener mOnReceiveListener = new SerialReceive.OnReceiveListener(){
         @Override
-        public void onReceive(byte[] data) {
+        public void onReceive(byte[] data, int length) {
 
-            receive(data) ;
+            receive(data,length) ;
         }
     };
 
 
-    private void receive(byte[] data){
+    private void receive(byte[] data, int length){
 
         if (isValid(data)){
 
@@ -223,7 +223,6 @@ public class Y128Receive {
                 return false ;
             }
         }
-
 
         if(Y128Steering.HEAD_0 != data[0] || Y128Steering.HEAD_1 != data[1]){
 

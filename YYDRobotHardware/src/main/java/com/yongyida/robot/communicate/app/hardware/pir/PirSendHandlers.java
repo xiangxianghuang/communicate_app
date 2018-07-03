@@ -14,23 +14,4 @@ public abstract class PirSendHandlers extends BaseSendHandlers<PirSend> {
         super(context);
     }
 
-
-    public static final String ACTION_MONITOR_PERSON = "com.yongyida.robot.MONITOR_PERSON" ;
-    public static final String KEY_DISTANCE      = "distance" ;
-
-
-    protected void monitorPerson(){
-
-        Intent intent = new Intent(ACTION_MONITOR_PERSON) ;
-        mContext.sendBroadcast(intent);
-    }
-
-
-    protected void monitorPerson(int distance){
-
-        Intent intent = new Intent(ACTION_MONITOR_PERSON);
-        intent.putExtra(KEY_DISTANCE, distance);
-        mContext.sendBroadcast(intent);
-    }
-
 }

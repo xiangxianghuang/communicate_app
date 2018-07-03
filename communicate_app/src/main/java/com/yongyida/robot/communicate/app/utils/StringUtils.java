@@ -33,4 +33,52 @@ public class StringUtils {
     }
 
 
+
+
+    /**
+     * 将byte数组转变成String字符串
+     * */
+    public static String bytes2HexString(byte[] bytes){
+
+        if(bytes == null){
+
+            return null ;
+        }
+        return bytes2HexString(bytes, bytes.length) ;
+    }
+
+
+    /**
+     * 将byte数组转变成String字符串，选择字符长度
+     * */
+    public static String bytes2HexString(byte[] bytes , int length){
+
+        if(bytes == null){
+
+            return null ;
+        }
+
+        int len = bytes.length ;
+        if(len == 0 || length <= 0){
+
+            return "" ;
+        }
+
+        if(length > len){
+
+            length = len ;
+        }
+
+        String format = "%02X" ;
+        StringBuilder sb = new StringBuilder() ;
+        for (int i= 0 ; i < length-1 ; i++){
+
+            sb.append(String.format(format, bytes[i]) + " ") ;
+        }
+
+        sb.append(String.format(format, bytes[length - 1])) ;
+
+        return sb.toString() ;
+    }
+
 }

@@ -10,33 +10,29 @@ public class Y165Steering {
 
         protected byte[] content = new byte[1] ;
 
-
         public SingleChip() {
-
-
         }
 
-        public abstract byte getFunction();  // 功能码
+        protected abstract byte getFunction();  // 功能码
 
-        public byte[] getContent() {
+        public byte[] getCmd() {
 
             return content;
         }
+
     }
 
     public static class EyeLed extends SingleChip {
 
         @Override
         public byte getFunction() {
-            return 0x08;
+            return 0;
         }
 
         public void setOnOff(boolean isOnOff){
 
             content[0] = (byte) (isOnOff ? 0xAA : 0xBB);
         }
-
-
     }
 
 }

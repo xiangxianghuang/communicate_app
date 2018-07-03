@@ -10,6 +10,11 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
+import com.yongyida.robot.communicate.app.common.response.BaseResponseControl;
+import com.yongyida.robot.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.common.send.SendResponseListener;
+import com.yongyida.robot.communicate.app.hardware.pir.response.data.PirValue;
+import com.yongyida.robot.communicate.app.hardware.pir.send.data.QueryPirValueControl;
 import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
@@ -32,7 +37,6 @@ public class TestPirActivity extends TestBaseActivity {
         mMonitorResultTvw = view.findViewById(R.id.monitor_result_tvw) ;
         mMonitorResultTvw.setMovementMethod(ScrollingMovementMethod.getInstance()); //可以滑动
 
-
         return view;
     }
 
@@ -41,16 +45,66 @@ public class TestPirActivity extends TestBaseActivity {
         return getString(R.string.pir_tips);
     }
 
+
+    private QueryPirValueControl mQueryPirValueControl = new QueryPirValueControl() ;
+    private SendResponseListener mSendResponseListener = new SendResponseListener< PirValue>(){
+
+        @Override
+        public void onSuccess(final PirValue pirValue) {
+
+            if(pirValue != null){
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        int distance = pirValue.getPeopleDistance() ;
+                        String info;
+                        if(mMonitorResultTvw.getText().length() > 0){
+
+                            info = "\n" ;
+
+                        }else{
+                            info = "" ;
+                        }
+
+                        if(distance > 0){
+
+                            info += df.format(new Date()) +distance + "厘米处"+getString(R.string.pir_monitor_people ) ;
+                        }else {
+
+                            info += df.format(new Date()) + getString(R.string.pir_monitor_people ) ;
+                        }
+
+                        appendTextView(mMonitorResultTvw, info) ;
+
+                    }
+                });
+
+            }
+
+        }
+
+        @Override
+        public void onFail(int result, String message) {
+
+        }
+    } ;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        registerReceiver() ;
+//        registerReceiver() ;
+
+        SendClient.getInstance(this).send(this,mQueryPirValueControl,mSendResponseListener);
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver();
+//        unregisterReceiver();
     }
 
     private void registerReceiver(){
@@ -74,8 +128,8 @@ public class TestPirActivity extends TestBaseActivity {
     private static final String VALUE_FIND_PEOPLE  = "pir";
 
 
-    public static final String ACTION_MONITOR_PERSON = "com.yongyida.robot.MONITOR_PERSON" ;
-    public static final String KEY_DISTANCE      = "distance" ;
+    public static final String ACTION_MONITOR_PERSON = "com.yongyida.robot.PIR_VALUE" ;
+    public static final String KEY_DISTANCE      = "peopleDistance" ;
 
 
     private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ") ;
@@ -92,7 +146,6 @@ public class TestPirActivity extends TestBaseActivity {
                 LogHelper.i(TAG, LogHelper.__TAG__() + " ,value : " + value) ;
 
                 if(VALUE_FIND_PEOPLE.equals(value)){
-
 
                     String info;
                     if(mMonitorResultTvw.getText().length() > 0){

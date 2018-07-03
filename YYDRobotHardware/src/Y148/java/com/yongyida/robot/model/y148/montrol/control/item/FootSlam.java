@@ -205,9 +205,13 @@ public class FootSlam {
 
             case FORWARD:
             case BACK:
+                int time = getTimeValue(footControl.getFoot().getTime(), 1500) ;
+                startMove(action, time) ;
+                break;
             case LEFT:
             case RIGHT:
-                startMove(action, getTimeValue(footControl.getFoot().getTime())) ;
+                time = getTimeValue(footControl.getFoot().getTime(), 2000) ;
+                startMove(action, time) ;
                 break;
             case STOP:
                 stopMove();
@@ -220,11 +224,11 @@ public class FootSlam {
     }
 
 
-    private int getTimeValue(SteeringControl.Time time){
+    private int getTimeValue(SteeringControl.Time time, int defaultTime){
 
         if(time == null){
 
-            return 2000 ;
+            return defaultTime ;
         }
 
         SteeringControl.Time.Unit unit = time.getUnit();
@@ -235,6 +239,12 @@ public class FootSlam {
                 value *= 1000 ;
                 break;
         }
+
+        if(value <= 0){
+
+            return defaultTime ;
+        }
+
         return value ;
     }
 
@@ -286,6 +296,8 @@ public class FootSlam {
 
 
         void setData(FootControl.Action action, int time){
+
+            LogHelper.i(TAG, LogHelper.__TAG__() + ",action : " + action + ", time : " + time);
 
             this.action = action ;
 

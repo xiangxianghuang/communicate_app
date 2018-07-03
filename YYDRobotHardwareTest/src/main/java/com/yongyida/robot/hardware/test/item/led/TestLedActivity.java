@@ -197,7 +197,7 @@ public class TestLedActivity extends TestBaseActivity implements View.OnClickLis
         mLedPositionGvw.setAdapter(mLedPositionAdapter);
         mEffectGvw.setAdapter(mEffectAdapter);
 
-        ledControl.setPosition(CHEST);
+        ledControl.setPosition(POSITION_VALUE[0]);
         ledControl.setEffect(LedSendControl.Effect.NORMAL);
         ledControl.setColor(0xFF0000);
     }

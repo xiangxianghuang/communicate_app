@@ -26,10 +26,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yongyida.robot.communicate.app.common.send.SendClient;
+import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSendControl;
 import com.yongyida.robot.communicate.app.setting.send.data.FactoryConfig;
 import com.yongyida.robot.hardware.test.data.ModelInfo;
 import com.yongyida.robot.hardware.test.data.SettingData;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
+import com.yongyida.robot.hardware.test.item.idcard.TestIdCardActivity;
+import com.yongyida.robot.hardware.test.item.key.TestKeyActivity;
+import com.yongyida.robot.hardware.test.item.led.TestLed2Activity;
+import com.yongyida.robot.hardware.test.item.microphone.TestMicrophoneActivity;
+import com.yongyida.robot.hardware.test.item.motion.TestMotionActivity;
+import com.yongyida.robot.hardware.test.item.touch.TestTouchActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -179,46 +186,80 @@ public class TestMainActivity extends Activity implements AdapterView.OnItemClic
         Intent hardwareIntent = new Intent("com.yongyida.robot.HARDWARE");
         List<ResolveInfo> resolveInfos = getPackageManager().queryIntentActivities(hardwareIntent, 0);
 
-        String model = mModelInfo.getModel() ;
-        if(model.contains("YQ110")){    // YQ110 屏蔽身份证、打印机、指纹、麦克风
 
-            List<ResolveInfo> temp = new ArrayList<>();
+        final String model = mModelInfo.getModel() ;
 
-            final int size = resolveInfos.size() ;
-            for (int i = 0 ; i < size ; i++){
+        List<ResolveInfo> temp = new ArrayList<>();
+        final int size = resolveInfos.size() ;
+        for (int i = 0 ; i < size ; i++){
 
-                ResolveInfo resolveInfo = resolveInfos.get(i) ;
-                if(!resolveInfo.activityInfo.name.equals("com.yongyida.robot.hardware.test.item.idcard.TestIdCardActivity") &&
-                        !resolveInfo.activityInfo.name.equals("com.yongyida.robot.hardware.test.item.printer.TestPrinterActivity") &&
-                        !resolveInfo.activityInfo.name.equals("com.yongyida.robot.hardware.test.item.microphone.TestMicrophoneActivity") &&
-                        !resolveInfo.activityInfo.name.equals("com.yongyida.robot.hardware.test.item.fingerprint.TestFingerPrintActivity")){
+            ResolveInfo resolveInfo = resolveInfos.get(i) ;
+            final String name = resolveInfo.activityInfo.name ;
+            if(TestIdCardActivity.class.getName().equals(name)){ // 身份证
 
-                    temp.add(resolveInfo) ;
-                }
-            }
-            resolveInfos = temp ;
-
-        }else if(model.contains("Y165")){
-
-            List<ResolveInfo> temp = new ArrayList<>();
-
-            final int size = resolveInfos.size() ;
-            for (int i = 0 ; i < size ; i++){
-
-                ResolveInfo resolveInfo = resolveInfos.get(i) ;
-                if(!resolveInfo.activityInfo.name.equals("com.yongyida.robot.hardware.test.item.touch.TestTouchActivity") &&    // 触摸
-                        !resolveInfo.activityInfo.name.equals("com.yongyida.robot.hardware.test.item.key.TestKeyActivity")){    // 实体按键
+                if(model.contains("Y165")){
 
                     temp.add(resolveInfo) ;
                 }
+
+            }else if(TestIdCardActivity.class.getName().equals(name)){//打印机
+
+                if(model.contains("Y165")){
+
+                    temp.add(resolveInfo) ;
+                }
+
+            }else if(TestIdCardActivity.class.getName().equals(name)){//指纹
+
+                if(model.contains("Y165")){
+
+                    temp.add(resolveInfo) ;
+                }
+
+            }else if(TestMicrophoneActivity.class.getName().equals(name)){//唤醒麦
+
+                if(model.contains("Y165")){
+
+                    temp.add(resolveInfo) ;
+                }
+
+            }else if(TestTouchActivity.class.getName().equals(name)){// 触摸
+
+                if(!model.contains("Y165")){
+
+                    temp.add(resolveInfo) ;
+                }
+
+            }else if(TestMotionActivity.class.getName().equals(name)){// 动作
+
+                if(!model.contains("Y165")){
+
+                    temp.add(resolveInfo) ;
+                }
+
+            }else if(TestKeyActivity.class.getName().equals(name)){// 实体按键
+
+                if(model.contains("YQ110")){
+
+                    temp.add(resolveInfo) ;
+                }
+
+            }else if(TestLed2Activity.class.getName().equals(name)){// 灯带
+
+                if(model.contains("Y138") || model.contains("Y148")){
+
+                    temp.add(resolveInfo) ;
+                }
+
+            }else {
+
+                temp.add(resolveInfo) ;
             }
-            resolveInfos = temp ;
 
         }
 
 
-
-        return resolveInfos;
+        return temp;
     }
 
 
