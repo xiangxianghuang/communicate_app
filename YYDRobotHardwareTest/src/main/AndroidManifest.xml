@@ -253,6 +253,13 @@
             android:screenOrientation="landscape"
             />
 
+        <receiver android:name=".item.battery.BatteryReceiver" >
+            <intent-filter>
+
+                <action android:name="com.yongyida.robot.BATTERY_CHANGE"/>
+            </intent-filter>
+
+        </receiver>
     </application>
 
 </manifest>

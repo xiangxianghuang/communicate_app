@@ -75,7 +75,7 @@ public class TestMotionSystemFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-
+        LogHelper.i(TAG, LogHelper.__TAG__());
         SendClient.getInstance(getActivity()).send(getActivity(), mQueryMotionSystemControl, mSendResponseListener );
 
         this.mInflater = inflater;
@@ -86,6 +86,14 @@ public class TestMotionSystemFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+
+        LogHelper.i(TAG, LogHelper.__TAG__());
+        SendClient.getInstance(getActivity()).send(null, mQueryMotionSystemControl, null );
+
+        super.onDestroyView();
+    }
 
     private Handler mHandler = new Handler(){
 

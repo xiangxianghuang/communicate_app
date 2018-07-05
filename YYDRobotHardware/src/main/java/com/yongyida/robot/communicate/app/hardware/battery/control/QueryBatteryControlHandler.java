@@ -100,18 +100,21 @@ public abstract class QueryBatteryControlHandler extends BaseControlHandler<Quer
 
             //发广播 为了保证数据准确 需要一直发送数据
             sendYYDRobotBatteryBroadcast(batteryInfo) ;
-            sendSystemBatteryBroadcast(batteryInfo) ;
+//            sendSystemBatteryBroadcast(batteryInfo) ;
         }
 
     }
 
     private void responseYYDRobotBatteryService(){
 
+        LogHelper.i(TAG, LogHelper.__TAG__() + ", size : " + mResponseBatteryChangedListeners.size()) ;
+
         HashSet<String> deaths = new HashSet<>() ;
         for (Map.Entry<String, ResponseBatteryChangedListener> entry : mResponseBatteryChangedListeners.entrySet()){
 
             ResponseBatteryChangedListener batteryChangeListener = entry.getValue() ;
             int result = batteryChangeListener.responseBatteryChanged() ;
+            LogHelper.i(TAG, LogHelper.__TAG__() + "result : " + result) ;
             if(result != 0){    //非 0 表示已经断开
 
                 deaths.add(entry.getKey()) ;
@@ -123,7 +126,6 @@ public abstract class QueryBatteryControlHandler extends BaseControlHandler<Quer
 
             mResponseBatteryChangedListeners.remove(death) ;
         }
-
     }
 
 

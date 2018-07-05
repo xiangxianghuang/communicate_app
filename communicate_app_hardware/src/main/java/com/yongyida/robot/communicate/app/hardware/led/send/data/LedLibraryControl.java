@@ -51,7 +51,7 @@ public class LedLibraryControl extends BaseLedSendControl{
         NET_CONNECT_SUCCESS,                // 网络连接成功
         NET_CONNECT_FAIL,                   // 网络连接失败
         POWER_OFF,                          // 关机
-        BATTERY_NORMAL_LESS_20,             // 待机低于20
+        BATTERY_NORMAL_10_TO_20,            // 待机10-20
         BATTERY_NORMAL_LESS_10,             // 待机低于10
         BATTERY_CHARGING_EQUAL_100,         // 充电100
         BATTERY_CHARGING_MORE_20,           // 充电高于20
@@ -69,7 +69,15 @@ public class LedLibraryControl extends BaseLedSendControl{
         MOVE_CONTROL,                       // 运动控制
         SURROUNDED,                         // 被包围
         FIRMWARE_UPDATE,                    // 固件升级
-        DANCE                               // 跳舞
+        DANCE,                              // 跳舞
+
+
+
+        BATTERY_NORMAL_LESS_5,              // 电量低于5
+        BATTERY_NORMAL_5_TO_10,             // 电量 5-10
+        BATTERY_NORMAL_MORE_10,             // 电量超过10
+        BATTERY_CHARGING_LESS_100,          // 充电不到100
+
     }
 
 

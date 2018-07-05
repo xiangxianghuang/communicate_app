@@ -9,8 +9,8 @@ android {
         targetSdkVersion 22
 
         applicationId "com.yongyida.robot.hardware"
-        versionCode 20
-        versionName "1.0.19"
+        versionCode 21
+        versionName "1.0.20"
 
         ndk {
             // 设置支持的SO库架构
@@ -49,8 +49,21 @@ android {
 
     sourceSets.main {
 
-        java.srcDirs += [ "src/CARO/java","src/Y20/java","src/Y20D/java","src/Y50/java","src/Y128/java","src/Y148/java","src/Y165/java","src/S1/java"]
-        jniLibs.srcDirs +=  ["src/CARO/jniLibs","src/Y20/jniLibs","src/Y20D/jniLibs", "src/Y128/jniLibs","src/Y165/jniLibs"]
+        java.srcDirs += [ "src/CARO/java",
+                          "src/Y20/java",
+                          "src/Y20D/java",
+                          "src/Y50/java",
+                          "src/YQ110/java",
+                          "src/Y128/java",
+                          "src/Y148/java",
+                          "src/Y165/java",
+                          "src/SR1/java"]
+
+        jniLibs.srcDirs +=  ["src/CARO/jniLibs",
+                             "src/Y20/jniLibs",
+                             "src/Y20D/jniLibs",
+                             "src/Y128/jniLibs",
+                             "src/Y165/jniLibs"]
         aidl.srcDirs +=  ["src/Y128/aidl"]
 //        aidl.srcDirs "/src/Y128/aidl"
 

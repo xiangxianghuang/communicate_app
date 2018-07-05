@@ -6,7 +6,7 @@ import com.yongyida.robot.communicate.app.common.send.BaseSend;
 import com.yongyida.robot.communicate.app.hardware.BaseSendHandlers;
 import com.yongyida.robot.communicate.app.hardware.led.LedSendHandlers;
 import com.yongyida.robot.communicate.app.utils.LogHelper;
-import com.yongyida.robot.model.s1.montrol.S1MotionSendHandlers;
+import com.yongyida.robot.model.sr1.montrol.SR1MotionSendHandlers;
 import com.yongyida.robot.model.y128.battery.Y128BatterySendHandlers;
 import com.yongyida.robot.model.y128.led.Y128LedSendHandlers;
 import com.yongyida.robot.model.y128.motion.Y128MotionSendHandlers;
@@ -46,7 +46,6 @@ public final class HardwareConfig {
         }
         return mHardwareConfig;
     }
-
 
 
     private HashMap<Class, BaseSendHandlers<BaseSend>> mControls = new HashMap() ;
@@ -94,9 +93,9 @@ public final class HardwareConfig {
         }else if(model.contains("Y138") | model.contains("Y148")){
 
             initY148();
-        }else if(model.contains("m_35_n")){
-            // 中国移动项目
-            initS1() ;
+        }else if(model.contains("SR1")){
+            // 中国移动SR1项目
+            initSR1() ;
         }
 
     }
@@ -167,10 +166,10 @@ public final class HardwareConfig {
     }
 
 
-    // S1项目
-    private void initS1(){
+    // SR1项目
+    private void initSR1(){
 
-        addControl(new S1MotionSendHandlers(mContext)) ;
+        addControl(new SR1MotionSendHandlers(mContext)) ;
 
     }
 

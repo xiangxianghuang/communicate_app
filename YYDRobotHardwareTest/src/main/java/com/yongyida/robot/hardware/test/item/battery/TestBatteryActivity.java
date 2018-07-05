@@ -135,6 +135,7 @@ public class TestBatteryActivity extends TestBaseActivity {
         super.onDestroy();
 //        unregisterReceiver() ;
 
+        stopQueryBatteryInfo() ;
     }
 
 
@@ -221,8 +222,11 @@ public class TestBatteryActivity extends TestBaseActivity {
 
         SendClient.getInstance(this).send(this,mQueryBattery, iResponseListener);
 
-
-
     }
 
+    private void stopQueryBatteryInfo(){
+
+        SendClient.getInstance(this).send(null,mQueryBattery, null);
+
+    }
 }

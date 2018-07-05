@@ -57,7 +57,6 @@ public class Receiver {
             LogHelper.i(TAG , LogHelper.__TAG__());
             sendManager = SendManager.Stub.asInterface(service) ;
 
-
             synchronized (mBindServiceListeners){
 
                 final int size = mBindServiceListeners.size() ;

@@ -9,6 +9,7 @@ import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSendControl;
 import com.yongyida.robot.communicate.app.server.IResponseListener;
 import com.yongyida.robot.model.agreement.Y128Send;
 import com.yongyida.robot.model.agreement.Y128Steering;
+import com.yongyida.robot.model.y128.led.type.Led;
 import com.yongyida.robot.utils.LogHelper;
 
 import static com.yongyida.robot.communicate.app.hardware.led.send.data.LedSendControl.Effect;
@@ -55,15 +56,12 @@ public class Y128LedSendControlHandler extends LedSendControlHandler {
 
     private static final String TAG = Y128LedSendControlHandler.class.getSimpleName() ;
 
-    private Y128Steering.SteerLed breathLed = new Y128Steering.SteerLed() ;
-    private Y128Steering.SteerLed2 breathLed2 = new Y128Steering.SteerLed2() ;
-    private Y128Send mSend ;
+    private Led mLed;
 
     public Y128LedSendControlHandler(Context context) {
 
         super(context);
-
-        mSend = Y128Send.getInstance() ;
+        mLed = Led.getInstance() ;
     }
 
     @Override
@@ -71,97 +69,7 @@ public class Y128LedSendControlHandler extends LedSendControlHandler {
 
         LogHelper.i(TAG, LogHelper.__TAG__() + ", ledSendControl : " + ledSendControl.toJson()) ;
 
-        Effect e = ledSendControl.getEffect() ;
-        if(e == null){
-
-            return null ;
-        }
-
-        Position p = ledSendControl.getPosition() ;
-        switch (p){
-
-            case LEFT_EAR :
-
-                breathLed.setPosition(Y128Steering.SteerLed.POSITION_LEFT_EAR);
-                breathLed2.setPosition(Y128Steering.SteerLed.POSITION_LEFT_EAR);
-                break;
-
-            case RIGHT_EAR :
-
-                breathLed.setPosition(Y128Steering.SteerLed.POSITION_RIGHT_EAR);
-                breathLed2.setPosition(Y128Steering.SteerLed.POSITION_RIGHT_EAR);
-                break;
-
-            case CHEST :
-
-                breathLed.setPosition(Y128Steering.SteerLed.POSITION_CHEST);
-                breathLed2.setPosition(Y128Steering.SteerLed.POSITION_CHEST);
-                break;
-
-        }
-
-        LedSendControl.Color c = ledSendControl.getColor() ;
-        if(c != null){
-
-            int value = (0xFF<< 24 )|c.getColor() ;
-            switch (value){
-
-                case Color.RED:
-
-                    breathLed.setColor(Y128Steering.SteerLed.COLOR_RED);
-                    breathLed2.setColor(Y128Steering.SteerLed.COLOR_RED);
-                    break;
-
-                case Color.GREEN:
-
-                    breathLed.setColor(Y128Steering.SteerLed.COLOR_GREEN);
-                    breathLed2.setColor(Y128Steering.SteerLed.COLOR_GREEN);
-                    break;
-
-                case Color.BLUE:
-
-                    breathLed.setColor(Y128Steering.SteerLed.COLOR_BLUE);
-                    breathLed2.setColor(Y128Steering.SteerLed.COLOR_BLUE);
-                    break;
-            }
-        }
-
-        switch (e){
-
-            case NORMAL:
-            case LED_ON:
-
-                breathLed2.setOn(true);
-                mSend.sendData(breathLed2.getCmd()) ;
-                break;
-
-            case LED_OFF:
-
-                breathLed2.setOn(false);
-                mSend.sendData(breathLed2.getCmd()) ;
-                break ;
-
-            case BREATH_LOW:
-
-                breathLed.setSpeed((byte) 60);
-                mSend.sendData(breathLed.getCmd()) ;
-                break;
-
-            case BREATH_MIDDLE:
-
-                breathLed.setSpeed((byte) 30);
-                mSend.sendData(breathLed.getCmd()) ;
-                break;
-
-            case BREATH_FAST:
-
-                breathLed.setSpeed((byte) 1);
-                mSend.sendData(breathLed.getCmd()) ;
-                break;
-        }
-
-        return null;
+        return mLed.onHandler(ledSendControl, responseListener) ;
     }
-
 
 }

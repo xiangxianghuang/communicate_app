@@ -13,7 +13,15 @@ import android.widget.GridView;
 import com.yongyida.robot.communicate.app.common.send.SendClient;
 import com.yongyida.robot.communicate.app.hardware.led.send.data.LedLibraryControl;
 import com.yongyida.robot.hardware.test.R;
+import com.yongyida.robot.hardware.test.data.ModelInfo;
 import com.yongyida.robot.hardware.test.item.motion.adapter.NameAdapter;
+
+import static com.yongyida.robot.communicate.app.hardware.led.send.data.LedLibraryControl.*;
+import static com.yongyida.robot.communicate.app.hardware.led.send.data.LedLibraryControl.State.BATTERY_CHARGING_EQUAL_100;
+import static com.yongyida.robot.communicate.app.hardware.led.send.data.LedLibraryControl.State.BATTERY_CHARGING_LESS_100;
+import static com.yongyida.robot.communicate.app.hardware.led.send.data.LedLibraryControl.State.BATTERY_NORMAL_5_TO_10;
+import static com.yongyida.robot.communicate.app.hardware.led.send.data.LedLibraryControl.State.BATTERY_NORMAL_LESS_5;
+import static com.yongyida.robot.communicate.app.hardware.led.send.data.LedLibraryControl.State.STAND_BY;
 
 
 
@@ -57,7 +65,37 @@ public class LedLibraryActivity extends Activity implements AdapterView.OnItemCl
 
     private GridView mLedLibraryGvw;
 
-    private LedLibraryControl.State[] mStates = LedLibraryControl.State.values();
+
+    private static State[] mStates ;
+    private static String[] mStateNames ;
+    static{
+
+        String model = ModelInfo.getInstance().getModel() ;
+        if(model.contains("YQ110")){
+
+            mStates = new State[]{BATTERY_NORMAL_LESS_5, BATTERY_NORMAL_5_TO_10,
+                    BATTERY_CHARGING_LESS_100, BATTERY_CHARGING_EQUAL_100, STAND_BY
+            };
+            mStateNames = new String[]{"低于5%电量","5-10%电量","充电未满","充电已满","待机"} ;
+
+
+        }else{
+
+            mStates = State.values() ;
+
+            final int length = mStates.length;
+            mStateNames = new String[length];
+            for (int i = 0; i < length; i++) {
+
+                mStateNames[i] = mStates[i].toString();
+            }
+        }
+
+
+    }
+
+
+
     private NameAdapter mNameAdapter;
     /**
      * 返回
@@ -91,13 +129,7 @@ public class LedLibraryActivity extends Activity implements AdapterView.OnItemCl
         mLedLibraryGvw = (GridView) findViewById(R.id.led_library_gvw);
         mLedLibraryGvw.setOnItemClickListener(this);
 
-        final int length = mStates.length;
-        String[] names = new String[length];
-        for (int i = 0; i < length; i++) {
-
-            names[i] = mStates[i].toString();
-        }
-        mNameAdapter = new NameAdapter(this, names);
+        mNameAdapter = new NameAdapter(this, mStateNames);
         mNameAdapter.setSelectIndex(-1);
         mLedLibraryGvw.setAdapter(mNameAdapter);
         mBackBtn = (Button) findViewById(R.id.back_btn);

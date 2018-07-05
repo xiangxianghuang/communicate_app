@@ -31,7 +31,7 @@ public class Y165Steering {
 
         public void setOnOff(boolean isOnOff){
 
-            content[0] = (byte) (isOnOff ? 0xAA : 0xBB);
+            content[0] = (byte) (isOnOff ? 0x0A : 0x0B);
         }
     }
 
