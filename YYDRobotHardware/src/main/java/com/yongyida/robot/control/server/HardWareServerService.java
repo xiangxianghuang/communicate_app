@@ -46,7 +46,6 @@ public class HardWareServerService extends ServerService {
         registerReceiver();
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();

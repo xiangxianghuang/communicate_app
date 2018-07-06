@@ -10,6 +10,7 @@ import com.yongyida.robot.model.sr1.montrol.SR1MotionSendHandlers;
 import com.yongyida.robot.model.y128.battery.Y128BatterySendHandlers;
 import com.yongyida.robot.model.y128.led.Y128LedSendHandlers;
 import com.yongyida.robot.model.y128.motion.Y128MotionSendHandlers;
+import com.yongyida.robot.model.y128.pir.Y28PirSendHandlers;
 import com.yongyida.robot.model.y128.touch.Y128TouchSendHandlers;
 import com.yongyida.robot.model.y148.led.Y148LedSendHandlers;
 import com.yongyida.robot.model.y148.montrol.Y148MotionSendHandlers;
@@ -82,7 +83,7 @@ public final class HardwareConfig {
             return;
         }
 
-        if(model.contains("Y128") | model.contains("YQ110")){
+        if(model.contains("YQ110") | model.contains("Y128")){
 
             initY128();
 
@@ -135,6 +136,8 @@ public final class HardwareConfig {
         addControl(new Y128TouchSendHandlers(mContext)) ;
         addControl(new Y128LedSendHandlers(mContext)) ;
         addControl(new Y128MotionSendHandlers(mContext)) ;
+
+        addControl(new Y28PirSendHandlers(mContext)) ;
 
     }
 

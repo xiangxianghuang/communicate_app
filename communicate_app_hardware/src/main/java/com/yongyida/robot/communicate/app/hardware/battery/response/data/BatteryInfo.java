@@ -11,7 +11,13 @@ public class BatteryInfo extends BaseResponseControl {
 
     private boolean isCharging = false ;    //是否充电
     private int level = -1 ;                //电量
-    private int state ;                     //充电码（备用，不同机型不相同）
+    private int state = -1;                 //充电码（备用，不同机型不相同）
+
+
+    public boolean isLegal(){
+
+        return this.level != -1 && state != -1 ;
+    }
 
 
     public boolean isCharging() {

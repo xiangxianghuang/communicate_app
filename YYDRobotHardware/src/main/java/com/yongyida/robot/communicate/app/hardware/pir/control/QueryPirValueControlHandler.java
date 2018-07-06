@@ -124,22 +124,8 @@ public abstract class QueryPirValueControlHandler extends BaseControlHandler<Que
      * */
     private synchronized void responsePirValueService(boolean hasPeople, int peopleDistance) {
 
-        boolean isChange = false ;
-        if(mPirValue.isHasPeople() != hasPeople){
-
-            mPirValue.setHasPeople(hasPeople);
-            isChange = true ;
-        }
-        if(mPirValue.getPeopleDistance() != peopleDistance){
-
-            mPirValue.setPeopleDistance(peopleDistance);
-            isChange = true ;
-        }
-
-        if(!isChange){  //数据没有变化
-
-            return;
-        }
+        mPirValue.setHasPeople(hasPeople);
+        mPirValue.setPeopleDistance(peopleDistance);
 
         HashSet<String> deaths = new HashSet<>() ;
         for (Map.Entry<String, ResponsePirValueListener> entry : mResponsePirValueListeners.entrySet()){
@@ -185,7 +171,7 @@ public abstract class QueryPirValueControlHandler extends BaseControlHandler<Que
 
 
     /***/
-    private OnPirValueChangedListener mOnPirValueChangedListener = new OnPirValueChangedListener(){
+    protected OnPirValueChangedListener mOnPirValueChangedListener = new OnPirValueChangedListener(){
 
         @Override
         public void onPirValueChanged(boolean hasPeople, int peopleDistance) {

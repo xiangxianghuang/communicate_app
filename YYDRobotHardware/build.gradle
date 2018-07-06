@@ -9,8 +9,8 @@ android {
         targetSdkVersion 22
 
         applicationId "com.yongyida.robot.hardware"
-        versionCode 21
-        versionName "1.0.20"
+        versionCode 22
+        versionName "1.0.21"
 
         ndk {
             // 设置支持的SO库架构

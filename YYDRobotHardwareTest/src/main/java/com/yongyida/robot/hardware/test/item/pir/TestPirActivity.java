@@ -1,25 +1,25 @@
 package com.yongyida.robot.hardware.test.item.pir;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.method.ScrollingMovementMethod;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.yongyida.robot.communicate.app.common.response.BaseResponseControl;
 import com.yongyida.robot.communicate.app.common.send.SendClient;
 import com.yongyida.robot.communicate.app.common.send.SendResponseListener;
 import com.yongyida.robot.communicate.app.hardware.pir.response.data.PirValue;
 import com.yongyida.robot.communicate.app.hardware.pir.send.data.QueryPirValueControl;
-import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.hardware.test.R;
 import com.yongyida.robot.hardware.test.item.TestBaseActivity;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -27,15 +27,18 @@ import java.util.Date;
  */
 public class TestPirActivity extends TestBaseActivity {
 
-    private static final String TAG = TestPirActivity.class.getSimpleName() ;
+    private static final String TAG = TestPirActivity.class.getSimpleName();
 
-    private TextView mMonitorResultTvw ;
+    private ListView mPirLvw;
+
     @Override
     protected View initContentView() {
 
-        View view = mLayoutInflater.inflate(R.layout.activity_test_pir, null) ;
-        mMonitorResultTvw = view.findViewById(R.id.monitor_result_tvw) ;
-        mMonitorResultTvw.setMovementMethod(ScrollingMovementMethod.getInstance()); //可以滑动
+        mInflater = LayoutInflater.from(this);
+
+        View view = mLayoutInflater.inflate(R.layout.activity_test_pir, null);
+        mPirLvw = (ListView) view.findViewById(R.id.pir_lvw);
+        mPirLvw.setAdapter(mBaseAdapter);
 
         return view;
     }
@@ -45,39 +48,19 @@ public class TestPirActivity extends TestBaseActivity {
         return getString(R.string.pir_tips);
     }
 
-
-    private QueryPirValueControl mQueryPirValueControl = new QueryPirValueControl() ;
-    private SendResponseListener mSendResponseListener = new SendResponseListener< PirValue>(){
+    private QueryPirValueControl mQueryPirValueControl = new QueryPirValueControl();
+    private SendResponseListener mSendResponseListener = new SendResponseListener<PirValue>() {
 
         @Override
         public void onSuccess(final PirValue pirValue) {
 
-            if(pirValue != null){
+            if (pirValue != null) {
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
-                        int distance = pirValue.getPeopleDistance() ;
-                        String info;
-                        if(mMonitorResultTvw.getText().length() > 0){
-
-                            info = "\n" ;
-
-                        }else{
-                            info = "" ;
-                        }
-
-                        if(distance > 0){
-
-                            info += df.format(new Date()) +distance + "厘米处"+getString(R.string.pir_monitor_people ) ;
-                        }else {
-
-                            info += df.format(new Date()) + getString(R.string.pir_monitor_people ) ;
-                        }
-
-                        appendTextView(mMonitorResultTvw, info) ;
-
+                        addPirValue(pirValue) ;
                     }
                 });
 
@@ -89,111 +72,141 @@ public class TestPirActivity extends TestBaseActivity {
         public void onFail(int result, String message) {
 
         }
-    } ;
+    };
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        registerReceiver() ;
 
-        SendClient.getInstance(this).send(this,mQueryPirValueControl,mSendResponseListener);
-
+        SendClient.getInstance(this).send(this, mQueryPirValueControl, mSendResponseListener);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        unregisterReceiver();
+        SendClient.getInstance(this).send(null, mQueryPirValueControl, null);
     }
 
-    private void registerReceiver(){
+    private static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
+    private class PirData {
 
-        IntentFilter filter = new IntentFilter(ACTION_FIND_PEOPLE) ;
-        filter.addAction(ACTION_FIND_PEOPLE);
-        filter.addAction(ACTION_MONITOR_PERSON);
+        final String time;
+        final PirValue pirValue;
 
-        registerReceiver(mHumanInductionReceiver, filter) ;
+        PirData(PirValue pirValue) {
+
+            this.time = df.format(new Date());
+            this.pirValue = pirValue;
+        }
+
     }
 
-    private void unregisterReceiver(){
+    private final static int MAX_SIZE = 10;
+    private ArrayList<PirData> mPirDatas = new ArrayList<>();
 
-        unregisterReceiver(mHumanInductionReceiver);
-    }
+    private void addPirValue(PirValue pirValue) {
 
+        mPirDatas.add(new PirData(pirValue));
 
+        if (MAX_SIZE > 0) {
 
-    private static final String ACTION_FIND_PEOPLE  = "TouchSensor";
-    private static final String KEY_FIND_PEOPLE  = "android.intent.extra.Touch";
-    private static final String VALUE_FIND_PEOPLE  = "pir";
+            if (mPirDatas.size() > MAX_SIZE) {
 
-
-    public static final String ACTION_MONITOR_PERSON = "com.yongyida.robot.PIR_VALUE" ;
-    public static final String KEY_DISTANCE      = "peopleDistance" ;
-
-
-    private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ") ;
-
-    private BroadcastReceiver mHumanInductionReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            final String action = intent.getAction() ;
-            LogHelper.i(TAG, LogHelper.__TAG__() + " ,action : " + action) ;
-            if(ACTION_FIND_PEOPLE.equals(action)){
-
-                String value = intent.getStringExtra(KEY_FIND_PEOPLE) ;
-                LogHelper.i(TAG, LogHelper.__TAG__() + " ,value : " + value) ;
-
-                if(VALUE_FIND_PEOPLE.equals(value)){
-
-                    String info;
-                    if(mMonitorResultTvw.getText().length() > 0){
-
-                        info = "\n" ;
-
-                    }else{
-                        info = "" ;
-                    }
-
-                    info += df.format(new Date()) + getString(R.string.pir_monitor_people) ;
-                    appendTextView(mMonitorResultTvw, info) ;
-                }
-            }else if(ACTION_MONITOR_PERSON.equals(action)){
-
-                int distance = intent.getIntExtra(KEY_DISTANCE, -1) ;
-
-                String info;
-                if(mMonitorResultTvw.getText().length() > 0){
-
-                    info = "\n" ;
-
-                }else{
-                    info = "" ;
-                }
-
-                if(distance > 0){
-
-                    info += df.format(new Date()) +distance + "厘米处"+getString(R.string.pir_monitor_people ) ;
-                }else {
-
-                    info += df.format(new Date()) + getString(R.string.pir_monitor_people ) ;
-                }
-
-                appendTextView(mMonitorResultTvw, info) ;
+                mPirDatas.remove(0);
             }
         }
-    };
 
+        mPirLvw.setSelection(mPirDatas.size() - 1);     //选择最后一个
+        mBaseAdapter.notifyDataSetChanged();
 
-    private void appendTextView(TextView textView,String msg){
-        textView.append(msg);
-        int offset=textView.getLineCount()*textView.getLineHeight();
-        if(offset>textView.getHeight()){
-            textView.scrollTo(0,offset-textView.getHeight());
-        }
     }
 
+
+    private LayoutInflater mInflater;
+    private BaseAdapter mBaseAdapter = new BaseAdapter() {
+
+
+        @Override
+        public int getCount() {
+            return mPirDatas.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            ViewHolder holder;
+            if (convertView == null) {
+
+                convertView = mInflater.inflate(R.layout.item_pir_data, null);
+
+                holder = new ViewHolder(convertView);
+
+                convertView.setTag(holder);
+            } else {
+
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            holder.setPirData(mPirDatas.get(position));
+
+
+            return convertView;
+        }
+
+
+        class ViewHolder {
+            View view;
+            TextView mDateTvw;
+            TextView mPeopleTvw;
+            TextView mDistanceTvw;
+
+            ViewHolder(View view) {
+                this.view = view;
+                this.mDateTvw = (TextView) view.findViewById(R.id.date_tvw);
+                this.mPeopleTvw = (TextView) view.findViewById(R.id.people_tvw);
+                this.mDistanceTvw = (TextView) view.findViewById(R.id.distance_tvw);
+            }
+
+            void setPirData(PirData pirData) {
+
+                mDateTvw.setText(pirData.time);
+
+                if (pirData.pirValue.isHasPeople()) {
+
+                    mPeopleTvw.setTextColor(Color.GREEN);
+                    mPeopleTvw.setText("监测到有人");
+
+                } else {
+
+                    mPeopleTvw.setTextColor(Color.RED);
+                    mPeopleTvw.setText("没有监测到有人");
+                }
+
+                int distance = pirData.pirValue.getPeopleDistance();
+                if (distance < 0) {
+
+                    mDistanceTvw.setVisibility(View.INVISIBLE);
+
+                } else {
+                    mDistanceTvw.setVisibility(View.VISIBLE);
+                    mDistanceTvw.setText(distance + "厘米");
+                }
+
+            }
+        }
+
+    };
 
 
 }

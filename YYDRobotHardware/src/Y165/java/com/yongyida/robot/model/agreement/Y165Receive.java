@@ -73,10 +73,11 @@ public class Y165Receive {
 
                 if(mOnPirValueChangedListener != null){
 
+                    boolean hasPeople = (data[6] == 0x01) ; // 监测到人
                     int distance = (((0xFF&data[4])<<8) | (0xFF&data[5])) / 2 ;
-                    mOnPirValueChangedListener.onPirValueChanged(true, distance);
+                    LogHelper.i(TAG, "distance : " + distance);
+                    mOnPirValueChangedListener.onPirValueChanged(hasPeople, distance);
                 }
-
 
                 break;
         }

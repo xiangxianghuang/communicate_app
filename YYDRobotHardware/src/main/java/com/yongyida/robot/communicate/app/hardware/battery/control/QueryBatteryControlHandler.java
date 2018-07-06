@@ -229,7 +229,10 @@ public abstract class QueryBatteryControlHandler extends BaseControlHandler<Quer
         @Override
         public void onBatteryChange(BatteryInfo batteryInfo) {
 
-            sendYYDRobotBatteryChange(batteryInfo) ;
+            if(batteryInfo.isLegal()){
+
+                sendYYDRobotBatteryChange(batteryInfo) ;
+            }
 
         }
     };
