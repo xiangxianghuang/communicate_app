@@ -11,6 +11,7 @@ import com.yongyida.robot.model.y128.battery.Y128BatterySendHandlers;
 import com.yongyida.robot.model.y128.led.Y128LedSendHandlers;
 import com.yongyida.robot.model.y128.motion.Y128MotionSendHandlers;
 import com.yongyida.robot.model.y128.pir.Y28PirSendHandlers;
+import com.yongyida.robot.model.y128.pir.control.Y128QueryPirValueControlHandler;
 import com.yongyida.robot.model.y128.touch.Y128TouchSendHandlers;
 import com.yongyida.robot.model.y148.led.Y148LedSendHandlers;
 import com.yongyida.robot.model.y148.montrol.Y148MotionSendHandlers;
@@ -148,7 +149,7 @@ public final class HardwareConfig {
 
         addControl(new Y148LedSendHandlers(mContext)) ;
         addControl(new Y148MotionSendHandlers(mContext)) ;
-
+        addControl(new Y28PirSendHandlers(mContext)) ;
 
     }
 

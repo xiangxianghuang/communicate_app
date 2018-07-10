@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.yongyida.robot.communicate.app.hardware.motion.MotionSendHandlers;
 import com.yongyida.robot.model.y128.motion.control.Y128QueryMotionSystemControlHandler;
+import com.yongyida.robot.model.y128.motion.control.Y128QueryMotionSystemHistoryControlHandler;
 import com.yongyida.robot.model.y128.motion.control.Y128QueryUltrasonicControlHandler;
 import com.yongyida.robot.model.y148.led.Y148LedSendHandlers;
 import com.yongyida.robot.model.y148.montrol.control.Y148ArmControlHandler;
@@ -40,6 +41,7 @@ public class Y148MotionSendHandlers extends MotionSendHandlers {
 
         addBaseControlHandler(new Y128QueryUltrasonicControlHandler(context));
         addBaseControlHandler(new Y128QueryMotionSystemControlHandler(context));
+        addBaseControlHandler(new Y128QueryMotionSystemHistoryControlHandler(context));
 
     }
 

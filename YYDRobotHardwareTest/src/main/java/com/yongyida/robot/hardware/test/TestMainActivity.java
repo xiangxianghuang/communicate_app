@@ -257,7 +257,9 @@ public class TestMainActivity extends Activity implements AdapterView.OnItemClic
 
             }else if(TestPirActivity.class.getName().equals(name)){// Pir 人体监测
 
-                if(model.contains("YQ110")||model.contains("Y128") || model.contains("Y165")){
+                if(model.contains("YQ110")||  model.contains("Y128") ||
+                        model.contains("Y138") ||  model.contains("Y148") ||
+                        model.contains("Y165")){
 
                     temp.add(resolveInfo) ;
                 }

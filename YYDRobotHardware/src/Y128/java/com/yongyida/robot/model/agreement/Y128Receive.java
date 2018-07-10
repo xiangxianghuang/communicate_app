@@ -4,12 +4,18 @@ import com.yongyida.robot.communicate.app.hardware.battery.control.QueryBatteryC
 import com.yongyida.robot.communicate.app.hardware.battery.response.data.BatteryInfo;
 import com.yongyida.robot.communicate.app.hardware.motion.control.QueryMotionSystemControlHandler;
 import com.yongyida.robot.communicate.app.hardware.motion.control.QueryUltrasonicControlHandler;
+import com.yongyida.robot.communicate.app.hardware.motion.response.data.MotionSystemHistory;
 import com.yongyida.robot.communicate.app.hardware.touch.TouchSendHandlers;
 import com.yongyida.robot.communicate.app.hardware.touch.control.QueryTouchPositionControlHandler;
 import com.yongyida.robot.communicate.app.hardware.touch.response.data.TouchPosition;
 import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.communicate.app.utils.StringUtils;
 import com.yongyida.robot.serial.SerialReceive;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by HuangXiangXiang on 2018/3/30.
@@ -136,11 +142,14 @@ public class Y128Receive {
     /**故障信息*/
     private void receiveFault(byte[] data){
 
-        if(mOnMotionSystemChangedListener != null){
+        String title = "运动故障信息" ;
+        String value = Y128Steering.ReceiveFault.getFaultMessages(data[4]) ;
+        boolean isAdd = addHistory(title, value);
 
-            mOnMotionSystemChangedListener.onMotionSystemChanged( "运动故障信息", Y128Steering.ReceiveFault.getFaultMessages(data[4]));
+        if(isAdd && mOnMotionSystemChangedListener != null){
+
+            mOnMotionSystemChangedListener.onMotionSystemChanged( title, value);
         }
-
     }
 
     /**超声波信息*/
@@ -168,9 +177,13 @@ public class Y128Receive {
             mOnBatteryChangeListener.onBatteryChange(mBatteryInfo);
         }
 
-        if(mOnMotionSystemChangedListener != null){
+        String title = "OBD信息" ;
+        String value = mOBDData.toString() ;
+        boolean isAdd = addHistory(title, value);
 
-            mOnMotionSystemChangedListener.onMotionSystemChanged( "OBD信息", mOBDData.toString());
+        if(isAdd && mOnMotionSystemChangedListener != null){
+
+            mOnMotionSystemChangedListener.onMotionSystemChanged( title, value);
         }
     }
 
@@ -193,9 +206,15 @@ public class Y128Receive {
             mOnBatteryChangeListener.onBatteryChange(mBatteryInfo);
         }
 
-        if(mOnMotionSystemChangedListener != null){
 
-            mOnMotionSystemChangedListener.onMotionSystemChanged( "系统信息", mReceiveSystemState.toString());
+
+        String title = "系统信息" ;
+        String value = mReceiveSystemState.toString() ;
+        boolean isAdd = addHistory(title, value);
+
+        if(isAdd && mOnMotionSystemChangedListener != null){
+
+            mOnMotionSystemChangedListener.onMotionSystemChanged( title, value);
         }
 
     }
@@ -231,8 +250,6 @@ public class Y128Receive {
 
             return false ;
         }
-
-
         return true ;
     }
 
@@ -269,5 +286,55 @@ public class Y128Receive {
     public void setOnMotionSystemChangedListener(QueryMotionSystemControlHandler.OnMotionSystemChangedListener onMotionSystemChangedListener) {
         this.mOnMotionSystemChangedListener = onMotionSystemChangedListener;
     }
+
+
+    private static final int MAX_SIZE = 100 ;   //历史记录最大条数
+    private final HashMap<String, ArrayList<MotionSystemHistory.History>> historyMap  = new HashMap<>() ;
+
+    /**
+     * 增加历史记录
+     * */
+    private boolean addHistory(String title, String value){
+
+        if(value != null){
+
+            ArrayList<MotionSystemHistory.History> histories = historyMap.get(title) ;
+            if(histories == null || histories.isEmpty()){
+
+                histories = new ArrayList<>() ;
+                MotionSystemHistory.History history = new MotionSystemHistory.History(value) ;
+                histories.add(history) ;
+
+                historyMap.put(title, histories) ;
+
+                return true ;
+
+            }else{
+
+                MotionSystemHistory.History last = histories.get(histories.size()-1) ;
+                if(!value.equals(last.value)){
+
+                    MotionSystemHistory.History history = new MotionSystemHistory.History(value) ;
+                    histories.add(history) ;
+
+                    if(histories.size() > MAX_SIZE){
+
+                        histories.remove(0) ;
+                    }
+
+                    return true ;
+                }
+            }
+        }
+
+        return false ;
+    }
+
+    public ArrayList<MotionSystemHistory.History> getHistories(String title){
+
+        return historyMap.get(title) ;
+    }
+
+
 
 }

@@ -79,12 +79,6 @@ public class TestMotionActivity extends TestBaseActivity implements AdapterView.
     /**初始控制*/
     private void initFragment(){
 
-//
-//        final String model = ModelInfo.getInstance().getModel() ;
-//        if(model)
-
-
-
         baseFragments.add(new TestHeadFragment()) ;
         baseFragments.add(new TestHandFragment()) ;
         baseFragments.add(new TestFootFragment()) ;
@@ -93,12 +87,6 @@ public class TestMotionActivity extends TestBaseActivity implements AdapterView.
         baseFragments.add(new TestGroupFrameFragment()) ;
         baseFragments.add(new TestUltrasonicFragment()) ;
         baseFragments.add(new TestMotionSystemFragment()) ;
-
-
-
-
-
-
     }
 
     @Override

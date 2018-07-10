@@ -33,32 +33,39 @@ package com.yongyida.robot.hardware.test.item.motion.fragment;
                     不见满街漂亮妹，哪个归得程序员？ 
 */
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.yongyida.robot.communicate.app.common.send.BaseSend;
 import com.yongyida.robot.communicate.app.common.send.SendClient;
 import com.yongyida.robot.communicate.app.common.send.SendResponseListener;
 import com.yongyida.robot.communicate.app.hardware.motion.response.data.MotionSystem;
+import com.yongyida.robot.communicate.app.hardware.motion.response.data.MotionSystemHistory;
 import com.yongyida.robot.communicate.app.hardware.motion.response.data.Ultrasonic;
 import com.yongyida.robot.communicate.app.hardware.motion.send.data.QueryMotionSystemControl;
+import com.yongyida.robot.communicate.app.hardware.motion.send.data.QueryMotionSystemHistoryControl;
 import com.yongyida.robot.communicate.app.utils.LogHelper;
 import com.yongyida.robot.hardware.test.R;
+import com.yongyida.robot.hardware.test.item.motion.dialog.HistoriesDialog;
 
 import java.util.ArrayList;
 
 /**
  * Create By HuangXiangXiang 2018/6/13
  */
-public class TestMotionSystemFragment extends BaseFragment {
+public class TestMotionSystemFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
     private static final String TAG = TestMotionSystemFragment.class.getSimpleName() ;
 
@@ -95,13 +102,34 @@ public class TestMotionSystemFragment extends BaseFragment {
         super.onDestroyView();
     }
 
+    private static final int WHAT_MOTION_SYSTEM             = 0x01 ;
+    private static final int WHAT_MOTION_SYSTEM_HISTORY     = 0x02 ;
+
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler(){
 
         @Override
         public void handleMessage(Message msg) {
 
-            items = (ArrayList<MotionSystem.Item>) msg.obj;
-            mAdapter.notifyDataSetChanged();
+            switch (msg.what){
+
+                case WHAT_MOTION_SYSTEM:
+
+                    items = (ArrayList<MotionSystem.Item>) msg.obj;
+                    mAdapter.notifyDataSetChanged();
+
+                    break;
+
+
+                case WHAT_MOTION_SYSTEM_HISTORY:
+
+                    ArrayList<MotionSystemHistory.History> histories = (ArrayList<MotionSystemHistory.History>) msg.obj;
+                    new HistoriesDialog(getActivity(), histories).show();
+
+                    break;
+            }
+
+
         }
     };
 
@@ -113,7 +141,7 @@ public class TestMotionSystemFragment extends BaseFragment {
 
             LogHelper.i(TAG, LogHelper.__TAG__() + ", ultrasonic : " + new Gson().toJson(motionSystem));
 
-            Message message = mHandler.obtainMessage() ;
+            Message message = mHandler.obtainMessage(WHAT_MOTION_SYSTEM) ;
             message.obj = motionSystem.getItems() ;
             mHandler.sendMessage(message) ;
         }
@@ -131,6 +159,7 @@ public class TestMotionSystemFragment extends BaseFragment {
         mMotionSystemLvw = (ListView) view.findViewById(R.id.motion_system_lvw);
         mMotionSystemLvw.setAdapter(mAdapter);
 
+        mMotionSystemLvw.setOnItemClickListener(this);
     }
 
     private ArrayList<MotionSystem.Item> items ;
@@ -165,12 +194,39 @@ public class TestMotionSystemFragment extends BaseFragment {
             textView = (TextView) convertView;
 
             MotionSystem.Item item = items.get(position) ;
-            textView.setText(item.title + "\n" + item.info);
+
+            textView.setText(Html.fromHtml(item.title + "<br><br>" + item.info));
 
             return convertView;
         }
 
     };
 
+    private QueryMotionSystemHistoryControl mQueryMotionSystemHistoryControl = new QueryMotionSystemHistoryControl();
+    private SendResponseListener mHistorySendResponseListener = new SendResponseListener<MotionSystemHistory>(){
+        @Override
+        public void onSuccess(MotionSystemHistory motionSystemHistory) {
 
+            Message message = mHandler.obtainMessage(WHAT_MOTION_SYSTEM_HISTORY) ;
+            message.obj = motionSystemHistory.getHistories() ;
+            mHandler.sendMessage(message) ;
+        }
+
+        @Override
+        public void onFail(int result, String message) {
+
+        }
+    } ;
+
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        String title = items.get(position).title ;
+        mQueryMotionSystemHistoryControl.setTitle(title);
+
+        SendClient.getInstance(getActivity()).send(null, mQueryMotionSystemHistoryControl, mHistorySendResponseListener);
+
+
+    }
 }

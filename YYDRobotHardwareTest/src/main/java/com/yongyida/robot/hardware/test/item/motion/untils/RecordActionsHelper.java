@@ -40,12 +40,22 @@ import com.google.gson.Gson;
 import com.yongyida.robot.hardware.test.item.motion.bean.GroupFrame;
 import com.yongyida.robot.hardware.test.item.motion.bean.OneFrameScript;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 
 /**
  * Create By HuangXiangXiang 2018/5/30
  */
 public class RecordActionsHelper {
+
+    private static final String PATH = "/sdcard/dance/scripts.json" ;
+    private static final File FILE = new File(PATH) ;
 
     private static final String DATA                = "Data" ;
     private static final String RECORD_ACTIONS      = "RecordActions" ;
@@ -94,11 +104,48 @@ public class RecordActionsHelper {
         return recordActions ;
     }
 
+//    /**
+//     * 读取数据资源(SharedPreferences)
+//     * */
+//    private String readData(Context context){
+//
+//        SharedPreferences sp = context.getSharedPreferences(DATA, Context.MODE_PRIVATE) ;
+//
+//        return sp.getString(RECORD_ACTIONS, null);
+//    }
+
+
+    /**
+     * 读取数据资源(sdcard)
+     * */
     private String readData(Context context){
 
-        SharedPreferences sp = context.getSharedPreferences(DATA, Context.MODE_PRIVATE) ;
+        StringBuilder sb = new StringBuilder() ;
 
-        return sp.getString(RECORD_ACTIONS, null);
+        BufferedReader bufferedReader = null;
+        try {
+            bufferedReader = new BufferedReader(new FileReader(FILE)) ;
+
+            String line;
+            while ((line = bufferedReader.readLine()) != null){
+
+                sb.append(line) ;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+
+            if(bufferedReader != null){
+
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return sb.toString() ;
     }
 
     public void writeRecordActions(GroupFrame recordAction){
@@ -145,15 +192,52 @@ public class RecordActionsHelper {
         return null ;
     }
 
+
+//    /**
+//     * 保存数据资源(SharedPreferences)
+//     * */
+//    public void saveRecordActions(){
+//
+//        String data = toRecordActionsString(recordActions) ;
+//
+//
+//        SharedPreferences sp = mContext.getSharedPreferences(DATA, Context.MODE_PRIVATE) ;
+//        SharedPreferences.Editor editor = sp.edit() ;
+//        editor.putString(RECORD_ACTIONS, data) ;
+//        editor.apply();
+//    }
+
+    /**
+     * 保存数据资源(sdcard)
+     * */
     public void saveRecordActions(){
 
         String data = toRecordActionsString(recordActions) ;
 
-        SharedPreferences sp = mContext.getSharedPreferences(DATA, Context.MODE_PRIVATE) ;
-        SharedPreferences.Editor editor = sp.edit() ;
-        editor.putString(RECORD_ACTIONS, data) ;
-        editor.apply();
+        if(!FILE.exists()){
+
+            FILE.getParentFile().mkdirs() ;
+        }
+
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(FILE);
+            writer.write(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+
+            try {
+                if(writer != null){
+                    writer.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
+
 
     private static String toRecordActionsString(RecordActions recordActions){
 

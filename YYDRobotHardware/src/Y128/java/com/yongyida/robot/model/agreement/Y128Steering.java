@@ -1,6 +1,11 @@
 package com.yongyida.robot.model.agreement;
 
+import android.graphics.Color;
 import android.util.SparseArray;
+
+import com.yongyida.robot.communicate.app.hardware.led.send.data.LedSendControl;
+
+import java.util.Locale;
 
 /**
  * Y128（YQ110）底层控制板与上位机串口通讯协议(Agreement)
@@ -940,10 +945,8 @@ public class Y128Steering {
 
         public static String getFaultMessages(int code){
 
-            return FAULT_MESSAGES.get(code) ;
+            return getError(FAULT_MESSAGES.get(code)) ;
         }
-
-
 
         @Override
         public byte getFunction() {
@@ -997,26 +1000,45 @@ public class Y128Steering {
      */
     public static class OBDData extends Receive{
 
+        public static final short DRIVER_STATUS_0 = 0x0000;     //驱动器正常（机器人正常情况）
+        public static final short DRIVER_STATUS_1 = 0x0100;     //驱动器内部错误
+        public static final short DRIVER_STATUS_2 = 0x0200;     //编码器ABN信号错误
+        public static final short DRIVER_STATUS_3 = 0x0400;     //编码器UVW信号错误
+        public static final short DRIVER_STATUS_4 = 0x0800;     //编码器计数错误
+        public static final short DRIVER_STATUS_5 = 0x1000;     //驱动器温度过高
+        public static final short DRIVER_STATUS_6 = 0x2000;     //驱动器总线电压过高
+        public static final short DRIVER_STATUS_7 = 0x4000;     //驱动器总线电压过低
+        public static final short DRIVER_STATUS_8 = (short) 0x8000;//驱动器输出短路
+        public static final short DRIVER_STATUS_9 = 0x0001;     //驱动器制动电阻异常
+        public static final short DRIVER_STATUS_10 = 0x0002;    //实际跟踪误差超过允许范围
+        public static final short DRIVER_STATUS_11 = 0x0004;    //逻辑电压过低18
+        public static final short DRIVER_STATUS_12 = 0x0008;    //I2*T故障
+        public static final short DRIVER_STATUS_13 = 0x0010;    //输出脉冲频率过高
+        public static final short DRIVER_STATUS_14 = 0x0020;    //保留备用
+        public static final short DRIVER_STATUS_15 = 0x0040;    //寻找电机错误
+        public static final short DRIVER_STATUS_16 = 0x0080;    //EEPROM内部错误
+
+
         public static SparseArray<String> driverStatusInfos = new SparseArray<>() ;
         static {
 
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_0,"驱动器正常（机器人正常情况）");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_1,"驱动器内部错误");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_2,"编码器ABN信号错误");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_3,"编码器UVW信号错误");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_4,"编码器计数错误");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_5,"驱动器温度过高");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_6,"驱动器总线电压过高");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_7,"驱动器总线电压过低");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_8,"驱动器输出短路");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_9,"驱动器制动电阻异常");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_10,"实际跟踪误差超过允许范围");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_11,"逻辑电压过低18");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_12,"I2*T故障");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_13,"输出脉冲频率过高");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_14,"保留备用");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_15,"寻找电机错误");
-            driverStatusInfos.put(Y128Steering.ReceiveSystemState.DRIVER_STATUS_16,"EEPROM内部错误");
+            driverStatusInfos.put(DRIVER_STATUS_0,"驱动器正常（机器人正常情况）");
+            driverStatusInfos.put(DRIVER_STATUS_1,"驱动器内部错误");
+            driverStatusInfos.put(DRIVER_STATUS_2,"编码器ABN信号错误");
+            driverStatusInfos.put(DRIVER_STATUS_3,"编码器UVW信号错误");
+            driverStatusInfos.put(DRIVER_STATUS_4,"编码器计数错误");
+            driverStatusInfos.put(DRIVER_STATUS_5,"驱动器温度过高");
+            driverStatusInfos.put(DRIVER_STATUS_6,"驱动器总线电压过高");
+            driverStatusInfos.put(DRIVER_STATUS_7,"驱动器总线电压过低");
+            driverStatusInfos.put(DRIVER_STATUS_8,"驱动器输出短路");
+            driverStatusInfos.put(DRIVER_STATUS_9,"驱动器制动电阻异常");
+            driverStatusInfos.put(DRIVER_STATUS_10,"实际跟踪误差超过允许范围");
+            driverStatusInfos.put(DRIVER_STATUS_11,"逻辑电压过低18");
+            driverStatusInfos.put(DRIVER_STATUS_12,"I2*T故障");
+            driverStatusInfos.put(DRIVER_STATUS_13,"输出脉冲频率过高");
+            driverStatusInfos.put(DRIVER_STATUS_14,"保留备用");
+            driverStatusInfos.put(DRIVER_STATUS_15,"寻找电机错误");
+            driverStatusInfos.put(DRIVER_STATUS_16,"EEPROM内部错误");
         }
 
 
@@ -1058,22 +1080,46 @@ public class Y128Steering {
 
             StringBuilder sb = new StringBuilder() ;
 
-            sb.append("电压值 : " + voltage/100F + "\n") ;
-            sb.append("电量值 : " + level + "%\n") ;
+            sb.append(getInfo("电压值 : " + voltage/100F + "<br>")) ;
 
+            String l ;
+            if(level < 0 || level > 100){
+
+                l = getWarn("电量值 : " + level + "%<br>") ;
+            }else {
+
+                l = getInfo("电量值 : " + level + "%<br>") ;
+            }
+            sb.append(l) ;
+
+            String d1 ;
             String driverStatusInfo = driverStatusInfos.get(driver1Status) ;
             if(driverStatusInfo == null){
 
                 driverStatusInfo = "未知码 " + driver1Status ;
             }
-            sb.append("底盘1状态 : " + driverStatusInfo + "\n") ;
+            if(driver1Status == DRIVER_STATUS_0){
 
+                d1 = getInfo("底盘1状态 : " + driverStatusInfo + "<br>") ;
+            }else{
+                d1 = getWarn("底盘1状态 : " + driverStatusInfo + "<br>") ;
+            }
+            sb.append(d1) ;
+
+
+            String d2 ;
             driverStatusInfo = driverStatusInfos.get(driver2Status) ;
             if(driverStatusInfo == null){
 
                 driverStatusInfo = "未知码 " + driver2Status ;
             }
-            sb.append("底盘2状态 : " + driverStatusInfo ) ;
+            if(driver2Status == DRIVER_STATUS_0){
+
+                d2 = getInfo("底盘2状态 : " + driverStatusInfo ) ;
+            }else{
+                d2 = getWarn("底盘2状态 : " + driverStatusInfo) ;
+            }
+            sb.append(d2) ;
 
             return sb.toString();
         }
@@ -1085,6 +1131,26 @@ public class Y128Steering {
         }
     }
 
+
+    private static String getInfo(String msg){
+
+       return getMessage(msg, Color.GREEN);
+    }
+
+    private static String getWarn(String msg){
+
+        return getMessage(msg, Color.YELLOW);
+    }
+
+    private static String getError(String msg){
+
+        return getMessage(msg, Color.RED);
+    }
+
+    private static String getMessage(String msg, int  color){
+
+        return String.format(Locale.CHINA, "<font color='#%06X'>%s</font>" ,(color & 0x00FFFFFF), msg ) ;
+    }
 
 
 
@@ -1103,23 +1169,6 @@ public class Y128Steering {
         public static final byte KINCO_START_FAIL = 0x00 ;      //kinco底盘启动不成功
         public static final byte KINCO_IS_WORKING = 0x01 ;      //kinco底盘正常工作
 
-        public static final short DRIVER_STATUS_0 = 0x0000;     //驱动器正常（机器人正常情况）
-        public static final short DRIVER_STATUS_1 = 0x0100;     //驱动器内部错误
-        public static final short DRIVER_STATUS_2 = 0x0200;     //编码器ABN信号错误
-        public static final short DRIVER_STATUS_3 = 0x0400;     //编码器UVW信号错误
-        public static final short DRIVER_STATUS_4 = 0x0800;     //编码器计数错误
-        public static final short DRIVER_STATUS_5 = 0x1000;     //驱动器温度过高
-        public static final short DRIVER_STATUS_6 = 0x2000;     //驱动器总线电压过高
-        public static final short DRIVER_STATUS_7 = 0x4000;     //驱动器总线电压过低
-        public static final short DRIVER_STATUS_8 = (short) 0x8000;//驱动器输出短路
-        public static final short DRIVER_STATUS_9 = 0x0001;     //驱动器制动电阻异常
-        public static final short DRIVER_STATUS_10 = 0x0002;    //实际跟踪误差超过允许范围
-        public static final short DRIVER_STATUS_11 = 0x0004;    //逻辑电压过低18
-        public static final short DRIVER_STATUS_12 = 0x0008;    //I2*T故障
-        public static final short DRIVER_STATUS_13 = 0x0010;    //输出脉冲频率过高
-        public static final short DRIVER_STATUS_14 = 0x0020;    //保留备用
-        public static final short DRIVER_STATUS_15 = 0x0040;    //寻找电机错误
-        public static final short DRIVER_STATUS_16 = 0x0080;    //EEPROM内部错误
 
         public static final short SENSORBOARD_START_FAIL = 0x00;    //传感器板启动连接失败
         public static final short SENSORBOARD_IS_WORKING = 0x01;    //传感器板正常工作
@@ -1246,44 +1295,56 @@ public class Y128Steering {
 
             StringBuilder sb = new StringBuilder() ;
 
+            String b ;
             String batteryStateInfo = batteryStateInfos.get(chargeState) ;
             if(batteryStateInfo == null){
 
-                batteryStateInfo = "未知码 " + chargeState ;
-            }
-            sb.append("充电状态 : " + batteryStateInfo + "\n") ;
+                b = getWarn("充电状态 : 未知码 " + chargeState + "<br>") ;
+            }else{
 
+                b = getInfo("充电状态 : " + batteryStateInfo + "<br>") ;
+            }
+            sb.append(b) ;
+
+            String k ;
             String kincoStateInfo = kincoStateInfos.get(kincoState) ;
             if(kincoStateInfo == null){
 
-                kincoStateInfo = "未知码 " + kincoState ;
+                k = getWarn("Kinco底盘状态 : 未知码 " + kincoState + "<br>") ;
+            }else {
+                k = getInfo("Kinco底盘状态 : " + kincoStateInfo + "<br>") ;
             }
-            sb.append("Kinco底盘状态 : " + kincoStateInfo + "\n") ;
+            sb.append(k) ;
 
+            sb.append(getInfo("IO传感器状态 : " + ioStatus + "<br>")) ;
 
-            sb.append("IO传感器状态 : " + ioStatus + "\n") ;
+            String sbs ;
+            String sensorBoardStatusInfo = sensorboardStatusInfos.get(sensorboardStatus) ;
+            if(sensorBoardStatusInfo == null){
 
-            String sensorboardStatusInfo = sensorboardStatusInfos.get(sensorboardStatus) ;
-            if(sensorboardStatusInfo == null){
-
-                sensorboardStatusInfo = "未知码 " + sensorboardStatus ;
+                sbs = getWarn("传感器板状态 : 未知码 " + sensorboardStatus + "<br>") ;
+            }else {
+                sbs = getInfo("传感器板状态 : " + sensorBoardStatusInfo + "<br>") ;
             }
-            sb.append("传感器板状态 : " + sensorboardStatusInfo + "\n") ;
+            sb.append(sbs) ;
 
+            String sws ;
+            String slamWareStatusInfo = slamwareStatusInfos.get(slamwareStatus) ;
+            if(slamWareStatusInfo == null){
 
-            String slamwareStatusInfo = slamwareStatusInfos.get(slamwareStatus) ;
-            if(slamwareStatusInfo == null){
+                sws = getWarn("Slamware 运行状态 : 未知码 " + sensorboardStatus + "<br>") ;
+            }else{
 
-                slamwareStatusInfo = "未知码 " + sensorboardStatus ;
+                sws = getInfo("Slamware 运行状态 : " + slamWareStatusInfo + "<br>") ;
             }
-            sb.append("Slamware 运行状态 : " + slamwareStatusInfo + "\n") ;
+            sb.append(sws) ;
 
             boolean isUseUltrasonic = ( (sysStatus & 0x01) == 0x01 ) ;
-            sb.append("系统状态 : " + (isUseUltrasonic ? "不使用超声波数据" : "使用超声波数据") + "\n" ) ;
+            sb.append(getInfo("系统状态 : " + (isUseUltrasonic ? "不使用超声波数据" : "使用超声波数据") + "<br>" )) ;
 
-            sb.append("硬件版本 : V" + ((hardVer&0xf0)>> 4) + "." + (hardVer&0x0f ) + "\n") ;
+            sb.append(getInfo("硬件版本 : V" + ((hardVer&0xf0)>> 4) + "." + (hardVer&0x0f ) + "<br>")) ;
 
-            sb.append("软件版本 : V" + ((softVer&0xf0)>> 4) + "." + (softVer&0x0f )  + "\n") ;
+            sb.append(getInfo("软件版本 : V" + ((softVer&0xf0)>> 4) + "." + (softVer&0x0f ))) ;
 
             return sb.toString();
 

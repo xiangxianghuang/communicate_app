@@ -55,7 +55,17 @@ public class Y148LedLibraryControlHandler extends LedLibraryControlHandler {
     @Override
     public SendResponse onHandler(LedLibraryControl ledLibraryControl, IResponseListener responseListener) {
 
+        LedLibraryControl.State state = ledLibraryControl.getState() ;
+        if(state == null){
 
+
+        }
+
+        switch (state){
+
+
+
+        }
 
 
 
