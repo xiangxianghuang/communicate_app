@@ -29,7 +29,7 @@ public class MotionSystem extends BaseResponseControl {
             Item item = items.get(i) ;
             if(title.equals(item.title)){
 
-                if(info.equals(item.info)){
+                if(info != null && info.equals(item.info)){
 
                     return false ;
                 }else {

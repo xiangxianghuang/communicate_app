@@ -929,6 +929,7 @@ public class Y128Steering {
         public static final int FAULT_CODE_40 = 0x40 ;   //0x40 slamware core启动不成功
         public static final int FAULT_CODE_41 = 0x41 ;   //0x41 slamware core内部出错
         public static final int FAULT_CODE_50 = 0x50 ;   //0x50 电量计初始化不成功
+        public static final int FAULT_CODE_60 = 0x60 ;   //0x60 步科底盘发生异常
 
 
         private static final SparseArray<String> FAULT_MESSAGES = new SparseArray<>() ;
@@ -941,11 +942,17 @@ public class Y128Steering {
             FAULT_MESSAGES.put(Y128Steering.ReceiveFault.FAULT_CODE_40, "slamware core启动不成功" );
             FAULT_MESSAGES.put(Y128Steering.ReceiveFault.FAULT_CODE_41, "slamware core内部出错" );
             FAULT_MESSAGES.put(Y128Steering.ReceiveFault.FAULT_CODE_50, "电量计初始化不成功" );
+            FAULT_MESSAGES.put(Y128Steering.ReceiveFault.FAULT_CODE_60, "步科底盘发生异常" );
         }
 
         public static String getFaultMessages(int code){
 
-            return getError(FAULT_MESSAGES.get(code)) ;
+            String f = FAULT_MESSAGES.get(code) ;
+            if(f == null){
+
+                f = "未知码 " + code ;
+            }
+            return getError(f) ;
         }
 
         @Override

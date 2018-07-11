@@ -35,6 +35,7 @@ package com.yongyida.robot.dev;
 
 import com.yongyida.robot.utils.LogHelper;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -67,7 +68,6 @@ public class DevFile {
     public static boolean writeString(String path, String string){
 
         LogHelper.i(TAG, LogHelper.__TAG__() + " , path : " + path + " , string : " + string);
-
         try {
             FileWriter writer = new FileWriter(path);
             writer.write(string);
